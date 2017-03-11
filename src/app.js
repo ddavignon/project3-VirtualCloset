@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducers from './reducers';
 import { Header } from './components/common';
+import LoginForm from './components/LoginForm';
 
 class App extends Component {
     render() {
@@ -11,9 +12,7 @@ class App extends Component {
             <Provider store={createStore(reducers)}>
                 <View>
                     <Header headerText="My Closet" />
-                    <Text>
-                        Hello App!
-                    </Text>
+                    <LoginForm />
                 </View>
             </Provider>
         );
