@@ -1,6 +1,6 @@
 # react-native-redux-boilerplate
 
-run `git clone https://github.com/ddavignon/react-native-redux-boilerplate.git`
+run `git clone https://github.com/ddavignon/react-native-redux-boilerplate.git virtual_closet`
 
 then `npm install` to install dependencies
 
