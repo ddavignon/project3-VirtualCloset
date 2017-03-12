@@ -39,7 +39,7 @@ class LoginForm extends Component {
                     </Button>
                 </CardSection>
             </Card>
-                        <LoginButton
+            {/*<LoginButton
                 publishPermissions={["publish_actions"]}
                 onLoginFinished={
                     (error, result) => {
@@ -57,7 +57,7 @@ class LoginForm extends Component {
                     }
                 }
                 onLogoutFinished={() => alert("logout.")}
-            />
+            />*/}
             </View>
 
         );
