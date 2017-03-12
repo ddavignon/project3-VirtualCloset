@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged } from '../actions';
 import { Card, CardSection, Input, Button } from './common';
+import { LoginButton, AccessToken } from 'react-native-fbsdk';
 
 class LoginForm extends Component {
     onEmailChanged(text) {
@@ -13,6 +14,7 @@ class LoginForm extends Component {
     }
     render() {
         return (
+            <View>
             <Card>
                 <CardSection>
                     <Input
@@ -37,6 +39,26 @@ class LoginForm extends Component {
                     </Button>
                 </CardSection>
             </Card>
+                        <LoginButton
+                publishPermissions={["publish_actions"]}
+                onLoginFinished={
+                    (error, result) => {
+                    if (error) {
+                        alert("login has error: " + result.error);
+                    } else if (result.isCancelled) {
+                        alert("login is cancelled.");
+                    } else {
+                        AccessToken.getCurrentAccessToken().then(
+                        (data) => {
+                            alert(data.accessToken.toString())
+                        }
+                        )
+                    }
+                    }
+                }
+                onLogoutFinished={() => alert("logout.")}
+            />
+            </View>
 
         );
     }
