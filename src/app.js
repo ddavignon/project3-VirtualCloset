@@ -12,17 +12,17 @@ class App extends Component {
     componentWillMount() {
           // Initialize Firebase
         const config = {
-            apiKey: "AIzaSyDRztFHenjoHF-C5mBi0DLHEPQeFM9_ibE",
-            authDomain: "virtualcloset-8b936.firebaseapp.com",
-            databaseURL: "https://virtualcloset-8b936.firebaseio.com",
-            storageBucket: "virtualcloset-8b936.appspot.com",
-            messagingSenderId: "143904369045"
+            apiKey: 'AIzaSyDRztFHenjoHF-C5mBi0DLHEPQeFM9_ibE',
+            authDomain: 'virtualcloset-8b936.firebaseapp.com',
+            databaseURL: 'https://virtualcloset-8b936.firebaseio.com',
+            storageBucket: 'virtualcloset-8b936.appspot.com',
+            messagingSenderId: '143904369045'
         };
         firebase.initializeApp(config);
     }
 
     render() {
-        const store =createStore(reducers, {}, applyMiddleware(ReduxThunk));
+        const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
         return (
             <Provider store={store}>
                 <View>
