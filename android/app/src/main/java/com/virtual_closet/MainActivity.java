@@ -1,6 +1,7 @@
 package com.virtual_closet;
 
 import com.facebook.react.ReactActivity;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import android.content.Intent;
 
 public class MainActivity extends ReactActivity {

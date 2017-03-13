@@ -15,3 +15,8 @@ on mac, create `local.properties` and input ```sdk.dir = /Users/[YOUR_USERNAME]/
 or for iOS
 
 `react-native run-ios`
+
+
+## TO DO
+
+Step 4 of https://github.com/marcshilling/react-native-image-picker for iOS config (for video, not necessary)

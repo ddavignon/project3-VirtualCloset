@@ -1,7 +1,8 @@
 import React from 'react';
-import { Scene, Router } from 'react-native-router-flux';
+import { Scene, Router, Actions } from 'react-native-router-flux';
 import LoginForm from './components/LoginForm';
 import ClosetList from './components/ClosetList';
+import ImageUpload from './components/ImageUpload';
 
 const RouterComponent = () => {
     return (
@@ -11,12 +12,17 @@ const RouterComponent = () => {
             </Scene>
             <Scene key="main">
                 <Scene
-                    onRight={() => {}}
+                    onRight={() => Actions.imageUpload()}
                     rightTitle="Add"
                     key="closetList"
                     component={ClosetList}
                     title="My Closet"
                     initial
+                />
+                <Scene
+                    key="imageUpload"
+                    component={ImageUpload}
+                    title="Upload Image"
                 />
             </Scene>
         </Router>
