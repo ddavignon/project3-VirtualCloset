@@ -1,15 +1,30 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import firebase from 'firebase';
+import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import { Header } from './components/common';
 import LoginForm from './components/LoginForm';
 
 class App extends Component {
+    componentWillMount() {
+          // Initialize Firebase
+        const config = {
+            apiKey: "AIzaSyDRztFHenjoHF-C5mBi0DLHEPQeFM9_ibE",
+            authDomain: "virtualcloset-8b936.firebaseapp.com",
+            databaseURL: "https://virtualcloset-8b936.firebaseio.com",
+            storageBucket: "virtualcloset-8b936.appspot.com",
+            messagingSenderId: "143904369045"
+        };
+        firebase.initializeApp(config);
+    }
+
     render() {
+        const store =createStore(reducers, {}, applyMiddleware(ReduxThunk));
         return (
-            <Provider store={createStore(reducers)}>
+            <Provider store={store}>
                 <View>
                     <Header headerText="My Closet" />
                     <LoginForm />
