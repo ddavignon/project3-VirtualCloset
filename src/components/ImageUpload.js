@@ -8,7 +8,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-import ClothingItemForm from './ClothingItemForm';
+import ClothingItemCreate from './ClothingItemCreate';
 
 class ImageUpload extends Component {
 
@@ -61,7 +61,7 @@ class ImageUpload extends Component {
           }
           </View>
         </TouchableOpacity>
-        <ClothingItemForm />
+        <ClothingItemCreate />
       </View>
     );
   }
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
   },
   clothingItem: {
     borderRadius: 5,
-    width: 200,
-    height: 200
+    width: 150,
+    height: 150
   }
 });
 
