@@ -53,8 +53,8 @@ class ImageUpload extends Component {
     const { container, clothingItem, clothingItemContainer } = styles;
 
     return (
-      <View style={container}>
-        <TouchableOpacity onPress={this.displayImagePicker.bind(this)}> 
+      <View>
+        <TouchableOpacity style={container} onPress={this.displayImagePicker.bind(this)}> 
           <View style={[clothingItem, clothingItemContainer, { marginBottom: 20 }]} >
           { this.state.clothingItemSource === null ? <Text>Select a Photo</Text> :
             <Image style={clothingItem} source={this.state.clothingItemSource} />
