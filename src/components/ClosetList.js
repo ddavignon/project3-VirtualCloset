@@ -15,37 +15,43 @@ class ClosetList extends Component {
         return (
             <View style={styles.container}>
                 <View>
-			  <Text style={styles.welcome}>
-				"Here's what I got to work with!"
-			  </Text>
+                    <Text style={styles.welcome}>
+                        "Here's what I got to work with!"
+                    </Text>
+                </View>
+			<View style={{ height: 150 }}>
+                <ScrollView 
+                    ref={(scrollView) => { _scrollView = scrollView; }}
+                    automaticallyAdjustContentInsets={false}
+                    horizontal
+                    onScroll={() => { console.log('onScroll!'); }}
+                    scrollEventThrottle={200}
+                    style={[styles.scrollView, styles.horizontalScrollView]}
+                >
+                    {SHIRTS.map(createThumbRow)}
+                </ScrollView>
 			</View>
-			<View style={{height: 150}}>
-				<ScrollView ref={(scrollView) => { _scrollView = scrollView; }}
-					  automaticallyAdjustContentInsets={false}
-					  horizontal={true}
-					  onScroll={() => { console.log('onScroll!'); }}
-					  scrollEventThrottle={200}
-					  style={[styles.scrollView, styles.horizontalScrollView]}>
-					  {SHIRTS.map(createThumbRow)}
-				</ScrollView>
-			</View>
-			<View style={{height: 150}}>
-				<ScrollView ref={(scrollView) => { _scrollView = scrollView; }}
-					automaticallyAdjustContentInsets={false}
-					horizontal={true}
-					onScroll={() => { console.log('onScroll!'); }}
-					scrollEventThrottle={200}
-					style={[styles.scrollView, styles.horizontalScrollView]}>
+			<View style={{ height: 150 }}>
+                <ScrollView 
+                    ref={(scrollView) => { _scrollView = scrollView; }}
+                    automaticallyAdjustContentInsets={false}
+                    horizontal
+                    onScroll={() => { console.log('onScroll!'); }}
+                    scrollEventThrottle={200}
+                    style={[styles.scrollView, styles.horizontalScrollView]}
+                >
 					{PANTS.map(createThumbRow)}
 				</ScrollView>
 			</View>
-			<View style={{height: 150}}>
-				<ScrollView ref={(scrollView) => { _scrollView = scrollView; }}
-					automaticallyAdjustContentInsets={false}
-					horizontal={true}
-					onScroll={() => { console.log('onScroll!'); }}
-					scrollEventThrottle={200}
-					style={[styles.scrollView, styles.horizontalScrollView]}>
+			<View style={{ height: 150 }}>
+                <ScrollView 
+                    ref={(scrollView) => { _scrollView = scrollView; }}
+                    automaticallyAdjustContentInsets={false}
+                    horizontal
+                    onScroll={() => { console.log('onScroll!'); }}
+                    scrollEventThrottle={200}
+                    style={[styles.scrollView, styles.horizontalScrollView]}
+                >
 					{SHOES.map(createThumbRow)}
 				</ScrollView>
 			</View>
@@ -53,7 +59,7 @@ class ClosetList extends Component {
         );
     }
 }
-var SHOES = ['https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
+let SHOES = ['https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
 'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
 'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
 'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
@@ -66,7 +72,7 @@ var SHOES = ['https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b75
 'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg'];
 SHOES = SHOES.concat(SHOES);
 
-var PANTS = ['https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
+let PANTS = ['https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
 'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
 'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
 'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
@@ -79,7 +85,7 @@ var PANTS = ['https://content.backcountry.com/images/items/medium/COL/COL3692/ST
 'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg'];
 PANTS = PANTS.concat(PANTS);
 
-var SHIRTS = ['https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
+let SHIRTS = ['https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
 'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
 'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
 'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
@@ -92,7 +98,7 @@ var SHIRTS = ['https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.
 'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg',
 'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg'];
 SHIRTS = SHIRTS.concat(SHIRTS); // double length of THUMBS
-var createThumbRow = (uri, i) => <Thumb key={i} uri={uri} />;
+let createThumbRow = (uri, i) => <Thumb key={i} uri={uri} />;
 
 class Thumb extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -108,9 +114,8 @@ class Thumb extends React.Component {
   }
 }
 
-var THUMBS = ['https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'];
-THUMBS = THUMBS.concat(THUMBS); // double length of THUMBS
-var createThumbRow = (uri, i) => <Thumb key={i} uri={uri} />;
+// let THUMBS = ['https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'];
+// THUMBS = THUMBS.concat(THUMBS); // double length of THUMBS
 
 const styles = StyleSheet.create({
   container: {
