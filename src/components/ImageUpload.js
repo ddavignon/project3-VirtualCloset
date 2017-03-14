@@ -13,8 +13,7 @@ import ImagePicker from 'react-native-image-picker';
 class ImageUpload extends React.Component {
 
   state = {
-    avatarSource: null,
-    videoSource: null
+    avatarSource: null
   };
 
 
@@ -29,9 +28,9 @@ class ImageUpload extends React.Component {
     // };
     const options = {
         title: 'Select Avatar',
-        customButtons: [
-            {name: 'fb', title: 'Choose Photo from Facebook'},
-        ],
+        // customButtons: [
+        //     {name: 'fb', title: 'Choose Photo from Facebook'},
+        // ],
         storageOptions: {
             skipBackup: true,
             path: 'images'
@@ -45,8 +44,8 @@ class ImageUpload extends React.Component {
         console.log('User cancelled photo picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+      // } else if (response.customButton) {
+      //   console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = { uri: response.uri };
 
@@ -55,31 +54,6 @@ class ImageUpload extends React.Component {
 
         this.setState({
           avatarSource: source
-        });
-      }
-    });
-  }
-
-  selectVideoTapped() {
-    const options = {
-      title: 'Video Picker',
-      takePhotoButtonTitle: 'Take Video...',
-      mediaType: 'video',
-      videoQuality: 'medium'
-    };
-
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled video picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        this.setState({
-          videoSource: response.uri
         });
       }
     });
@@ -95,16 +69,6 @@ class ImageUpload extends React.Component {
           }
           </View>
         </TouchableOpacity>
-
-        <TouchableOpacity onPress={this.selectVideoTapped.bind(this)}>
-          <View style={[styles.avatar, styles.avatarContainer]}>
-            <Text>Select a Video</Text>
-          </View>
-        </TouchableOpacity>
-
-        { this.state.videoSource &&
-          <Text style={{margin: 8, textAlign: 'center'}}>{this.state.videoSource}</Text>
-        }
       </View>
     );
   }
