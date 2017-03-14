@@ -16,17 +16,8 @@ class ImageUpload extends React.Component {
     avatarSource: null
   };
 
-
-  selectPhotoTapped() {
-    // const options = {
-    //   quality: 1.0,
-    //   maxWidth: 500,
-    //   maxHeight: 500,
-    //   storageOptions: {
-    //     skipBackup: true
-    //   }
-    // };
-    const options = {
+  componentWillMount() {
+        const options = {
         title: 'Select Avatar',
         // customButtons: [
         //     {name: 'fb', title: 'Choose Photo from Facebook'},
@@ -59,11 +50,53 @@ class ImageUpload extends React.Component {
     });
   }
 
+  selectPhotoTapped() {
+    // const options = {
+    //   quality: 1.0,
+    //   maxWidth: 500,
+    //   maxHeight: 500,
+    //   storageOptions: {
+    //     skipBackup: true
+    //   }
+    // };
+    // const options = {
+    //     title: 'Select Avatar',
+    //     // customButtons: [
+    //     //     {name: 'fb', title: 'Choose Photo from Facebook'},
+    //     // ],
+    //     storageOptions: {
+    //         skipBackup: true,
+    //         path: 'images'
+    //     }
+    // };
+
+    // ImagePicker.showImagePicker(options, (response) => {
+    //   console.log('Response = ', response);
+
+    //   if (response.didCancel) {
+    //     console.log('User cancelled photo picker');
+    //   } else if (response.error) {
+    //     console.log('ImagePicker Error: ', response.error);
+    //   // } else if (response.customButton) {
+    //   //   console.log('User tapped custom button: ', response.customButton);
+    //   } else {
+    //     const source = { uri: response.uri };
+
+    //     // You can also display the image using data:
+    //     // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+    //     this.setState({
+    //       avatarSource: source
+    //     });
+    //   }
+    // });
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
-          <View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
+          <View style={[styles.avatar, styles.avatarContainer, { marginBottom: 20 }]}>
           { this.state.avatarSource === null ? <Text>Select a Photo</Text> :
             <Image style={styles.avatar} source={this.state.avatarSource} />
           }
