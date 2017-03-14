@@ -5,6 +5,7 @@ import {
   View,
   PixelRatio,
   Image,
+  TouchableOpacity
 } from 'react-native';
 
 import ImagePicker from 'react-native-image-picker';
@@ -12,12 +13,16 @@ import ImagePicker from 'react-native-image-picker';
 class ImageUpload extends Component {
 
   state = {
-    avatarSource: null
+    clothingItemSource: null
   };
 
   componentWillMount() {
-        const options = {
-        title: 'Select Avatar',
+    this.displayImagePicker();
+  }
+
+  displayImagePicker() {
+    const options = {
+        title: 'Select Clothing Item',
         storageOptions: {
             skipBackup: true,
             path: 'images'
@@ -38,22 +43,24 @@ class ImageUpload extends Component {
         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
         this.setState({
-          avatarSource: source
+          clothingItemSource: source
         });
       }
     });
   }
 
   render() {
-    const { container, avatar, avatarContainer } = styles;
-    
+    const { container, clothingItem, clothingItemContainer } = styles;
+
     return (
       <View style={container}>
-          <View style={[avatar, avatarContainer, { marginBottom: 20 }]}>
-          { this.state.avatarSource === null ? <Text>Select a Photo</Text> :
-            <Image style={avatar} source={this.state.avatarSource} />
+        <TouchableOpacity onPress={this.displayImagePicker.bind(this)}> 
+          <View style={[clothingItem, clothingItemContainer, { marginBottom: 20 }]} >
+          { this.state.clothingItemSource === null ? <Text>Select a Photo</Text> :
+            <Image style={clothingItem} source={this.state.clothingItemSource} />
           }
           </View>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -62,21 +69,20 @@ class ImageUpload extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },
-  avatarContainer: {
+  clothingItemContainer: {
     borderColor: '#9B9B9B',
     borderWidth: 1 / PixelRatio.get(),
     justifyContent: 'center',
     alignItems: 'center'
   },
-  avatar: {
-    borderRadius: 75,
-    width: 150,
-    height: 150
+  clothingItem: {
+    borderRadius: 5,
+    width: 200,
+    height: 200
   }
 });
 
