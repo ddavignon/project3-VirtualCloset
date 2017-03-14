@@ -2,13 +2,25 @@ import React, { Component } from 'react';
 import { ScrollView, View, Text, Image } from 'react-native';
 
 class ClosetList extends Component {
-    state = { showText: true };
+    state = { showText: true, initialPosition: '' };
+
+    componentDidMount() {
+        navigator.geolocation.getCurrentPosition(
+        (position) => {
+            var initialPosition = JSON.stringify(position);
+            this.setState({initialPosition});
+        },
+        (error) => alert(JSON.stringify(error)),
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        );
+    }
 
     render() {
         const { container, welcome } = styles;
         const display = this.state.showText ? 'Welcome to my VirtualCloset' : ' ';
-        
+
         return (
+
             /*<ScrollView
                 horizontal
             >
@@ -23,6 +35,7 @@ class ClosetList extends Component {
             </ScrollView>*/
             <ScrollView horizontal>
             <Text style={{fontSize:96}}>Scroll me plz</Text>
+            <Text>{this.state.initialPosition}</Text>
             <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'}} />
             <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'}} />
             <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'}} />
