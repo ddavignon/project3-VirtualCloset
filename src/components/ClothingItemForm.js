@@ -47,7 +47,7 @@ class ClothingItemForm extends Component {
                     <Input
                         label="Type"
                         placeholder="shirt"
-                        value={this.props.color}
+                        value={this.props.type}
                         onChangeText={value => this.props.clothingItemUpdate({ prop: 'type', value })}
                     />
                {/* <CardSection style={{ flexDirection: 'column' }}>
