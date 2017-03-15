@@ -15,9 +15,9 @@ class ImageUpload extends Component {
     clothingItemSource: null
   };
 
-  // componentWillMount() {
-  //   this.displayImagePicker();
-  // }
+  componentWillMount() {
+    this.displayImagePicker();
+  }
 
   displayImagePicker() {
     const options = {
