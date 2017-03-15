@@ -5,3 +5,4 @@ export const LOGIN_USER_FAIL = 'login_user_fail';
 export const LOGIN_USER = 'login_user';
 
 export const CLOTHING_ITEM_UPDATE = 'clothing_item_update';
+export const CLOTHING_ITEM_CREATE = 'clothin_item_create';

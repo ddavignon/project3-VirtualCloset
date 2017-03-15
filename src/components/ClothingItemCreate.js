@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { clothingItemUpdate, clothingItemCreate } from '../actions';
 import { Card, CardSection, Button } from './common';
 import ImageUpload from './ImageUpload';
 import ClothingItemForm from './ClothingItemForm';
 
 class ClothingItemCreate extends Component {
+    onButtonPress() {
+        const { name, description, style, color, type } = this.props;
+
+        this.props.clothingItemCreate({ name, description, style, color, type });
+    }
+
     render() {
         return (
             <Card>
                 <ImageUpload />
-                <ClothingItemForm />
+                <ClothingItemForm {...this.props} />
                 <CardSection>
-                    <Button>
+                    <Button onPress={this.onButtonPress.bind(this)}>
                         Add Item
                     </Button>
                 </CardSection>
@@ -19,4 +27,12 @@ class ClothingItemCreate extends Component {
     }
 }
 
-export default ClothingItemCreate;
+const mapStateToProps = (state) => {
+    const { name, description, style, color, type } = state.clothingItemForm;
+
+    return { name, description, style, color, type };
+};
+
+export default connect(mapStateToProps, {
+    clothingItemUpdate, clothingItemCreate
+})(ClothingItemCreate);
