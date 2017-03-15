@@ -8,7 +8,6 @@ import {
   TouchableOpacity
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-import ClothingItemCreate from './ClothingItemCreate';
 
 class ImageUpload extends Component {
 
@@ -61,7 +60,6 @@ class ImageUpload extends Component {
           }
           </View>
         </TouchableOpacity>
-        <ClothingItemCreate />
       </View>
     );
   }

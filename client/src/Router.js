@@ -2,7 +2,7 @@ import React from 'react';
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import LoginForm from './components/LoginForm';
 import ClosetList from './components/ClosetList';
-import ImageUpload from './components/ImageUpload';
+import ClothingItemCreate from './components/ClothingItemCreate';
 
 const RouterComponent = () => {
     return (
@@ -12,7 +12,7 @@ const RouterComponent = () => {
             </Scene>
             <Scene key="main">
                 <Scene
-                    onRight={() => Actions.imageUpload()}
+                    onRight={() => Actions.clothingItemCreate()}
                     rightTitle="Add"
                     key="closetList"
                     component={ClosetList}
@@ -20,8 +20,8 @@ const RouterComponent = () => {
                     initial
                 />
                 <Scene
-                    key="imageUpload"
-                    component={ImageUpload}
+                    key="clothingItemCreate"
+                    component={ClothingItemCreate}
                     title="Upload Image"
                 />
             </Scene>
