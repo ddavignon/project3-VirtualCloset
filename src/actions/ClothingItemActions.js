@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import { Actions } from 'react-native-router-flux';
 import {
     CLOTHING_ITEM_UPDATE,
     CLOTHING_ITEM_CREATE
@@ -15,7 +16,7 @@ export const clothingItemCreate = ({ name, description, style, color, type }) =>
     const { currentUser } = firebase.auth();
 
     return (dispatch) => {
-        firebase.database()ref(`/users/${currenUser.uid}/closet`)
+        firebase.database().ref(`/users/${currentUser.uid}/closet`)
             .push({ name, description, style, color, type })
             .then(() => {
                 dispatch({ type: CLOTHING_ITEM_CREATE });
