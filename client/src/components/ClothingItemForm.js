@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Text, Picker } from 'react-native';
 import { connect } from 'react-redux';
 import { clothingItemUpdate } from '../actions';
 import { CardSection, Input } from './common';
@@ -43,14 +43,14 @@ class ClothingItemForm extends Component {
                         onChangeText={value => this.props.clothingItemUpdate({ prop: 'color', value })}
                     />
                 </CardSection>
-                <CardSection>
+                {/*<CardSection>
                     <Input
                         label="Type"
                         placeholder="shirt"
                         value={this.props.type}
                         onChangeText={value => this.props.clothingItemUpdate({ prop: 'type', value })}
-                    />
-               {/* <CardSection style={{ flexDirection: 'column' }}>
+                    />*/}
+                <CardSection style={{ flexDirection: 'column' }}>
                     <Text>Type</Text>
                     <Picker
                         style={{ flex: 1 }}
@@ -62,7 +62,7 @@ class ClothingItemForm extends Component {
                         <Picker label="shoes" value="shoes" />
                         <Picker label="accessories" value="accessories" />
 
-                    </Picker>*/}
+                    </Picker>
                 </CardSection>
             </View>
         );
