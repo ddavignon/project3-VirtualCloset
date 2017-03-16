@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, Picker } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { clothingItemUpdate } from '../actions';
 import { CardSection, Input } from './common';
@@ -7,7 +7,7 @@ import { CardSection, Input } from './common';
 class ClothingItemForm extends Component {
     render() {
         return (
-            <ScrollView>
+            <View>
                 <CardSection>
                     <Input
                         label="Name"
@@ -64,7 +64,7 @@ class ClothingItemForm extends Component {
 
                     </Picker>*/}
                 </CardSection>
-            </ScrollView>
+            </View>
         );
     }
 }
