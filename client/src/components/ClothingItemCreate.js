@@ -3,7 +3,6 @@ import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { clothingItemUpdate, clothingItemCreate } from '../actions';
 import { Card, CardSection, Button } from './common';
-import ImageUpload from './ImageUpload';
 import ClothingItemForm from './ClothingItemForm';
 
 class ClothingItemCreate extends Component {
@@ -17,7 +16,6 @@ class ClothingItemCreate extends Component {
         return (
             <ScrollView>
                 <Card>
-                    <ImageUpload />
                     <ClothingItemForm {...this.props} />
                     <CardSection>
                         <Button onPress={this.onButtonPress.bind(this)}>
