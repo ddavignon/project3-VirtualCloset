@@ -230,14 +230,14 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-		DABD534F1E7A0F6D00D999FE /* PBXContainerItemProxy */ = {
+		DABD52F11E7A0EFD00D999FE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C774AABC6FE84DD7A0200BDD /* RNFetchBlob.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A15C300E1CD25C330074CB35;
 			remoteInfo = RNFetchBlob;
 		};
-		DABD53521E7A0F6D00D999FE /* PBXContainerItemProxy */ = {
+		DABD52F61E7A0EFD00D999FE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD045D2D766343789864F45D /* RNImagePicker.xcodeproj */;
 			proxyType = 2;
@@ -507,18 +507,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DABD53311E7A0F6C00D999FE /* Products */ = {
+		DABD52D51E7A0EFD00D999FE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DABD53501E7A0F6D00D999FE /* libRNFetchBlob.a */,
+				DABD52F21E7A0EFD00D999FE /* libRNFetchBlob.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DABD53331E7A0F6C00D999FE /* Products */ = {
+		DABD52F31E7A0EFD00D999FE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DABD53531E7A0F6D00D999FE /* libRNImagePicker.a */,
+				DABD52F71E7A0EFD00D999FE /* libRNImagePicker.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -679,11 +679,11 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = DABD53311E7A0F6C00D999FE /* Products */;
+					ProductGroup = DABD52D51E7A0EFD00D999FE /* Products */;
 					ProjectRef = C774AABC6FE84DD7A0200BDD /* RNFetchBlob.xcodeproj */;
 				},
 				{
-					ProductGroup = DABD53331E7A0F6C00D999FE /* Products */;
+					ProductGroup = DABD52F31E7A0EFD00D999FE /* Products */;
 					ProjectRef = DD045D2D766343789864F45D /* RNImagePicker.xcodeproj */;
 				},
 			);
@@ -873,18 +873,18 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		DABD53501E7A0F6D00D999FE /* libRNFetchBlob.a */ = {
+		DABD52F21E7A0EFD00D999FE /* libRNFetchBlob.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNFetchBlob.a;
-			remoteRef = DABD534F1E7A0F6D00D999FE /* PBXContainerItemProxy */;
+			remoteRef = DABD52F11E7A0EFD00D999FE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		DABD53531E7A0F6D00D999FE /* libRNImagePicker.a */ = {
+		DABD52F71E7A0EFD00D999FE /* libRNImagePicker.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNImagePicker.a;
-			remoteRef = DABD53521E7A0F6D00D999FE /* PBXContainerItemProxy */;
+			remoteRef = DABD52F61E7A0EFD00D999FE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
