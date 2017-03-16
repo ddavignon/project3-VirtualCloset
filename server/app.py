@@ -3,9 +3,15 @@ import os
 from flask import abort
 from flask import make_response
 from flask import request
+from clarifai import rest
+from clarifai.rest import ClarifaiApp
+from clarifai.rest import Image as ClImage
+import tempfile
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
+appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
 tasks = [
     {
         'id': 1,
@@ -20,6 +26,32 @@ tasks = [
         'done': False
     }
 ]
+
+
+###################################Clarifai methods#############################
+#returns an an array of  possible apparel
+#attr
+#name-apparelName
+#value-confidence
+def possibleApparel(appCont,name):
+    model=appCont.models.get('e0be3b9d6a454f0493ac3a30784001ff')
+    image = ClImage(file_obj=open(name, 'rb'))
+    response=model.predict([image])
+    print response
+    return response["outputs"][0]["data"]["concepts"]
+
+#returns an an array of  possible styles and what type of clothes it could be
+#attr
+#name-apparelName
+#value-confidence
+def possibleStyles(appCont,name):
+    model=appCont.models.get('general-v1.3')
+    image = ClImage(file_obj=open(name, 'rb'))
+    response=model.predict([image])
+    print response
+    return response["outputs"][0]["data"]["concepts"]
+    
+    
 @app.route('/')
 def something():
     return "hello"
@@ -62,9 +94,22 @@ def confirm():
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])
 def upload():
     #stuff from form can be grabbed by id of the tag
-    stuff = request.form['something']
+    #stuff = request.form['something']
     file = request.files['Test']
-    print file
+    #get working directory 
+    directory_name=os.getcwd()+"/tmp"
+    print directory_name
+    #make a filename note need to add extnesion probably only jpg or jpeg at this point less data
+    filename = secure_filename(file.filename)
+    #save fiel
+    file.save(os.path.join(directory_name, filename))
+    #send to Clarfai API
+    possibleApparel(appClar,directory_name+"/"+file.filename)
+    #remove file
+    os.remove(directory_name+"/"+file.filename) 
+    #does take a little time 
+    
+    #print file.mimetype_params
     return "Success"
         
     
