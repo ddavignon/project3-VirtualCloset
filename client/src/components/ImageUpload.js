@@ -5,9 +5,18 @@ import {
   View,
   PixelRatio,
   Image,
+  Platform,
   TouchableOpacity
 } from 'react-native';
+import firebase from 'firebase';
 import ImagePicker from 'react-native-image-picker';
+import RNFetchBlob from 'react-native-fetch-blob';
+
+// Prepare Blob support
+const Blob = RNFetchBlob.polyfill.Blob;
+// const fs = RNFetchBlob.fs;
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+window.Blob = Blob;
 
 class ImageUpload extends Component {
 
@@ -38,6 +47,21 @@ class ImageUpload extends Component {
       } else {
         const source = { uri: response.uri };
 
+       
+      const testImageName = `image-from-react-native-${Platform.OS}-${new Date()}.jpg`;
+
+      const path = response.path;  
+      // path ->  /storage/emulated/0/Pictures/image-8de3ead3-4411cc.jpg
+
+      Blob.build(RNFetchBlob.wrap(path), { type: 'image/jpeg' })
+        .then((blob) => firebase.storage()
+                .ref('images')
+                .child(testImageName)
+                .put(blob, { contentType: 'image/png' })
+        )
+        .then((snapshot) => { /* there we go ! */ });
+
+    
         // You can also display the image using data:
         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
