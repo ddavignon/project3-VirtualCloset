@@ -5,12 +5,10 @@ import {
   ScrollView,
   View
 } from 'react-native';
-import ClosetItem from './ClosetItem';
+import ClosetRow from './ClosetRow';
 
 class ClosetList extends Component {
     state = { showText: true };
-
-
     render() {
         return (
             <View style={styles.container}>
@@ -19,42 +17,9 @@ class ClosetList extends Component {
                         "Here's what I got to work with!"
                     </Text>
                 </View>
-			<View style={{ height: 150 }}>
-                <ScrollView 
-                    ref={(scrollView) => { _scrollView = scrollView; }}
-                    automaticallyAdjustContentInsets={false}
-                    horizontal
-                    onScroll={() => { console.log('onScroll!'); }}
-                    scrollEventThrottle={200}
-                    style={[styles.scrollView, styles.horizontalScrollView]}
-                >
-                    {SHIRTS.map(createThumbRow)}
-                </ScrollView>
-			</View>
-			<View style={{ height: 150 }}>
-                <ScrollView 
-                    ref={(scrollView) => { _scrollView = scrollView; }}
-                    automaticallyAdjustContentInsets={false}
-                    horizontal
-                    onScroll={() => { console.log('onScroll!'); }}
-                    scrollEventThrottle={200}
-                    style={[styles.scrollView, styles.horizontalScrollView]}
-                >
-					{PANTS.map(createThumbRow)}
-				</ScrollView>
-			</View>
-			<View style={{ height: 150 }}>
-                <ScrollView 
-                    ref={(scrollView) => { _scrollView = scrollView; }}
-                    automaticallyAdjustContentInsets={false}
-                    horizontal
-                    onScroll={() => { console.log('onScroll!'); }}
-                    scrollEventThrottle={200}
-                    style={[styles.scrollView, styles.horizontalScrollView]}
-                >
-					{SHOES.map(createThumbRow)}
-				</ScrollView>
-			</View>
+                <ClosetRow items={SHIRTS} />
+                <ClosetRow items={PANTS} />
+                <ClosetRow items={SHOES} />
             </View>
         );
     }
@@ -98,7 +63,7 @@ let SHIRTS = ['https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.
 'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg',
 'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg'];
 SHIRTS = SHIRTS.concat(SHIRTS); // double length of THUMBS
-let createThumbRow = (uri, i) => <ClosetItem key={i} uri={uri} />;
+// let createThumbRow = (uri, i) => <ClosetItem key={i} uri={uri} />;
 
 /*class Thumb extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -154,13 +119,6 @@ const styles = StyleSheet.create({
 	top: 20,
 	height: 40,
   },
-  // button: {
-	// margin: 7,
-	// padding: 5,
-	// alignItems: 'center',
-	// backgroundColor: '#eaeaea',
-	// borderRadius: 3,
-  // },
   buttonContents: {
 	flexDirection: 'row',
 	width: 64,
