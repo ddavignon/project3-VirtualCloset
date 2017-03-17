@@ -127,14 +127,15 @@ def sendToClarfai():
     #save fiel
     file.save(os.path.join(directory_name, filename))
     #send to Clarfai API
-    #possibleApparel(appClar,directory_name+"/"+file.filename)
-    data["apparel"]
+    data["apparel"]=possibleApparel(appClar,directory_name+"/"+file.filename)
+    data["styles"]=possibleStyles(appClar,directory_name+"/"+file.filename)
+    data["color"]=getColor(appClar,directory_name+"/"+file.filename)
     #remove file
     os.remove(directory_name+"/"+file.filename) 
     #does take a little time 
     
     #print file.mimetype_params
-    return "Success"
+    return jsonify(data)
         
     
 if __name__ == '__main__':
