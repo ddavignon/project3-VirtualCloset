@@ -8,6 +8,7 @@ from clarifai.rest import ClarifaiApp
 from clarifai.rest import Image as ClImage
 import tempfile
 from werkzeug.utils import secure_filename
+import json
 
 app = Flask(__name__)
 
@@ -37,8 +38,13 @@ def possibleApparel(appCont,name):
     model=appCont.models.get('e0be3b9d6a454f0493ac3a30784001ff')
     image = ClImage(file_obj=open(name, 'rb'))
     response=model.predict([image])
-    print response
-    return response["outputs"][0]["data"]["concepts"]
+    response=response["outputs"][0]["data"]["concepts"]
+    item =response
+    items=[]
+    items.append(item[0])
+    items.append(item[2])
+    items.append(item[3])
+    return items
 
 #returns an an array of  possible styles and what type of clothes it could be
 #attr
@@ -48,9 +54,25 @@ def possibleStyles(appCont,name):
     model=appCont.models.get('general-v1.3')
     image = ClImage(file_obj=open(name, 'rb'))
     response=model.predict([image])
-    print response
-    return response["outputs"][0]["data"]["concepts"]
+    response=response["outputs"][0]["data"]["concepts"]
+    item =response
+    items=[]
+    items.append(item[0])
+    items.append(item[2])
+    items.append(item[3])
+    return items
     
+#returns an an array of  possible colors
+#attr
+#name-apparelName
+#value-confidence
+def getColor(appCont,name):
+    model = appCont.models.get('color', model_type='color')
+    image = ClImage(file_obj=open(name,'rb'))
+    response=model.predict([image])
+    response=response["outputs"][0]["data"]["colors"][0]["w3c"]["hex"]
+    print json.dumps(response, indent=2)
+    return response
     
 @app.route('/')
 def something():
@@ -92,10 +114,11 @@ def confirm():
     return "confirmed"
 
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])
-def upload():
+def sendToClarfai():
     #stuff from form can be grabbed by id of the tag
     #stuff = request.form['something']
     file = request.files['Test']
+    data ={"apparel":"apparel","styles":"styles","color":"color"}
     #get working directory 
     directory_name=os.getcwd()+"/tmp"
     print directory_name
@@ -104,7 +127,8 @@ def upload():
     #save fiel
     file.save(os.path.join(directory_name, filename))
     #send to Clarfai API
-    possibleApparel(appClar,directory_name+"/"+file.filename)
+    #possibleApparel(appClar,directory_name+"/"+file.filename)
+    data["apparel"]
     #remove file
     os.remove(directory_name+"/"+file.filename) 
     #does take a little time 
