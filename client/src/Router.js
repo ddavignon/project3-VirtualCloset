@@ -6,7 +6,7 @@ import ClothingItemCreate from './components/ClothingItemCreate';
 
 const RouterComponent = () => {
     return (
-        <Router sceneStyle={{ paddingTop: 65 }}>
+        <Router sceneStyle={{ paddingTop: 55 }}>
             <Scene key="auth">
                 <Scene key="login" component={LoginForm} title="Please Login" />
             </Scene>
