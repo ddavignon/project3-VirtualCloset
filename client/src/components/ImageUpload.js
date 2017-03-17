@@ -59,7 +59,7 @@ class ImageUpload extends Component {
                 .child(testImageName)
                 .put(blob, { contentType: 'image/png' })
         )
-        .then((snapshot) => { /* there we go ! */ });
+        .then((snapshot) => { console.log(snapshot); /* there we go ! */ });
 
     
         // You can also display the image using data:
@@ -78,7 +78,7 @@ class ImageUpload extends Component {
     return (
       <View>
         <TouchableOpacity style={container} onPress={this.displayImagePicker.bind(this)}> 
-          <View style={[clothingItem, clothingItemContainer, { marginBottom: 20 }]} >
+          <View style={[clothingItem, clothingItemContainer, { margin: 20 }]} >
           { this.state.clothingItemSource === null ? <Text>Select a Photo</Text> :
             <Image style={clothingItem} source={this.state.clothingItemSource} />
           }

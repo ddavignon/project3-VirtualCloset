@@ -5,10 +5,22 @@ import {
   ScrollView,
   View
 } from 'react-native';
+import axios from 'axios';
 import ClosetRow from './ClosetRow';
 
 class ClosetList extends Component {
     state = { showText: true };
+
+    componentWillMount() {
+      axios.get('http://localhost:3005/v1/closet')
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
     render() {
         return (
             <ScrollView>
