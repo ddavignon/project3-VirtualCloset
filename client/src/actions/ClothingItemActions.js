@@ -28,6 +28,9 @@ export const clothingItemCreate = ({ name, description, style, color, type }) =>
             .then(() => {
                 dispatch({ type: CLOTHING_ITEM_CREATE });
                 Actions.closetList({ type: 'reset' });
+            })
+            .catch((error) => {
+                console.log(error);
             });      
     };
 

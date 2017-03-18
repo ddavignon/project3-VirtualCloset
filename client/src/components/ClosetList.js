@@ -6,20 +6,32 @@ import {
   View
 } from 'react-native';
 import axios from 'axios';
+import { GET_CLOTHING_ITEMS } from '../api/constants';
 import ClosetRow from './ClosetRow';
 
 class ClosetList extends Component {
-    state = { showText: true };
+    state = { showText: true, closetItems: [] };
 
     componentWillMount() {
-      axios.get('http://localhost:3005/v1/closet')
+      axios.get(GET_CLOTHING_ITEMS)
         .then((response) => {
-          console.log(response.data);
+          console.log('state', this.state.closetItems);
+          this.setState({ closetItems: response.data });
+          console.log('state-after', this.state.closetItems);
         })
         .catch((err) => {
           console.log(err);
         });
     }
+
+    renderItems() {
+        let items = [];
+        this.state.closetItems.map(newitems => 
+            items.push(newitems.urlPath)
+        );
+        return <ClosetRow items={items} />;
+    }
+
 
     render() {
         return (
@@ -30,7 +42,8 @@ class ClosetList extends Component {
                         "Here's what I got to work with!"
                     </Text>
                 </View>
-                <ClosetRow items={SHIRTS} />
+                {this.renderItems()}
+                <ClosetRow items={SHOES} />
                 <ClosetRow items={PANTS} />
                 <ClosetRow items={SHOES} />
                 <ClosetRow items={SHIRTS} />
