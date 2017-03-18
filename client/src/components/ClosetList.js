@@ -6,20 +6,28 @@ import {
   View
 } from 'react-native';
 import axios from 'axios';
-import ClosetRow from './ClosetRow';
+import { GET_CLOTHING_ITEMS } from '../api/constants';
+import ClosetItem from './ClosetItem';
 
 class ClosetList extends Component {
-    state = { showText: true };
+    state = { showText: true, closetItems: [] };
 
     componentWillMount() {
-      axios.get('http://localhost:3005/v1/closet')
+      axios.get(GET_CLOTHING_ITEMS)
         .then((response) => {
-          console.log(response.data);
+          console.log('state', this.state.closetItems);
+          this.setState({ closetItems: response.data });
+          console.log('state-after', this.state.closetItems);
         })
         .catch((err) => {
           console.log(err);
         });
     }
+
+    renderItems() {
+        return this.state.closetItems.map(item => <ClosetItem key={item._id} uri={item.urlPath} />);
+    }
+
 
     render() {
         return (
@@ -30,11 +38,17 @@ class ClosetList extends Component {
                         "Here's what I got to work with!"
                     </Text>
                 </View>
-                <ClosetRow items={SHIRTS} />
-                <ClosetRow items={PANTS} />
-                <ClosetRow items={SHOES} />
-                <ClosetRow items={SHIRTS} />
-                <ClosetRow items={PANTS} />
+                <View style={{ height: 150 }}>
+                  <ScrollView 
+                      ref={(scrollView) => { _scrollView = scrollView; }}
+                      automaticallyAdjustContentInsets={false}
+                      horizontal
+                      onScroll={() => { console.log('onScroll!'); }}
+                      scrollEventThrottle={200}
+                  >
+                      {this.renderItems()}
+                  </ScrollView>
+                </View>
               </View>
             </ScrollView>
         );

@@ -1,6 +1,7 @@
-# react-native-redux-boilerplate
+# Virtual Closet Application
+### Spring 2017 - CST438 Software Engineering 
 
-run `git clone https://github.com/ddavignon/react-native-redux-boilerplate.git virtual_closet`
+run `git clone`
 
 then `npm install` to install dependencies
 
@@ -9,13 +10,14 @@ it is assumed you have react native tools installed, please see https://facebook
 
 on mac, create `local.properties` and input ```sdk.dir = /Users/[YOUR_USERNAME]/Library/Android/sdk```
 
+not sure about windows setup...
+
 
 `react-native run-android`
 
 or for iOS
 
 `react-native run-ios`
-
 
 ## TO DO
 

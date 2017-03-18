@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3005/v1/closet';
+const BASE_URL = 'https://dustind.net/api/v1/closet';
 
 // Basic CRUD functinoality
 
