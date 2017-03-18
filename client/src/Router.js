@@ -7,9 +7,7 @@ import ClothingItemCreate from './components/ClothingItemCreate';
 const RouterComponent = () => {
     return (
         <Router sceneStyle={{ paddingTop: 55 }}>
-            <Scene key="auth">
-                <Scene key="login" component={LoginForm} title="Please Login" />
-            </Scene>
+
             <Scene key="main">
                 <Scene
                     onRight={() => Actions.clothingItemCreate()}
@@ -24,6 +22,9 @@ const RouterComponent = () => {
                     component={ClothingItemCreate}
                     title="Upload Image"
                 />
+            </Scene>
+            <Scene key="auth">
+                <Scene key="login" component={LoginForm} title="Please Login" />
             </Scene>
         </Router>
     );

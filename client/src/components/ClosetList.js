@@ -38,9 +38,31 @@ class ClosetList extends Component {
                         "Here's what I got to work with!"
                     </Text>
                 </View>
+
                 <View style={{ height: 150 }}>
                   <ScrollView 
-                      ref={(scrollView) => { _scrollView = scrollView; }}
+                      automaticallyAdjustContentInsets={false}
+                      horizontal
+                      onScroll={() => { console.log('onScroll!'); }}
+                      scrollEventThrottle={200}
+                  >
+                      {this.renderItems()}
+                  </ScrollView>
+                </View>
+
+                <View style={{ height: 150 }}>
+                  <ScrollView 
+                      automaticallyAdjustContentInsets={false}
+                      horizontal
+                      onScroll={() => { console.log('onScroll!'); }}
+                      scrollEventThrottle={200}
+                  >
+                      {this.renderItems()}
+                  </ScrollView>
+                </View>
+
+                <View style={{ height: 150 }}>
+                  <ScrollView 
                       automaticallyAdjustContentInsets={false}
                       horizontal
                       onScroll={() => { console.log('onScroll!'); }}
