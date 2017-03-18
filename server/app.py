@@ -117,7 +117,7 @@ def confirm():
 def sendToClarfai():
     #stuff from form can be grabbed by id of the tag
     #stuff = request.form['something']
-    file = request.files['Test']
+    file = request.files['uri']
     data ={"apparel":"apparel","styles":"styles","color":"color"}
     #get working directory 
     directory_name=os.getcwd()+"/tmp"
