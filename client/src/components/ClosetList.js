@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { GET_CLOTHING_ITEMS } from '../api/constants';
-import ClosetRow from './ClosetRow';
+import ClosetItem from './ClosetItem';
 
 class ClosetList extends Component {
     state = { showText: true, closetItems: [] };
@@ -25,11 +25,7 @@ class ClosetList extends Component {
     }
 
     renderItems() {
-        let items = [];
-        this.state.closetItems.map(newitems => 
-            items.push(newitems.urlPath)
-        );
-        return <ClosetRow items={items} />;
+        return this.state.closetItems.map(item => <ClosetItem key={item._id} uri={item.urlPath} />);
     }
 
 
@@ -42,12 +38,17 @@ class ClosetList extends Component {
                         "Here's what I got to work with!"
                     </Text>
                 </View>
-                {this.renderItems()}
-                <ClosetRow items={SHOES} />
-                <ClosetRow items={PANTS} />
-                <ClosetRow items={SHOES} />
-                <ClosetRow items={SHIRTS} />
-                <ClosetRow items={PANTS} />
+                <View style={{ height: 150 }}>
+                  <ScrollView 
+                      ref={(scrollView) => { _scrollView = scrollView; }}
+                      automaticallyAdjustContentInsets={false}
+                      horizontal
+                      onScroll={() => { console.log('onScroll!'); }}
+                      scrollEventThrottle={200}
+                  >
+                      {this.renderItems()}
+                  </ScrollView>
+                </View>
               </View>
             </ScrollView>
         );
