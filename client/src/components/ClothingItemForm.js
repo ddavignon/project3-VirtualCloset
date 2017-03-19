@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { clothingItemUpdate } from '../actions';
-import { CardSection, Input } from './common';
+import { CardSection, Input, Spinner } from './common';
 import { UPLOAD_ITEM_IMAGE } from '../api/constants';
 
 
@@ -31,53 +31,51 @@ class ClothingItemForm extends Component {
             }
         };
 
-    ImagePicker.showImagePicker(options, (response) => {
-        console.log('Response = ', response);
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
 
-        if (response.didCancel) {
-            console.log('User cancelled photo picker');
-        } else if (response.error) {
-            console.log('ImagePicker Error: ', response.error);
-        } else {
-            RNFetchBlob.fetch('POST', UPLOAD_ITEM_IMAGE, {
-                'Content-Type': 'multipart/form-data',
-            }, [
-                { name: 'info', data: 'imageUpload' },
-                { name: 'uri', filename: 'image.png', data: response.data }
-                ])
-                .then((res) => console.log(res.data));
-            
-            this.props.clothingItemUpdate({ prop: 'uri', value: response.uri });
-            this.props.clothingItemUpdate({ prop: 'image_data', value: response.data });
-      }
-    });
-  }
+            if (response.didCancel) {
+                console.log('User cancelled photo picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else {
+                this.props.clothingItemUpdate({ prop: 'uri', value: response.uri });
+                this.props.clothingItemUpdate({ prop: 'loading', value: true });
 
-    render() {
-        const { container, clothingItem, clothingItemContainer } = styles;
+                RNFetchBlob.fetch('POST', UPLOAD_ITEM_IMAGE, {
+                    'Content-Type': 'multipart/form-data',
+                }, [
+                    { name: 'info', data: 'imageUpload' },
+                    { name: 'uri', filename: 'image.png', data: response.data }
+                    ])
+                    .then((res) => {
+                        const description = res.json().apparel[0].name;
+                        const style = res.json().styles[0].name;
+                        const color = res.json().color;
+
+                        console.log(res.json(), style, description);
+                        this.props.clothingItemUpdate({ prop: 'style', value: style });
+                        this.props.clothingItemUpdate({ prop: 'description', value: description });
+                        this.props.clothingItemUpdate({ prop: 'color', value: color });
+                        this.props.clothingItemUpdate({ prop: 'loading', value: false });
+                    });
+        
+                this.props.clothingItemUpdate({ prop: 'image_data', value: response.data });
+            }
+        });
+    }
+
+    renderForm() {
+        if (this.props.loading) {
+            return (
+                <CardSection>
+                    <Spinner size="large" />
+                </CardSection>
+            );
+        }
+
         return (
             <View>
-                <CardSection>
-                    <View style={{ flex: 1 }}>
-                        <TouchableOpacity style={container} onPress={this.displayImagePicker.bind(this)}> 
-                            <View style={[clothingItem, clothingItemContainer, { marginBottom: 20 }]} >
-                            { this.props.uri === null ? <Text>Select a Photo</Text> :
-                                <Image style={clothingItem} source={{ uri: this.props.uri }} />
-                            }
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </CardSection>
-
-                <CardSection>
-                    <Input
-                        label="Name"
-                        placeholder="sweater"
-                        value={this.props.name}
-                        onChangeText={value => this.props.clothingItemUpdate({ prop: 'name', value })}
-                    />
-                </CardSection>
-
                 <CardSection>
                     <Input
                         label="Description"
@@ -104,6 +102,36 @@ class ClothingItemForm extends Component {
                         onChangeText={value => this.props.clothingItemUpdate({ prop: 'color', value })}
                     />
                 </CardSection>
+            </View>
+        );
+    }
+
+    render() {
+        const { container, clothingItem, clothingItemContainer } = styles;
+        return (
+            <View>
+                <CardSection>
+                    <View style={{ flex: 1 }}>
+                        <TouchableOpacity style={container} onPress={this.displayImagePicker.bind(this)}> 
+                            <View style={[clothingItem, clothingItemContainer, { marginBottom: 20 }]} >
+                            { this.props.uri === null ? <Text>Select a Photo</Text> :
+                                <Image style={clothingItem} source={{ uri: this.props.uri }} />
+                            }
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </CardSection>
+
+                <CardSection>
+                    <Input
+                        label="Name"
+                        placeholder="sweater"
+                        value={this.props.name}
+                        onChangeText={value => this.props.clothingItemUpdate({ prop: 'name', value })}
+                    />
+                </CardSection>
+
+                {this.renderForm()}
   
                 <CardSection style={{ flexDirection: 'column' }}>
                     <Text>Type</Text>
@@ -145,10 +173,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     const {
-        name, description, style, color, type_clothing, uri, image_data
+        name, description, style, color, type_clothing, uri, image_data, loading
     } = state.clothingItemForm;
 
-    return { name, description, style, color, type_clothing, uri, image_data };
+    return { name, description, style, color, type_clothing, uri, image_data, loading };
 };
 
 export default connect(mapStateToProps, { clothingItemUpdate })(ClothingItemForm);

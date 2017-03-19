@@ -5,7 +5,11 @@ import {
     clothingItemUpdate,
     clothingItemCreate
 } from '../actions';
-import { Card, CardSection, Button } from './common';
+import {
+    Card,
+    CardSection,
+    Button
+} from './common';
 import ClothingItemForm from './ClothingItemForm';
 
 class ClothingItemCreate extends Component {
@@ -16,7 +20,7 @@ class ClothingItemCreate extends Component {
             name, description, style, color, type_clothing, image_data 
         });
     }
-    
+
     render() {
         return (
             <ScrollView>
@@ -27,7 +31,7 @@ class ClothingItemCreate extends Component {
                             Add Item
                         </Button>
                     </CardSection>  
-                </Card>  
+                </Card> 
             </ScrollView>
         );
     }
@@ -35,10 +39,10 @@ class ClothingItemCreate extends Component {
 
 const mapStateToProps = (state) => {
     const { 
-        name, description, style, color, type_clothing, uri, image_data, loading
+        name, description, style, color, type_clothing, uri, image_data
     } = state.clothingItemForm;
 
-    return { name, description, style, color, type_clothing, uri, image_data, loading };
+    return { name, description, style, color, type_clothing, uri, image_data };
 };
 
 export default connect(mapStateToProps, {

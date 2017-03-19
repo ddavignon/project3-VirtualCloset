@@ -12,7 +12,7 @@ const INTIAL_STATE = {
     uri: null,
     url_path: null,
     image_data: '',
-    loading: true
+    loading: false
 };
 
 export default (state = INTIAL_STATE, action) => {
