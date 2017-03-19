@@ -15,9 +15,10 @@ class ClosetList extends Component {
     componentWillMount() {
       axios.get(GET_CLOTHING_ITEMS)
         .then((response) => {
-          console.log('state', this.state.closetItems);
+        //   console.log('state', this.state.closetItems);
+        //   response.data.map((data) => console.log(data));
           this.setState({ closetItems: response.data });
-          console.log('state-after', this.state.closetItems);
+        //   console.log('state-after', this.state.closetItems);
         })
         .catch((err) => {
           console.log(err);

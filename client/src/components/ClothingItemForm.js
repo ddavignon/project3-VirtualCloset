@@ -67,13 +67,13 @@ class ClothingItemForm extends Component {
             // You can also display the image using data:
             // let source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.props.clothingItemUpdate({ prop: 'uri', value: response.uri });
+        this.props.clothingItemUpdate({ prop: 'data', value: response.data });
       }
     });
   }
 
     render() {
         const { container, clothingItem, clothingItemContainer } = styles;
-        console.log(this.props.uri);
         return (
             <View>
                 <CardSection>
@@ -163,9 +163,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    const { name, description, style, color, type, uri } = state.clothingItemForm;
+    const { name, description, style, color, type, uri, data } = state.clothingItemForm;
 
-    return { name, description, style, color, type, uri };
+    return { name, description, style, color, type, uri, data };
 };
 
 export default connect(mapStateToProps, { clothingItemUpdate })(ClothingItemForm);

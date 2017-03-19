@@ -1,7 +1,9 @@
 // import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import axios from 'axios';
-import { ADD_CLOTHING_ITEM } from '../api/constants';
+import {
+    ADD_CLOTHING_ITEM,
+} from '../api/constants';
 import {
     CLOTHING_ITEM_UPDATE,
     CLOTHING_ITEM_CREATE
@@ -14,16 +16,18 @@ export const clothingItemUpdate = ({ prop, value }) => {
     };
 };
 
-export const clothingItemCreate = ({ name, description, style, color, type }) => {
+export const clothingItemCreate = ({ name, description, style, color, type, uri }) => {
 
     return (dispatch) => {
+        console.log(name);
+        console.log(uri);
         axios.post(ADD_CLOTHING_ITEM, {
                 name,
                 description,
                 style,
                 color,
                 type,
-                urlPath: 'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg'
+                uri
             })
             .then(() => {
                 dispatch({ type: CLOTHING_ITEM_CREATE });
@@ -31,8 +35,9 @@ export const clothingItemCreate = ({ name, description, style, color, type }) =>
             })
             .catch((error) => {
                 console.log(error);
-            });      
+            });  
     };
+
 
     /*** 
      *
