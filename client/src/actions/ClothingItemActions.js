@@ -1,8 +1,8 @@
 // import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
-import axios from 'axios';
+import RNFetchBlob from 'react-native-fetch-blob';
 import {
-    ADD_CLOTHING_ITEM,
+    ADD_CLOTHING_ITEM
 } from '../api/constants';
 import {
     CLOTHING_ITEM_UPDATE,
@@ -16,26 +16,27 @@ export const clothingItemUpdate = ({ prop, value }) => {
     };
 };
 
-export const clothingItemCreate = ({ name, description, style, color, type, uri }) => {
+export const clothingItemCreate = ({ name, description, style, color, type, data }) => {
 
     return (dispatch) => {
-        console.log(name);
-        console.log(uri);
-        axios.post(ADD_CLOTHING_ITEM, {
-                name,
-                description,
-                style,
-                color,
-                type,
-                uri
-            })
-            .then(() => {
-                dispatch({ type: CLOTHING_ITEM_CREATE });
-                Actions.closetList({ type: 'reset' });
-            })
-            .catch((error) => {
-                console.log(error);
-            });  
+        RNFetchBlob.fetch('POST', ADD_CLOTHING_ITEM, {
+                'Content-Type': 'multipart/form-data',
+            }, [
+                { name: 'info', data: 'imageUpload' },
+                { name: 'uri', filename: 'image.png', data },
+                { name: 'name', data: name },
+                { name: 'description', data: description },
+                { name: 'style', data: style },
+                { name: 'color', data: color },
+                { name: 'type', data: type }
+                ])
+                .then(() => {
+                    dispatch({ type: CLOTHING_ITEM_CREATE });
+                    Actions.closetList({ type: 'reset' });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
     };
 
 

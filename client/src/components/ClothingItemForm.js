@@ -19,9 +19,9 @@ import { UPLOAD_ITEM_IMAGE } from '../api/constants';
 
 class ClothingItemForm extends Component {
 
-//   componentWillMount() {
-//     this.displayImagePicker();
-//   }
+    // componentWillMount() {
+    //     this.displayImagePicker();
+    // }
 
     displayImagePicker() {
         const options = {

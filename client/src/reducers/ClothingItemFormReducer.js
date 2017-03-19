@@ -9,7 +9,8 @@ const INTIAL_STATE = {
     style: '',
     color: '',
     type: 'shirt',
-    uri: null 
+    uri: null,
+    loading: true
 };
 
 export default (state = INTIAL_STATE, action) => {
