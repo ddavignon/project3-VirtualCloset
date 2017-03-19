@@ -15,9 +15,10 @@ class ClosetList extends Component {
     componentWillMount() {
       axios.get(GET_CLOTHING_ITEMS)
         .then((response) => {
-          console.log('state', this.state.closetItems);
+        //   console.log('state', this.state.closetItems);
+        //   response.data.map((data) => console.log(data));
           this.setState({ closetItems: response.data });
-          console.log('state-after', this.state.closetItems);
+        //   console.log('state-after', this.state.closetItems);
         })
         .catch((err) => {
           console.log(err);
@@ -38,9 +39,31 @@ class ClosetList extends Component {
                         "Here's what I got to work with!"
                     </Text>
                 </View>
+
                 <View style={{ height: 150 }}>
                   <ScrollView 
-                      ref={(scrollView) => { _scrollView = scrollView; }}
+                      automaticallyAdjustContentInsets={false}
+                      horizontal
+                      onScroll={() => { console.log('onScroll!'); }}
+                      scrollEventThrottle={200}
+                  >
+                      {this.renderItems()}
+                  </ScrollView>
+                </View>
+
+                <View style={{ height: 150 }}>
+                  <ScrollView 
+                      automaticallyAdjustContentInsets={false}
+                      horizontal
+                      onScroll={() => { console.log('onScroll!'); }}
+                      scrollEventThrottle={200}
+                  >
+                      {this.renderItems()}
+                  </ScrollView>
+                </View>
+
+                <View style={{ height: 150 }}>
+                  <ScrollView 
                       automaticallyAdjustContentInsets={false}
                       horizontal
                       onScroll={() => { console.log('onScroll!'); }}
