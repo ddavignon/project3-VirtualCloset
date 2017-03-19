@@ -7,9 +7,9 @@ import ClothingItemForm from './ClothingItemForm';
 
 class ClothingItemCreate extends Component {
     onButtonPress() {
-        const { name, description, style, color, type } = this.props;
+        const { name, description, style, color, type, uri } = this.props;
 
-        this.props.clothingItemCreate({ name, description, style, color, type });
+        this.props.clothingItemCreate({ name, description, style, color, type, uri });
     }
 
     render() {
@@ -29,9 +29,9 @@ class ClothingItemCreate extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { name, description, style, color, type } = state.clothingItemForm;
+    const { name, description, style, color, type, uri } = state.clothingItemForm;
 
-    return { name, description, style, color, type };
+    return { name, description, style, color, type, uri };
 };
 
 export default connect(mapStateToProps, {

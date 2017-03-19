@@ -8,7 +8,8 @@ const INTIAL_STATE = {
     description: '',
     style: '',
     color: '',
-    type: '' 
+    type: '',
+    uri: null 
 };
 
 export default (state = INTIAL_STATE, action) => {

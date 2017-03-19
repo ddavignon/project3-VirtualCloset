@@ -19,10 +19,6 @@ import { UPLOAD_ITEM_IMAGE } from '../api/constants';
 
 class ClothingItemForm extends Component {
 
-    state = {
-        clothingItemSource: null
-    };
-
 //   componentWillMount() {
 //     this.displayImagePicker();
 //   }
@@ -44,8 +40,6 @@ class ClothingItemForm extends Component {
         } else if (response.error) {
             console.log('ImagePicker Error: ', response.error);
         } else {
-            const source = { uri: response.uri };
-
         
         // const testImageName = `image-from-react-native-${Platform.OS}-${new Date()}.jpg`;
 
@@ -59,8 +53,8 @@ class ClothingItemForm extends Component {
             { name: 'uri', filename: 'image.png', data: response.data }
             ])
             .then((res) => console.log(res.data));
-        /*
         
+        /*
         Blob.build(RNFetchBlob.wrap(path), { type: 'image/jpeg' })      
             .then((blob) => firebase.storage()
                     .ref('images')
@@ -72,25 +66,22 @@ class ClothingItemForm extends Component {
         
             // You can also display the image using data:
             // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        this.setState({
-        clothingItemSource: source
-        });
+        this.props.clothingItemUpdate({ prop: 'uri', value: response.uri });
       }
     });
   }
 
     render() {
         const { container, clothingItem, clothingItemContainer } = styles;
-
+        console.log(this.props.uri);
         return (
             <View>
                 <CardSection>
                     <View style={{ flex: 1 }}>
                         <TouchableOpacity style={container} onPress={this.displayImagePicker.bind(this)}> 
                             <View style={[clothingItem, clothingItemContainer, { marginBottom: 20 }]} >
-                            { this.state.clothingItemSource === null ? <Text>Select a Photo</Text> :
-                                <Image style={clothingItem} source={this.state.clothingItemSource} />
+                            { this.props.uri === null ? <Text>Select a Photo</Text> :
+                                <Image style={clothingItem} source={{ uri: this.props.uri }} />
                             }
                             </View>
                         </TouchableOpacity>
@@ -172,9 +163,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    const { name, description, style, color, type } = state.clothingItemForm;
+    const { name, description, style, color, type, uri } = state.clothingItemForm;
 
-    return { name, description, style, color, type };
+    return { name, description, style, color, type, uri };
 };
 
 export default connect(mapStateToProps, { clothingItemUpdate })(ClothingItemForm);
