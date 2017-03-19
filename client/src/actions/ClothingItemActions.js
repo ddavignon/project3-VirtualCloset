@@ -16,19 +16,19 @@ export const clothingItemUpdate = ({ prop, value }) => {
     };
 };
 
-export const clothingItemCreate = ({ name, description, style, color, type, data }) => {
+export const clothingItemCreate = ({ name, description, style, color, type_clothing, image_data }) => {
 
     return (dispatch) => {
         RNFetchBlob.fetch('POST', ADD_CLOTHING_ITEM, {
                 'Content-Type': 'multipart/form-data',
             }, [
                 { name: 'info', data: 'imageUpload' },
-                { name: 'uri', filename: 'image.png', data },
+                { name: 'uri', filename: 'image.png', data: image_data },
                 { name: 'name', data: name },
                 { name: 'description', data: description },
                 { name: 'style', data: style },
                 { name: 'color', data: color },
-                { name: 'type', data: type }
+                { name: 'type_clothing', data: type_clothing }
                 ])
                 .then(() => {
                     dispatch({ type: CLOTHING_ITEM_CREATE });

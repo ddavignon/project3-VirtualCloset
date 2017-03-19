@@ -8,7 +8,7 @@ const INTIAL_STATE = {
     description: '',
     style: '',
     color: '',
-    type: 'shirt',
+    type_clothing: 'shirt',
     uri: null,
     loading: true
 };

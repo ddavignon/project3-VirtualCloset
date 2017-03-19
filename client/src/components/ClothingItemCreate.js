@@ -3,17 +3,18 @@ import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import {
     clothingItemUpdate,
-    clothingItemCreate,
-    clothingItemImageUpload
+    clothingItemCreate
 } from '../actions';
 import { Card, CardSection, Button } from './common';
 import ClothingItemForm from './ClothingItemForm';
 
 class ClothingItemCreate extends Component {
     onButtonPress() {
-        const { name, description, style, color, type, data } = this.props;
+        const { name, description, style, color, type_clothing, image_data } = this.props;
         
-        this.props.clothingItemCreate({ name, description, style, color, type, data });
+        this.props.clothingItemCreate({
+            name, description, style, color, type_clothing, image_data 
+        });
     }
     
     render() {
@@ -33,11 +34,13 @@ class ClothingItemCreate extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { name, description, style, color, type, uri, data, loading } = state.clothingItemForm;
+    const { 
+        name, description, style, color, type_clothing, uri, image_data, loading
+    } = state.clothingItemForm;
 
-    return { name, description, style, color, type, uri, data, loading };
+    return { name, description, style, color, type_clothing, uri, image_data, loading };
 };
 
 export default connect(mapStateToProps, {
-    clothingItemUpdate, clothingItemCreate, clothingItemImageUpload
+    clothingItemUpdate, clothingItemCreate
 })(ClothingItemCreate);

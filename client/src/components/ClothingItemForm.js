@@ -67,7 +67,7 @@ class ClothingItemForm extends Component {
             // You can also display the image using data:
             // let source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.props.clothingItemUpdate({ prop: 'uri', value: response.uri });
-        this.props.clothingItemUpdate({ prop: 'data', value: response.data });
+        this.props.clothingItemUpdate({ prop: 'imageData', value: response.data });
       }
     });
   }
@@ -128,7 +128,7 @@ class ClothingItemForm extends Component {
                     <Text>Type</Text>
                     <Picker
                         style={{ flex: 1 }}
-                        selectedValue={this.props.type}
+                        selectedValue={this.props.type_clothing}
                         onValueChange={value => this.props.clothingItemUpdate({ prop: 'type', value })}
                     >
                         <Picker label="shirt" value="shirt" />
@@ -163,9 +163,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    const { name, description, style, color, type, uri, data } = state.clothingItemForm;
+    const { name, description, style, color, type_clothing, uri, imageData } = state.clothingItemForm;
 
-    return { name, description, style, color, type, uri, data };
+    return { name, description, style, color, type_clothing, uri, imageData };
 };
 
 export default connect(mapStateToProps, { clothingItemUpdate })(ClothingItemForm);
