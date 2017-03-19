@@ -18,9 +18,9 @@ import { UPLOAD_ITEM_IMAGE } from '../api/constants';
 
 class ClothingItemForm extends Component {
 
-    // componentWillMount() {
-    //     this.displayImagePicker();
-    // }
+    componentWillMount() {
+        this.displayImagePicker();
+    }
 
     displayImagePicker() {
         const options = {
@@ -57,6 +57,10 @@ class ClothingItemForm extends Component {
                         this.props.clothingItemUpdate({ prop: 'style', value: style });
                         this.props.clothingItemUpdate({ prop: 'description', value: description });
                         this.props.clothingItemUpdate({ prop: 'color', value: color });
+                        this.props.clothingItemUpdate({ prop: 'loading', value: false });
+                    })
+                    .catch((error) => {
+                        console.log(error);
                         this.props.clothingItemUpdate({ prop: 'loading', value: false });
                     });
         
@@ -114,9 +118,10 @@ class ClothingItemForm extends Component {
                     <View style={{ flex: 1 }}>
                         <TouchableOpacity style={container} onPress={this.displayImagePicker.bind(this)}> 
                             <View style={[clothingItem, clothingItemContainer, { marginBottom: 20 }]} >
-                            { this.props.uri === null ? <Text>Select a Photo</Text> :
-                                <Image style={clothingItem} source={{ uri: this.props.uri }} />
-                            }
+                                { this.props.uri === null 
+                                    ? <Text>Select a Photo</Text> 
+                                    : <Image style={styles.clothingItem} source={{ uri: this.props.uri }} />
+                                }
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -130,9 +135,8 @@ class ClothingItemForm extends Component {
                         onChangeText={value => this.props.clothingItemUpdate({ prop: 'name', value })}
                     />
                 </CardSection>
-
                 {this.renderForm()}
-  
+
                 <CardSection style={{ flexDirection: 'column' }}>
                     <Text>Type</Text>
                     <Picker
