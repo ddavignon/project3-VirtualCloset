@@ -9,7 +9,6 @@ import {
     Picker
 } from 'react-native';
 import { connect } from 'react-redux';
-// import firebase from 'firebase';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { clothingItemUpdate } from '../actions';
@@ -40,34 +39,16 @@ class ClothingItemForm extends Component {
         } else if (response.error) {
             console.log('ImagePicker Error: ', response.error);
         } else {
-        
-        // const testImageName = `image-from-react-native-${Platform.OS}-${new Date()}.jpg`;
-
-        // const path = response.path;  
-        // path ->  /storage/emulated/0/Pictures/image-8de3ead3-4411cc.jpg
-
-        RNFetchBlob.fetch('POST', UPLOAD_ITEM_IMAGE, {
-            'Content-Type': 'multipart/form-data',
-        }, [
-            { name: 'info', data: 'imageUpload' },
-            { name: 'uri', filename: 'image.png', data: response.data }
-            ])
-            .then((res) => console.log(res.data));
-        
-        /*
-        Blob.build(RNFetchBlob.wrap(path), { type: 'image/jpeg' })      
-            .then((blob) => firebase.storage()
-                    .ref('images')
-                    .child(testImageName)
-                    .put(blob, { contentType: 'image/png' })
-            )
-            .then((snapshot) => { console.log(snapshot); });
-            */
-        
-            // You can also display the image using data:
-            // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-        this.props.clothingItemUpdate({ prop: 'uri', value: response.uri });
-        this.props.clothingItemUpdate({ prop: 'imageData', value: response.data });
+            RNFetchBlob.fetch('POST', UPLOAD_ITEM_IMAGE, {
+                'Content-Type': 'multipart/form-data',
+            }, [
+                { name: 'info', data: 'imageUpload' },
+                { name: 'uri', filename: 'image.png', data: response.data }
+                ])
+                .then((res) => console.log(res.data));
+            
+            this.props.clothingItemUpdate({ prop: 'uri', value: response.uri });
+            this.props.clothingItemUpdate({ prop: 'image_data', value: response.data });
       }
     });
   }
@@ -129,7 +110,7 @@ class ClothingItemForm extends Component {
                     <Picker
                         style={{ flex: 1 }}
                         selectedValue={this.props.type_clothing}
-                        onValueChange={value => this.props.clothingItemUpdate({ prop: 'type', value })}
+                        onValueChange={value => this.props.clothingItemUpdate({ prop: 'type_clothing', value })}
                     >
                         <Picker label="shirt" value="shirt" />
                         <Picker label="pants" value="pants" />
@@ -163,9 +144,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    const { name, description, style, color, type_clothing, uri, imageData } = state.clothingItemForm;
+    const {
+        name, description, style, color, type_clothing, uri, image_data
+    } = state.clothingItemForm;
 
-    return { name, description, style, color, type_clothing, uri, imageData };
+    return { name, description, style, color, type_clothing, uri, image_data };
 };
 
 export default connect(mapStateToProps, { clothingItemUpdate })(ClothingItemForm);

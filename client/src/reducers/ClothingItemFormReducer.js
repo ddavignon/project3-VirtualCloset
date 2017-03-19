@@ -8,8 +8,10 @@ const INTIAL_STATE = {
     description: '',
     style: '',
     color: '',
-    type_clothing: 'shirt',
+    type: 'shirt',
     uri: null,
+    url_path: null,
+    image_data: '',
     loading: true
 };
 
