@@ -5,10 +5,31 @@ import {
   ScrollView,
   View
 } from 'react-native';
-import ClosetRow from './ClosetRow';
+import axios from 'axios';
+import { GET_CLOTHING_ITEMS } from '../api/constants';
+import ClosetItem from './ClosetItem';
 
 class ClosetList extends Component {
-    state = { showText: true };
+    state = { showText: true, closetItems: [] };
+
+    componentWillMount() {
+      axios.get(GET_CLOTHING_ITEMS)
+        .then((response) => {
+        //   console.log('state', this.state.closetItems);
+        //   response.data.map((data) => console.log(data));
+          this.setState({ closetItems: response.data });
+        //   console.log('state-after', this.state.closetItems);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    renderItems() {
+        return this.state.closetItems.map(item => <ClosetItem key={item._id} uri={item.urlPath} />);
+    }
+
+
     render() {
         return (
             <ScrollView>
@@ -18,11 +39,39 @@ class ClosetList extends Component {
                         "Here's what I got to work with!"
                     </Text>
                 </View>
-                <ClosetRow items={SHIRTS} />
-                <ClosetRow items={PANTS} />
-                <ClosetRow items={SHOES} />
-                <ClosetRow items={SHIRTS} />
-                <ClosetRow items={PANTS} />
+
+                <View style={{ height: 150 }}>
+                  <ScrollView 
+                      automaticallyAdjustContentInsets={false}
+                      horizontal
+                      onScroll={() => { console.log('onScroll!'); }}
+                      scrollEventThrottle={200}
+                  >
+                      {this.renderItems()}
+                  </ScrollView>
+                </View>
+
+                <View style={{ height: 150 }}>
+                  <ScrollView 
+                      automaticallyAdjustContentInsets={false}
+                      horizontal
+                      onScroll={() => { console.log('onScroll!'); }}
+                      scrollEventThrottle={200}
+                  >
+                      {this.renderItems()}
+                  </ScrollView>
+                </View>
+
+                <View style={{ height: 150 }}>
+                  <ScrollView 
+                      automaticallyAdjustContentInsets={false}
+                      horizontal
+                      onScroll={() => { console.log('onScroll!'); }}
+                      scrollEventThrottle={200}
+                  >
+                      {this.renderItems()}
+                  </ScrollView>
+                </View>
               </View>
             </ScrollView>
         );
