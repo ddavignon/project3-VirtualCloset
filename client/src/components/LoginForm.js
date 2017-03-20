@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 //import { LoginButton, AccessToken } from 'react-native-fbsdk';
 
 class LoginForm extends Component {
+	state = {
+	latitudePosition: 'unknown',
+	lastPosition: 'unknown',
+	};
+	watchID: ?number = null;
+	
     onEmailChanged(text) {
         this.props.emailChanged(text);
     }
@@ -28,9 +34,38 @@ class LoginForm extends Component {
             </Button>
         );
     }
+	componentDidMount() {
+		navigator.geolocation.getCurrentPosition( (position) => {
+												 var latitudePosition = JSON.stringify(position['coords']['latitude']);
+												 this.setState({
+															   latitudePosition:JSON.stringify(position['coords']['latitude']),
+															   lastPosition:JSON.stringify(position['coords']['longitude'])
+															   });
+												 
+												 },
+		(error) => alert(JSON.stringify(error)),
+												 {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000} );
+//		this.watchID = navigator.geolocation.watchPosition((position) => {
+////														   var lastPosition = JSON.stringify(position['coords']['longitude']);
+////														   this.setState({lastPosition}); });
+	}
+	componentWillUnmount() { navigator.geolocation.clearWatch(this.watchID); }
     render() {
         return (
             <Card>
+				<CardSection>
+					<Text>
+						<Text style={styles.title}>Latitude:</Text>
+						{this.state.latitudePosition}
+					</Text>
+				</CardSection>
+				<CardSection>
+					<Text>
+						<Text style={styles.title}>Longitude:</Text>
+						{this.state.lastPosition}
+					</Text>
+				
+				</CardSection>
                 <CardSection>
                     <Input
                         label="Email"
