@@ -8,7 +8,7 @@ import { Card, CardSection, Input, Button, Spinner } from './common';
 class LoginForm extends Component {
 	state = {
 	latitudePosition: 'unknown',
-	lastPosition: 'unknown',
+	longitudePosition: 'unknown',
 	};
 	watchID: ?number = null;
 	
@@ -36,17 +36,14 @@ class LoginForm extends Component {
     }
 	componentDidMount() {
 		navigator.geolocation.getCurrentPosition( (position) => {
-												 var latitudePosition = JSON.stringify(position['coords']['latitude']);
-												 this.setState({
-															   latitudePosition:JSON.stringify(position['coords']['latitude']),
-															   lastPosition:JSON.stringify(position['coords']['longitude'])
-															   });
-												 
-												 },
+			this.setState({
+			   latitudePosition:JSON.stringify(position['coords']['latitude']),
+			   longitudePosition:JSON.stringify(position['coords']['longitude'])
+			   });
+			},
 		(error) => alert(JSON.stringify(error)),
 												 {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000} );
 	}
-	componentWillUnmount() { navigator.geolocation.clearWatch(this.watchID); }
     render() {
         return (
             <Card>
@@ -59,7 +56,7 @@ class LoginForm extends Component {
 				<CardSection>
 					<Text>
 						<Text style={styles.title}>Longitude:</Text>
-						{this.state.lastPosition}
+						{this.state.longitudePosition}
 					</Text>
 				
 				</CardSection>
