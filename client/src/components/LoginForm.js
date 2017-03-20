@@ -10,7 +10,6 @@ class LoginForm extends Component {
 	latitudePosition: 'unknown',
 	longitudePosition: 'unknown',
 	};
-	watchID: ?number = null;
 	
     onEmailChanged(text) {
         this.props.emailChanged(text);
@@ -41,8 +40,11 @@ class LoginForm extends Component {
 			   longitudePosition:JSON.stringify(position['coords']['longitude'])
 			   });
 			},
-		(error) => alert(JSON.stringify(error)),
-												 {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000} );
+		(error) => alert(JSON.stringify(error)),{
+			enableHighAccuracy: true,
+			timeout: 20000,
+			maximumAge: 1000}
+		);
 	}
     render() {
         return (
