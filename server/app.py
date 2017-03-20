@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 import json
 
 app = Flask(__name__)
-import models
+#import models
 appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
 tasks = [
     {
