@@ -35,7 +35,8 @@ class Clothes(db.Model):
     size = db.Column(db.String(10))
     quantity = db.Column(db.Integer)
     type_clothing= db.Column(db.String(10))
-    name_file=db.Column(db.String(100))
+    url_path=db.Column(db.String(100))
+    
     
     def __init__(self, user_id,color,descripition,style,tempLow,tempHigh,size,quantity,type_clothing):
         self.user_id=user_id
