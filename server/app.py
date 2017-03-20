@@ -12,7 +12,7 @@ import json
 
 app = Flask(__name__)
 import models
-#appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
+appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
 tasks = [
     {
         'id': 1,
@@ -109,9 +109,31 @@ def create_task():
     print request.json['picture']
     return jsonify({'picture': request.json['picture']}), 201
     
-@app.route('/virtual/api/v1.0/confirm',methods=["POST"])
+@app.route('/virtual/api/v1.0/signUp',methods=["POST"])
 def confirm():
-    return "confirmed"
+    email=request.form["email"]
+    password=request.form["password"]
+    phoneNumber=request.form["phoneNumber"]
+    #for testing purposes only send back info
+    item={'email':email,'password':password,'phoneNumber':phoneNumber}
+    return jsonify(item) 
+
+@app.route('/virtual/api/v1.0/confirmation', methods=['POST'])
+def confirmation():
+    user_id=request.form["email"]
+    color = request.form["color"]
+    description = request.form["description"]
+    type_clothing= request.form["type"]
+    style = request.form["style"]
+    size = request.form["size"]
+    quantity = request.form["quantity"]
+    uri =request.file["uri"]
+    print request.form
+    print request.files
+    #testing purposes only send back to client what was just sent
+    item ={'color':color,'description':description,'type':type_clothing,'size':size,'quantity':quantity,'uri':uri, 'user':user_id}
+    return item
+    
 
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])
 def sendToClarfai():
