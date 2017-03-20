@@ -45,9 +45,6 @@ class LoginForm extends Component {
 												 },
 		(error) => alert(JSON.stringify(error)),
 												 {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000} );
-//		this.watchID = navigator.geolocation.watchPosition((position) => {
-////														   var lastPosition = JSON.stringify(position['coords']['longitude']);
-////														   this.setState({lastPosition}); });
 	}
 	componentWillUnmount() { navigator.geolocation.clearWatch(this.watchID); }
     render() {
