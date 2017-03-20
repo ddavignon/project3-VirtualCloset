@@ -120,19 +120,21 @@ def confirm():
 
 @app.route('/virtual/api/v1.0/confirmation', methods=['POST'])
 def confirmation():
-    user_id=request.form["email"]
+    #user_id=request.form["email"]
+    
     color = request.form["color"]
+    
     description = request.form["description"]
-    type_clothing= request.form["type"]
+    
+    type_clothing= request.form["type_clothing"]
     style = request.form["style"]
-    size = request.form["size"]
-    quantity = request.form["quantity"]
-    uri =request.file["uri"]
+    uri =request.files["image_data"]
+    
     print request.form
     print request.files
     #testing purposes only send back to client what was just sent
-    item ={'color':color,'description':description,'type':type_clothing,'size':size,'quantity':quantity,'uri':uri, 'user':user_id}
-    return item
+    item ={'color':color,'description':description,'type':type_clothing,'uri':uri.filename}
+    return jsonify(item)
     
 
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])
