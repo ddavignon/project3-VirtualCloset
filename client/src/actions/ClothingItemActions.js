@@ -40,6 +40,7 @@ export const clothingItemResults = ({ response }) => {
                 { name: 'uri', filename: 'image.png', data: response.data }
                 ])
                 .then((res) => {
+                    // console.log(res.json());
                     const description = res.json().apparel[0].name;
                     const style = res.json().styles[0].name;
                     const color = res.json().color;
@@ -65,15 +66,16 @@ export const clothingItemCreate = ({
         RNFetchBlob.fetch('POST', ADD_CLOTHING_ITEM, {
                 'Content-Type': 'multipart/form-data',
             }, [
-                { name: 'info', data: 'imageUpload' },
-                { name: 'url_path', filename: 'image.png', data: image_data },
+                { name: 'info', data: 'itemCreate' },
+                { name: 'image_data', filename: 'image.png', data: image_data },
                 { name: 'name', data: name },
                 { name: 'description', data: description },
                 { name: 'style', data: style },
                 { name: 'color', data: color },
                 { name: 'type_clothing', data: type_clothing }
                 ])
-                .then(() => {
+                .then((res) => {
+                    console.log(res);
                     dispatch({ type: CLOTHING_ITEM_CREATE });
                     Actions.closetList({ type: 'reset' });
                 })

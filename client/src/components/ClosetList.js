@@ -10,25 +10,38 @@ import { GET_CLOTHING_ITEMS } from '../api/constants';
 import ClosetItem from './ClosetItem';
 
 class ClosetList extends Component {
-    state = { showText: true, closetItems: [] };
+    state = {
+        showText: true,
+        shirtItems: [],
+        pantsItems: [],
+        shoesItems: []
+    };
 
     componentWillMount() {
       axios.get(GET_CLOTHING_ITEMS)
         .then((response) => {
-        //   console.log('state', this.state.closetItems);
-        //   response.data.map((data) => console.log(data));
-          this.setState({ closetItems: response.data });
-        //   console.log('state-after', this.state.closetItems);
+          this.setState({ 
+              shirtItems: response.data.shirts,
+              pantsItems: response.data.pants,
+              shoesItems: response.data.shoes 
+            });
         })
         .catch((err) => {
           console.log(err);
         });
     }
 
-    renderItems() {
-        return this.state.closetItems.map(item => <ClosetItem key={item._id} uri={item.urlPath} />);
+    renderShirtItems() {
+        return this.state.shirtItems.map(item => <ClosetItem key={item.id} uri={item.url_path} />);
     }
 
+    renderPantsItems() {
+        return this.state.pantsItems.map(item => <ClosetItem key={item.id} uri={item.url_path} />);
+    }
+
+    renderShoesItems() {
+        return this.state.shoesItems.map(item => <ClosetItem key={item.id} uri={item.url_path} />);
+    }
 
     render() {
         return (
@@ -47,7 +60,7 @@ class ClosetList extends Component {
                       onScroll={() => { console.log('onScroll!'); }}
                       scrollEventThrottle={200}
                   >
-                      {this.renderItems()}
+                      {this.renderShirtItems()}
                   </ScrollView>
                 </View>
 
@@ -58,7 +71,7 @@ class ClosetList extends Component {
                       onScroll={() => { console.log('onScroll!'); }}
                       scrollEventThrottle={200}
                   >
-                      {this.renderItems()}
+                      {this.renderPantsItems()}
                   </ScrollView>
                 </View>
 
@@ -69,7 +82,7 @@ class ClosetList extends Component {
                       onScroll={() => { console.log('onScroll!'); }}
                       scrollEventThrottle={200}
                   >
-                      {this.renderItems()}
+                      {this.renderShoesItems()}
                   </ScrollView>
                 </View>
               </View>
