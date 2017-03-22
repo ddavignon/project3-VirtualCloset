@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
-
+import { AUTH_USER } from '../api/constants';
 import {
     EMAIL_CHANGED,
     PASSWORD_CHANGED,
@@ -26,9 +26,41 @@ export const passwordChanged = (text) => {
 export const loginUser = ({ email, password }) => {
     return (dispatch) => {
         dispatch({ type: LOGIN_USER });
-
+    //     const data = {
+    //         email,
+    //         password
+    //     };
+    //     // Serialize and post the data
+    //     const json = JSON.stringify(data);
+    //     fetch(AUTH_USER, {
+    //         method: 'POST',
+    //         headers: {
+    //         'Content-Type': 'application/json',
+    //         Accept: 'application/json'
+    //         },
+    //         body: json
+    //     })
+    //     .then((response) => response.json())
+    //     .then((response) => {
+    //         console.log(response.id_token);
+    //         if (response.status === 200) {
+    //             loginUserSuccess(dispatch, email);
+    //         } else {
+    //             loginUserFail(dispatch);
+    //         }       
+    //     })
+    //     .catch((error) => {
+    //         loginUserFail(dispatch);
+    //         console.log(error);
+    //         alert('There was an error creating your account.');
+    //     })
+    //     .done();
+    // };
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(user => loginUserSuccess(dispatch, user))
+            .then(user => {
+                console.log(user);
+                loginUserSuccess(dispatch, user);
+            })           
             .catch(() => {
                 firebase.auth().createUserWithEmailAndPassword(email, password)
                     .then(user => loginUserSuccess(dispatch, user))
