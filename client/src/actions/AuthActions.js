@@ -1,4 +1,6 @@
-import firebase from 'firebase';
+// import firebase from 'firebase';
+import axios from 'axios';
+import RNFetchBlob from 'react-native-fetch-blob';
 import { Actions } from 'react-native-router-flux';
 import { AUTH_USER, REGISTER_USER } from '../api/constants';
 import {
@@ -32,43 +34,80 @@ export const loginUser = ({ email, password }) => {
         };
         // Serialize and post the data
         const json = JSON.stringify(data);
-        fetch(AUTH_USER, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: json
-        })
-        //.then((response) => response.json())
-        .then((response) => {
-            console.log(response);
-            if (response.status === 200) {
-                loginUserSuccess(dispatch, email);
-            } else {
-                fetch(REGISTER_USER, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: json
+        RNFetchBlob.fetch('POST', AUTH_USER, {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }, json)
+            .then((response) => {
+                const token = response.json().access_token;
+                if (token) {
+                    loginUserSuccess(dispatch, email);
+                } else {
+                    fetch(REGISTER_USER, {
+                            method: 'POST',
+                            headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        body: json
+                        })
+                        .then((response) => {
+                            if (response.status === 201) {
+                                console.log(response);
+                                loginUserSuccess(dispatch, email);
+                            } else {
+                                loginUserFail(dispatch);
+                            }
+                        });
+                }      
                 })
-                .then((response) => {
-                    console.log(response);
-                    if (response.status === 201) {
-                        loginUserSuccess(dispatch, email);
-                    } else {
-                        loginUserFail(dispatch);
-                    }
-                });
-            }      
-        })
-        .catch((error) => {
-            loginUserFail(dispatch);
-            console.log(error);
-            alert('There was an error creating your account.');
-        })
-        .done();
+            .catch((error) => {
+                loginUserFail(dispatch);
+                console.log(error);
+                alert('There was an error creating your account.');
+            })
+            .done();
+
+
+        // fetch(AUTH_USER, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Accept': 'application/json'
+        //     },
+        //     body: json
+        // })
+        // .then((response) => {
+        //     console.log(response);
+        //     if (response.status === 200) {
+        //         loginUserSuccess(dispatch, email);
+        //     } else {
+        //         fetch(REGISTER_USER, {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'Accept': 'application/json',
+        //             },
+        //             body: json
+        //         })
+        //         .then((response) => {
+        //             if (response.status === 201) {
+        //                 console.log(response);
+        //                 loginUserSuccess(dispatch, email);
+        //             } else {
+        //                 loginUserFail(dispatch);
+        //             }
+        //         });
+        //     }      
+        // })
+        // .catch((error) => {
+        //     loginUserFail(dispatch);
+        //     console.log(error);
+        //     alert('There was an error creating your account.');
+        // })
+        // .done();
     };
+    
     //     firebase.auth().signInWithEmailAndPassword(email, password)
     //         .then(user => {
     //             console.log(user);
