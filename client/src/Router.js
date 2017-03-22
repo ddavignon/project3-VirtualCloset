@@ -32,7 +32,6 @@ const RouterComponent = () => {
                     title="Edit Item"
                 />
             </Scene>
-
         </Router>
     );
 };
