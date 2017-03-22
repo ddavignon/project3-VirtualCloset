@@ -14,6 +14,13 @@ import {
     CLOTHING_ITEM_INFO_FAIL
 } from './types';
 
+
+// Prepare Blob support
+const Blob = RNFetchBlob.polyfill.Blob;
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+window.Blob = Blob;
+
+
 export const clothingItemUpdate = ({ prop, value }) => {
     return {
         type: CLOTHING_ITEM_UPDATE,
@@ -21,7 +28,7 @@ export const clothingItemUpdate = ({ prop, value }) => {
     };
 };
 
-export const clothingItemResults = ({ response }) => {
+export const clothingItemResults = ({ response, token }) => {
     return (dispatch) => {
         console.log('Response = ', response, response.uri);
         const uri = response.uri;
@@ -36,6 +43,7 @@ export const clothingItemResults = ({ response }) => {
 
             RNFetchBlob.fetch('POST', UPLOAD_ITEM_IMAGE, {
                 'Content-Type': 'multipart/form-data',
+                'Authorization': 'JWT ' + token,
             }, [
                 { name: 'info', data: 'imageUpload' },
                 { name: 'uri', filename: 'image.png', data: response.data }
@@ -57,13 +65,8 @@ export const clothingItemResults = ({ response }) => {
     };
 };
 
-// Prepare Blob support
-const Blob = RNFetchBlob.polyfill.Blob;
-window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
-window.Blob = Blob;
-
 export const clothingItemCreate = ({
-    name, description, style, color, type_clothing, image_data
+    name, description, style, color, type_clothing, image_data, token
 }) => {
     return (dispatch) => {  
         const testImageName = `${name}--${new Date()}.jpg`;
@@ -95,6 +98,7 @@ export const clothingItemCreate = ({
                     method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': 'JWT ' + token,
                     },
                     body: JSON.stringify({
                         name,

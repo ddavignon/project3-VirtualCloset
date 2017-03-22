@@ -30,8 +30,10 @@ class ClothingItemForm extends Component {
             }
         };
 
+        const { token } = this.props;
+
         ImagePicker.showImagePicker(options, (response) => {
-            this.props.clothingItemResults({ response });
+            this.props.clothingItemResults({ response, token });
         });
     }
 
@@ -147,7 +149,9 @@ const mapStateToProps = (state) => {
         name, description, style, color, type_clothing, uri, image_data, loading
     } = state.clothingItemForm;
 
-    return { name, description, style, color, type_clothing, uri, image_data, loading };
+    const { token } = state.auth;
+
+    return { name, description, style, color, type_clothing, uri, image_data, loading, token };
 };
 
 export default connect(mapStateToProps, { clothingItemUpdate, clothingItemResults })(ClothingItemForm);

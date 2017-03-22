@@ -5,6 +5,7 @@ import {
   ScrollView,
   View
 } from 'react-native';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import { GET_CLOTHING_ITEMS } from '../api/constants';
 import ClosetItem from './ClosetItem';
@@ -18,17 +19,22 @@ class ClosetList extends Component {
     };
 
     componentWillMount() {
-      axios.get(GET_CLOTHING_ITEMS)
-        .then((response) => {
-          this.setState({ 
-              shirtItems: response.data.shirts,
-              pantsItems: response.data.pants,
-              shoesItems: response.data.shoes 
+        axios.get(GET_CLOTHING_ITEMS, { 
+                headers: {
+                    'Authorization': 'JWT ' + this.props.token 
+                }
+            })
+            .then((response) => {
+                console.log(response);
+                this.setState({ 
+                    shirtItems: response.data.shirts,
+                    pantsItems: response.data.pants,
+                    shoesItems: response.data.shoes 
+                    });
+                })
+            .catch((err) => {
+                console.log(err);
             });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     }
 
     renderShirtItems() {
@@ -94,45 +100,6 @@ class ClosetList extends Component {
     }
 }
 
-const SHOES = ['https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg'];
-
-const PANTS = ['https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg'];
-
-const SHIRTS = ['https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg',
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg',
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg',
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg'];
-
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -147,4 +114,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ClosetList;
+const mapStateToProps = (state) => {
+    const { token } = state.auth;
+
+    return { token };
+};
+
+export default connect(mapStateToProps, null)(ClosetList);
