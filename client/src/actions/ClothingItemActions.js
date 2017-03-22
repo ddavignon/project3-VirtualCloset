@@ -160,6 +160,10 @@ export const clothingItemCreate = ({
     // };
 };
 
+// clothing item save
+
+// clothing item delete
+
 const clothingItemInfoSuccess = (dispatch, style, description, color) => {
     dispatch({
         type: CLOTHING_ITEM_INFO_SUCCESS,

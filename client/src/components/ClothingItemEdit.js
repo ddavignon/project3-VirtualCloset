@@ -21,11 +21,7 @@ class ClothingItemEdit extends Component {
     }
 
     onButtonPress() {
-        const { name, description, style, color, type_clothing, image_data } = this.props;
-        
-        this.props.clothingItemCreate({
-            name, description, style, color, type_clothing, image_data 
-        });
+        console.log('cool button');
     }
 
     render() {
