@@ -8,6 +8,9 @@ import ClothingItemEdit from './components/ClothingItemEdit';
 const RouterComponent = () => {
     return (
         <Router sceneStyle={{ paddingTop: 55 }}>
+            <Scene key="auth">
+                <Scene key="login" component={LoginForm} title="Please Login" />
+            </Scene>
 
             <Scene key="main">
                 <Scene
@@ -29,9 +32,7 @@ const RouterComponent = () => {
                     title="Edit Item"
                 />
             </Scene>
-            <Scene key="auth">
-                <Scene key="login" component={LoginForm} title="Please Login" />
-            </Scene>
+
         </Router>
     );
 };
