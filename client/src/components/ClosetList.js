@@ -32,15 +32,18 @@ class ClosetList extends Component {
     }
 
     renderShirtItems() {
-        return this.state.shirtItems.map(item => <ClosetItem key={item._id} uri={item.url_path} />);
+        return this.state.shirtItems.map(item => 
+            <ClosetItem key={item._id} uri={item.url_path} item={item} />);
     }
 
     renderPantsItems() {
-        return this.state.pantsItems.map(item => <ClosetItem key={item._id} uri={item.url_path} />);
+        return this.state.pantsItems.map(item => 
+            <ClosetItem key={item._id} uri={item.url_path} item={item} />);
     }
 
     renderShoesItems() {
-        return this.state.shoesItems.map(item => <ClosetItem key={item._id} uri={item.url_path} />);
+        return this.state.shoesItems.map(item => 
+            <ClosetItem key={item._id} uri={item.url_path} item={item} />);
     }
 
     render() {
