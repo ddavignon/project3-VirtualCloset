@@ -1,22 +1,50 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, Picker } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Image, 
+    PixelRatio,
+    TouchableOpacity,
+    Picker
+} from 'react-native';
 import { connect } from 'react-redux';
-import { clothingItemUpdate } from '../actions';
-import { CardSection, Input } from './common';
+import ImagePicker from 'react-native-image-picker';
+import { clothingItemUpdate, clothingItemResults } from '../actions';
+import { CardSection, Input, Spinner } from './common';
+
 
 class ClothingItemForm extends Component {
-    render() {
-        return (
-            <ScrollView>
-                <CardSection>
-                    <Input
-                        label="Name"
-                        placeholder="sweater"
-                        value={this.props.name}
-                        onChangeText={value => this.props.clothingItemUpdate({ prop: 'name', value })}
-                    />
-                </CardSection>
 
+    componentWillMount() {
+        this.displayImagePicker();
+    }
+
+    displayImagePicker() {
+        const options = {
+            title: 'Select Clothing Item',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images'
+            }
+        };
+
+        ImagePicker.showImagePicker(options, (response) => {
+            this.props.clothingItemResults({ response });
+        });
+    }
+
+    renderForm() {
+        if (this.props.loading) {
+            return (
+                <CardSection>
+                    <Spinner size="large" />
+                </CardSection>
+            );
+        }
+
+        return (
+            <View>
                 <CardSection>
                     <Input
                         label="Description"
@@ -43,36 +71,81 @@ class ClothingItemForm extends Component {
                         onChangeText={value => this.props.clothingItemUpdate({ prop: 'color', value })}
                     />
                 </CardSection>
+            </View>
+        );
+    }
+
+    render() {
+        const { container, clothingItem, clothingItemContainer } = styles;
+        return (
+            <View>
+                <CardSection>
+                    <View style={{ flex: 1 }}>
+                        <TouchableOpacity style={container} onPress={this.displayImagePicker.bind(this)}> 
+                            <View style={[clothingItem, clothingItemContainer, { marginBottom: 20 }]} >
+                                { this.props.uri === null 
+                                    ? <Text>Select a Photo</Text> 
+                                    : <Image style={styles.clothingItem} source={{ uri: this.props.uri }} />
+                                }
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </CardSection>
+
                 <CardSection>
                     <Input
-                        label="Type"
-                        placeholder="shirt"
-                        value={this.props.type}
-                        onChangeText={value => this.props.clothingItemUpdate({ prop: 'type', value })}
+                        label="Name"
+                        placeholder="sweater"
+                        value={this.props.name}
+                        onChangeText={value => this.props.clothingItemUpdate({ prop: 'name', value })}
                     />
-               {/* <CardSection style={{ flexDirection: 'column' }}>
+                </CardSection>
+                {this.renderForm()}
+
+                <CardSection style={{ flexDirection: 'column' }}>
                     <Text>Type</Text>
                     <Picker
                         style={{ flex: 1 }}
-                        selectedValue={this.props.type}
-                        onValueChange={value => this.props.clothingItemUpdate({ prop: 'type', value })}
+                        selectedValue={this.props.type_clothing}
+                        onValueChange={value => this.props.clothingItemUpdate({ prop: 'type_clothing', value })}
                     >
                         <Picker label="shirt" value="shirt" />
                         <Picker label="pants" value="pants" />
                         <Picker label="shoes" value="shoes" />
                         <Picker label="accessories" value="accessories" />
 
-                    </Picker>*/}
+                    </Picker>
                 </CardSection>
-            </ScrollView>
+            </View>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    const { name, description, style, color, type } = state.clothingItemForm;
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF'
+  },
+  clothingItemContainer: {
+    borderColor: '#9B9B9B',
+    borderWidth: 1 / PixelRatio.get(),
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  clothingItem: {
+    borderRadius: 5,
+    width: 150,
+    height: 150
+  }
+});
 
-    return { name, description, style, color, type };
+const mapStateToProps = (state) => {
+    const {
+        name, description, style, color, type_clothing, uri, image_data, loading
+    } = state.clothingItemForm;
+
+    return { name, description, style, color, type_clothing, uri, image_data, loading };
 };
 
-export default connect(mapStateToProps, { clothingItemUpdate })(ClothingItemForm);
+export default connect(mapStateToProps, { clothingItemUpdate, clothingItemResults })(ClothingItemForm);
