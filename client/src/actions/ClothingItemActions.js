@@ -97,7 +97,8 @@ export const clothingItemCreate = ({
                 fetch(ADD_CLOTHING_ITEM.concat(name), {
                     method: 'POST',
                       headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': 'JWT '.concat(token)
                     },
                     body: JSON.stringify({
                         name,
