@@ -9,10 +9,19 @@ from clarifai.rest import Image as ClImage
 import tempfile
 from werkzeug.utils import secure_filename
 import json
+import boto3
+
+
+
+
+
 
 app = Flask(__name__)
-#import models
-appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
+import models
+#s3 = boto3.resource('s3')
+
+
+#appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
 tasks = [
     {
         'id': 1,
@@ -114,6 +123,7 @@ def confirm():
     email=request.form["email"]
     password=request.form["password"]
     phoneNumber=request.form["phoneNumber"]
+    closetName=request.form["closetName"]
     #for testing purposes only send back info
     item={'email':email,'password':password,'phoneNumber':phoneNumber}
     return jsonify(item) 
@@ -130,8 +140,17 @@ def confirmation():
     type_clothing= request.form["type_clothing"]
     print request.form
     print request.files
+    #S3#####################################
+    directory_name=os.getcwd()+"/tmp"
+    filename = secure_filename(uri.filename)
+    uri.save(os.path.join(directory_name, filename))
+    #data = open(directory_name+"/"+uri.filename, 'rb')
+    #s3.Bucket('virtualcloset2030').put_object(Key=uri.filename, Body=data)
+    os.remove(directory_name+"/"+uri.filename) 
+    ######################################
+    
     #testing purposes only send back to client what was just sent
-    item ={'info':info,'color':color,'description':description,'type_clothing':type_clothing,'image_data':uri.filename,'name':name,style:"style"}
+    item ={'info':info,'color':color,'description':description,'type_clothing':type_clothing,'image_data':uri.filename,'name':name,'style':style}
     return jsonify(item)
     
 

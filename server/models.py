@@ -32,21 +32,17 @@ class Clothes(db.Model):
     style = db.Column(db.String(30))
     tempLow = db.Column(db.Integer)
     tempHigh = db.Column(db.Integer)
-    size = db.Column(db.String(10))
-    quantity = db.Column(db.Integer)
     type_clothing= db.Column(db.String(10))
     url_path=db.Column(db.String(1000))
     
     
-    def __init__(self, user_id,color,descripition,style,tempLow,tempHigh,size,quantity,type_clothing):
+    def __init__(self, user_id,color,descripition,style,tempLow,tempHigh,type_clothing):
         self.user_id=user_id
         self.color=color
         self.descripition=descripiton 
         self.style=style
         self.tempLow=tempLow
         self.tempHigh=tempHigh
-        self.size=size
-        self.quantity=quantity
         self.type_clothing=type_clothing
         
     
