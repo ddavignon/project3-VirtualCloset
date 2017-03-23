@@ -15,12 +15,6 @@ import {
 } from './types';
 
 
-// Prepare Blob support
-const Blob = RNFetchBlob.polyfill.Blob;
-window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
-window.Blob = Blob;
-
-
 export const clothingItemUpdate = ({ prop, value }) => {
     return {
         type: CLOTHING_ITEM_UPDATE,
@@ -69,6 +63,11 @@ export const clothingItemCreate = ({
     name, description, style, color, type_clothing, image_data, token
 }) => {
     return (dispatch) => {  
+        // Prepare Blob support
+        const Blob = RNFetchBlob.polyfill.Blob;
+        window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+        window.Blob = Blob;
+        
         const testImageName = `${name}--${new Date()}.jpg`;
 
         Blob.build(RNFetchBlob.wrap(image_data.origURL), { type: 'image/jpeg' })
@@ -78,6 +77,7 @@ export const clothingItemCreate = ({
                     .put(blob, { contentType: 'image/png' })
             )
             .then((snapshot) => {
+                console.log(snapshot);
                 // axios.post(ADD_CLOTHING_ITEM.concat(name), {
                 //     // name, description, style, color, type_clothing, url_path: snapshot.downloadURL
                 //     name, description, style, color, type_clothing, url_path: snapshot.downloadURL
@@ -97,8 +97,7 @@ export const clothingItemCreate = ({
                 fetch(ADD_CLOTHING_ITEM.concat(name), {
                     method: 'POST',
                       headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'JWT ' + token,
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         name,
