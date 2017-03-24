@@ -10,7 +10,7 @@ import tempfile
 from werkzeug.utils import secure_filename
 import json
 import boto3
-
+import rules
 
 
 
@@ -18,10 +18,10 @@ import boto3
 
 app = Flask(__name__)
 import models
-#s3 = boto3.resource('s3')
+s3 = boto3.resource('s3')
 
 
-#appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
+appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
 tasks = [
     {
         'id': 1,
@@ -128,30 +128,55 @@ def confirm():
     item={'email':email,'password':password,'phoneNumber':phoneNumber}
     return jsonify(item) 
 
+@app.route('/virtual/api/v1.0/getClothes',methods=['GET'])
+def getClothes():
+    xCoordinates = request.args.get('user')
+    #note if parameter is not filled request.args.get(someParameter) returns None
+    yCoordinates = request.args.get('style')
+    
+@app.route('/virtual/api/v1.0/check',methods=['GET'])
+def checkDB():
+    clothes=models.db.session.query(models.Clothes.style,models.Clothes.user_id).distinct().filter(models.Clothes.user_id=="Tester@yahoo.com").all()
+    
+    print clothes[0].style
+    print clothes[1].style
+    print clothes
+    return "Success"
+
+
 @app.route('/virtual/api/v1.0/confirmation', methods=['POST'])
 def confirmation():
-    #user_id=request.form["email"]
-    info =request.form["info"]
+    #user email that they signed up with
+    user_id=request.form["email"]
+    #info =request.form["info"]
+    #checks if the user exist
+    if len(models.Users.query.filter_by(email=user_id).all()) !=1:
+        return jsonify({"error": "no user by that id"})
+    #stuff from request
     uri =request.files["image_data"]
     name=request.form["name"]
     description = request.form["description"]
     style = request.form["style"]
     color = request.form["color"]
     type_clothing= request.form["type_clothing"]
+    #add file name it unique 
+    #where its going to be stored in s3 storage
+    image_uri="https://s3-us-west-1.amazonaws.com/virtualcloset2030/"+user_id+"/"+uri.filename
     print request.form
     print request.files
     #S3#####################################
     directory_name=os.getcwd()+"/tmp"
     filename = secure_filename(uri.filename)
     uri.save(os.path.join(directory_name, filename))
-    #data = open(directory_name+"/"+uri.filename, 'rb')
-    #s3.Bucket('virtualcloset2030').put_object(Key=uri.filename, Body=data)
+    data = open(directory_name+"/"+uri.filename, 'rb')
+    s3.Bucket('virtualcloset2030').put_object(Key=user_id+"/"+uri.filename, Body=data)
     os.remove(directory_name+"/"+uri.filename) 
+    clothing_item = models.Clothes(user_id,color,description,style,rules.getLowTemp(type_clothing),rules.getHighTemp(type_clothing),type_clothing,image_uri)
+    models.db.session.add(clothing_item)
+    models.db.session.commit()
     ######################################
-    
     #testing purposes only send back to client what was just sent
-    item ={'info':info,'color':color,'description':description,'type_clothing':type_clothing,'image_data':uri.filename,'name':name,'style':style}
-    return jsonify(item)
+    return "Success"
     
 
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])

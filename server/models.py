@@ -6,7 +6,7 @@ import os
 #TODO REPLACE ALL ADD messges with DB adds :) add extra stuff more commands 
 
 #app.app.config['SQLALCHEMY_DATABASE_URI'] = app.os.getenv('DATABASE_URL')
-#app.app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql://brandan:blockwood@localhost/postgres'
+app.app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql://brandan:blockwood@localhost/postgres'
 db = flask_sqlalchemy.SQLAlchemy(app.app)
 
 #db.create_all()
@@ -36,14 +36,15 @@ class Clothes(db.Model):
     url_path=db.Column(db.String(1000))
     
     
-    def __init__(self, user_id,color,descripition,style,tempLow,tempHigh,type_clothing):
+    def __init__(self, user_id,color,descripition,style,tempLow,tempHigh,type_clothing,url_path):
         self.user_id=user_id
         self.color=color
-        self.descripition=descripiton 
+        self.descripition=descripition 
         self.style=style
         self.tempLow=tempLow
         self.tempHigh=tempHigh
         self.type_clothing=type_clothing
+        self.url_path=url_path
         
     
  
