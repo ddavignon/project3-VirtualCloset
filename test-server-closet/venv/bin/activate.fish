@@ -36,7 +36,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/dustin/Desktop/Dev/REACT_NATIVE/virtual_closet-client/virtual_closet/server-closet/venv"
+set -gx VIRTUAL_ENV "/Users/dustin/Desktop/Dev/REACT_NATIVE/virtual_closet-client/virtual_closet/test-server-closet/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

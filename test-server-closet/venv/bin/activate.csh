@@ -7,7 +7,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/Users/dustin/Desktop/Dev/REACT_NATIVE/virtual_closet-client/virtual_closet/server-closet/venv"
+setenv VIRTUAL_ENV "/Users/dustin/Desktop/Dev/REACT_NATIVE/virtual_closet-client/virtual_closet/test-server-closet/venv"
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"
