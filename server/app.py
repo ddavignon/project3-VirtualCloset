@@ -118,15 +118,32 @@ def create_task():
     print request.json['picture']
     return jsonify({'picture': request.json['picture']}), 201
     
+@app.route("/json", methods=['GET','POST'])
+def json_stuff():
+    #app.logger.debug("JSON received...")
+    #app.logger.debug(request.json)
+    if request.json:
+        mydata = request.json # will be 
+        print mydata["password"]
+        return 'Success'
+
+    else:
+        return "no json received"
+
 @app.route('/virtual/api/v1.0/signUp',methods=["POST"])
 def confirm():
-    email=request.form["email"]
-    password=request.form["password"]
-    phoneNumber=request.form["phoneNumber"]
-    closetName=request.form["closetName"]
-    #for testing purposes only send back info
-    item={'email':email,'password':password,'phoneNumber':phoneNumber}
-    return jsonify(item) 
+    if request.json:
+        mydata = request.json # will be
+        userExist = models.Users.query.filter_by(email=mydata["email"]).all()
+        if (len(userExist)==0):
+            user = models.Users(mydata["email"],mydata["password"],mydata["phoneNumber"],mydata["closetName"])
+            models.db.session.add(user)
+            models.db.session.commit()
+            return jsonify({"message":'Success'})
+
+        else:
+            return jsonify({"message":'user already exist'})
+     
 
 @app.route('/virtual/api/v1.0/getClothes',methods=['GET'])
 def getClothes():
@@ -137,7 +154,6 @@ def getClothes():
 @app.route('/virtual/api/v1.0/check',methods=['GET'])
 def checkDB():
     clothes=models.db.session.query(models.Clothes.style,models.Clothes.user_id).distinct().filter(models.Clothes.user_id=="Tester@yahoo.com").all()
-    
     print clothes[0].style
     print clothes[1].style
     print clothes
@@ -161,7 +177,7 @@ def confirmation():
     type_clothing= request.form["type_clothing"]
     #add file name it unique 
     #where its going to be stored in s3 storage
-    image_uri="https://s3-us-west-1.amazonaws.com/virtualcloset2030/"+user_id+"/"+uri.filename
+    image_uri="https://s3-us-west-1.amazonaws.com/"+os.getenv("bucket_name")+"/"+user_id+"/"+uri.filename
     print request.form
     print request.files
     #S3#####################################
@@ -169,7 +185,7 @@ def confirmation():
     filename = secure_filename(uri.filename)
     uri.save(os.path.join(directory_name, filename))
     data = open(directory_name+"/"+uri.filename, 'rb')
-    s3.Bucket('virtualcloset2030').put_object(Key=user_id+"/"+uri.filename, Body=data)
+    s3.Bucket(os.getenv("bucket_name")).put_object(Key=user_id+"/"+uri.filename, Body=data)
     os.remove(directory_name+"/"+uri.filename) 
     clothing_item = models.Clothes(user_id,color,description,style,rules.getLowTemp(type_clothing),rules.getHighTemp(type_clothing),type_clothing,image_uri)
     models.db.session.add(clothing_item)
