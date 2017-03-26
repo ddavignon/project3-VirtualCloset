@@ -1,5 +1,5 @@
-python-amazon-simple-product-api
 boto3
 flask-ask
 flask-email
 clarifai
+python-forecastio

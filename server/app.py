@@ -11,7 +11,6 @@ from werkzeug.utils import secure_filename
 import json
 import boto3
 import rules
-from amazon.api import AmazonAPI
 import forecastio
 
 
