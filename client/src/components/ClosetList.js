@@ -5,30 +5,52 @@ import {
   ScrollView,
   View
 } from 'react-native';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import { GET_CLOTHING_ITEMS } from '../api/constants';
 import ClosetItem from './ClosetItem';
 
 class ClosetList extends Component {
-    state = { showText: true, closetItems: [] };
+    state = {
+        showText: true,
+        shirtItems: [],
+        pantsItems: [],
+        shoesItems: []
+    };
 
     componentWillMount() {
-      axios.get(GET_CLOTHING_ITEMS)
-        .then((response) => {
-        //   console.log('state', this.state.closetItems);
-        //   response.data.map((data) => console.log(data));
-          this.setState({ closetItems: response.data });
-        //   console.log('state-after', this.state.closetItems);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        axios.get(GET_CLOTHING_ITEMS, { 
+                headers: {
+                    'Authorization': 'JWT ' + this.props.token 
+                }
+            })
+            .then((response) => {
+                console.log(response);
+                this.setState({ 
+                    shirtItems: response.data.shirts,
+                    pantsItems: response.data.pants,
+                    shoesItems: response.data.shoes 
+                    });
+                })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
-    renderItems() {
-        return this.state.closetItems.map(item => <ClosetItem key={item._id} uri={item.urlPath} />);
+    renderShirtItems() {
+        return this.state.shirtItems.map(item => 
+            <ClosetItem key={item._id} uri={item.url_path} item={item} />);
     }
 
+    renderPantsItems() {
+        return this.state.pantsItems.map(item => 
+            <ClosetItem key={item._id} uri={item.url_path} item={item} />);
+    }
+
+    renderShoesItems() {
+        return this.state.shoesItems.map(item => 
+            <ClosetItem key={item._id} uri={item.url_path} item={item} />);
+    }
 
     render() {
         return (
@@ -47,7 +69,7 @@ class ClosetList extends Component {
                       onScroll={() => { console.log('onScroll!'); }}
                       scrollEventThrottle={200}
                   >
-                      {this.renderItems()}
+                      {this.renderShirtItems()}
                   </ScrollView>
                 </View>
 
@@ -58,7 +80,7 @@ class ClosetList extends Component {
                       onScroll={() => { console.log('onScroll!'); }}
                       scrollEventThrottle={200}
                   >
-                      {this.renderItems()}
+                      {this.renderPantsItems()}
                   </ScrollView>
                 </View>
 
@@ -69,7 +91,7 @@ class ClosetList extends Component {
                       onScroll={() => { console.log('onScroll!'); }}
                       scrollEventThrottle={200}
                   >
-                      {this.renderItems()}
+                      {this.renderShoesItems()}
                   </ScrollView>
                 </View>
               </View>
@@ -77,45 +99,6 @@ class ClosetList extends Component {
         );
     }
 }
-
-const SHOES = ['https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg',
-'https://s-media-cache-ak0.pinimg.com/736x/e6/16/8a/e6168a701173b7537f779d7e79ea4d8a.jpg'];
-
-const PANTS = ['https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg',
-'https://content.backcountry.com/images/items/medium/COL/COL3692/STE.jpg'];
-
-const SHIRTS = ['https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg',
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg',
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg', 
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg',
-'https://www.vineyardvines.com/dw/image/v2/AAHW_PRD/on/demandware.static/-/Sites-vineyardvines-master/default/dwc5907d0b/images/2017/1V0586.459.a.zoom.jpg'];
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -131,4 +114,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ClosetList;
+const mapStateToProps = (state) => {
+    const { token } = state.auth;
+
+    return { token };
+};
+
+export default connect(mapStateToProps, null)(ClosetList);

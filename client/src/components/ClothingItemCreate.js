@@ -14,10 +14,10 @@ import ClothingItemForm from './ClothingItemForm';
 
 class ClothingItemCreate extends Component {
     onButtonPress() {
-        const { name, description, style, color, type_clothing, image_data } = this.props;
+        const { name, description, style, color, type_clothing, image_data, token } = this.props;
         
         this.props.clothingItemCreate({
-            name, description, style, color, type_clothing, image_data 
+            name, description, style, color, type_clothing, image_data, token 
         });
     }
 
@@ -42,7 +42,9 @@ const mapStateToProps = (state) => {
         name, description, style, color, type_clothing, uri, image_data
     } = state.clothingItemForm;
 
-    return { name, description, style, color, type_clothing, uri, image_data };
+    const { token } = state.auth;
+
+    return { name, description, style, color, type_clothing, uri, image_data, token };
 };
 
 export default connect(mapStateToProps, {

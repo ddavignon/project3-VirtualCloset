@@ -14,7 +14,7 @@ const INTIAL_STATE = {
     type_clothing: 'shirt',
     uri: null,
     url_path: null,
-    image_data: '',
+    image_data: null,
     loading: false
 };
 
@@ -23,7 +23,11 @@ export default (state = INTIAL_STATE, action) => {
         case CLOTHING_ITEM_UPDATE:
             return { ...state, [action.payload.prop]: action.payload.value };
         case CLOTHING_ITEM_SELECTED:
-            return { ...state, loading: true, uri: action.payload };
+            return { ...state,
+                loading: true,
+                uri: action.payload.uri,
+                image_data: action.payload.image_data
+            };
         case CLOTHING_ITEM_INFO_SUCCESS:
             return { ...state,
                 description: action.payload.description,
