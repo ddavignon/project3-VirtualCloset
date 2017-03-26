@@ -17,7 +17,8 @@ import { CardSection, Input, Spinner } from './common';
 class ClothingItemForm extends Component {
 
     componentWillMount() {
-        this.displayImagePicker();
+        // this.displayImagePicker();
+        console.log('props', this.props);
     }
 
     displayImagePicker() {
@@ -29,8 +30,10 @@ class ClothingItemForm extends Component {
             }
         };
 
+        const { token } = this.props;
+
         ImagePicker.showImagePicker(options, (response) => {
-            this.props.clothingItemResults({ response });
+            this.props.clothingItemResults({ response, token });
         });
     }
 
@@ -76,14 +79,15 @@ class ClothingItemForm extends Component {
     }
 
     render() {
-        const { container, clothingItem, clothingItemContainer } = styles;
+        const { container, clothingItem, clothingItemContainer } = styles;       
+       
         return (
             <View>
                 <CardSection>
                     <View style={{ flex: 1 }}>
                         <TouchableOpacity style={container} onPress={this.displayImagePicker.bind(this)}> 
                             <View style={[clothingItem, clothingItemContainer, { marginBottom: 20 }]} >
-                                { this.props.uri === null 
+                                { this.props.uri === null
                                     ? <Text>Select a Photo</Text> 
                                     : <Image style={styles.clothingItem} source={{ uri: this.props.uri }} />
                                 }
@@ -145,7 +149,9 @@ const mapStateToProps = (state) => {
         name, description, style, color, type_clothing, uri, image_data, loading
     } = state.clothingItemForm;
 
-    return { name, description, style, color, type_clothing, uri, image_data, loading };
+    const { token } = state.auth;
+
+    return { name, description, style, color, type_clothing, uri, image_data, loading, token };
 };
 
 export default connect(mapStateToProps, { clothingItemUpdate, clothingItemResults })(ClothingItemForm);
