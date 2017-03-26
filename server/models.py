@@ -5,8 +5,8 @@ import os
 #TODO ADD Database grab info set to message array in init send messages list down and will be done with SE PROJECT!!!!!
 #TODO REPLACE ALL ADD messges with DB adds :) add extra stuff more commands 
 
-#app.app.config['SQLALCHEMY_DATABASE_URI'] = app.os.getenv('DATABASE_URL')
-app.app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql://brandan:blockwood@localhost/postgres'
+app.app.config['SQLALCHEMY_DATABASE_URI'] = app.os.getenv('DATABASE_URL')
+#app.app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql://brandan:blockwood@localhost/postgres'
 db = flask_sqlalchemy.SQLAlchemy(app.app)
 
 #db.create_all()

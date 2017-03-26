@@ -20,7 +20,6 @@ app = Flask(__name__)
 import models
 s3 = boto3.resource('s3')
 dark_sky_key = os.getenv("DARK_SKY_KEY")
-
 appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
 
 
