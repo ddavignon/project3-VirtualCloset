@@ -11,31 +11,18 @@ from werkzeug.utils import secure_filename
 import json
 import boto3
 import rules
-
-
+from amazon.api import AmazonAPI
+import forecastio
 
 
 
 app = Flask(__name__)
 import models
 s3 = boto3.resource('s3')
-
+dark_sky_key = os.getenv("DARK_SKY_KEY")
 
 appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
-tasks = [
-    {
-        'id': 1,
-        'title': u'Buy groceries',
-        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol', 
-        'done': False
-    },
-    {
-        'id': 2,
-        'title': u'Learn Python',
-        'description': u'Need to find a good Python tutorial on the web', 
-        'done': False
-    }
-]
+
 
 
 ###################################Clarifai methods#############################
@@ -91,25 +78,18 @@ def something():
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
     
-@app.route('/virtual/api/v1.0/closet', methods=['GET'])
-def get_tasks():
-     # here we want to get the value of user (i.e. ?user=some-value)
-    user = request.args.get('user')
-    #note if parameter is not filled request.args.get(someParameter) returns None
-    style = request.args.get('style')
-    temperature = request.args.get('temperature')
-    print request.args.get('style')
+
     
-    print user
-    return jsonify({'user': user, 'style':style,'temperature':temperature})
     
-@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['GET'])
-def get_task(task_id):
-    print task_id
-    task = [task for task in tasks if task['id'] == task_id]
-    if len(task) == 0:
-        abort(404)
-    return jsonify({'task': task[0]})
+@app.route('/test', methods=['GET'])
+def get_test():
+    products = amazon.search(Keywords='kindle', SearchIndex='All')
+    for i, product in enumerate(products):
+        print "{0}. '{1}'".format(i, product.offer_url)+" "+product.large_image_url 
+    print products
+    return "hello"
+    
+
 
 @app.route('/todo/api/v1.0/tasks', methods=['POST'])
 def create_task():
@@ -118,17 +98,7 @@ def create_task():
     print request.json['picture']
     return jsonify({'picture': request.json['picture']}), 201
     
-@app.route("/json", methods=['GET','POST'])
-def json_stuff():
-    #app.logger.debug("JSON received...")
-    #app.logger.debug(request.json)
-    if request.json:
-        mydata = request.json # will be 
-        print mydata["password"]
-        return 'Success'
 
-    else:
-        return "no json received"
 
 @app.route('/virtual/api/v1.0/signUp',methods=["POST"])
 def confirm():
@@ -145,15 +115,35 @@ def confirm():
             return jsonify({"message":'user already exist'})
      
 
-@app.route('/virtual/api/v1.0/getClothes',methods=['GET'])
+@app.route('/virtual/api/v1.0/closet',methods=['GET'])
 def getClothes():
-    xCoordinates = request.args.get('user')
-    #note if parameter is not filled request.args.get(someParameter) returns None
-    yCoordinates = request.args.get('style')
+    user_id=request.args.get('user_id')
+    if len(models.Users.query.filter_by(email=user_id).all()) !=1:
+        return jsonify({"error": "no user by that id"})
+    lat = request.args.get('lat')
+    lng = request.args.get('lng')
+    forecast = forecastio.load_forecast(dark_sky_key, lat, lng)
+    today=forecast.hourly()
+    print today.icon
+    tempLow=40
+    tempHigh=-100
+    for data in today.data:
+        if(data.temperature<tempLow):
+           tempLow=data.temperature
+        if(data.temperature>tempHigh):
+            tempHigh=data.temperature
+    print tempLow
+    print tempHigh
+    shirt=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="shirt").all()]
+    pants=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="pants").all()]
+    shoes=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="shoes").all()]
+    accessory=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="accessory").all()]
+    return jsonify({'top':shirt ,'bottom':pants,'shoes':shoes,'accessory':accessory})
     
-@app.route('/virtual/api/v1.0/check',methods=['GET'])
+@app.route('/virtual/api/v1.0/styles',methods=['GET'])
 def checkDB():
-    clothes=models.db.session.query(models.Clothes.style,models.Clothes.user_id).distinct().filter(models.Clothes.user_id=="Tester@yahoo.com").all()
+    user_id=request.args.get('user_id')
+    clothes=models.db.session.query(models.Clothes.style,models.Clothes.user_id).distinct().filter(models.Clothes.user_id==user_id).all()
     print clothes[0].style
     print clothes[1].style
     print clothes

@@ -46,5 +46,15 @@ class Clothes(db.Model):
         self.type_clothing=type_clothing
         self.url_path=url_path
         
-    
+    @property   
+    def serialize(self):
+        return {
+            'usesr':self.user_id,
+            'color':self.color,
+            'style':self.style,
+            'tempLow':self.tempLow,
+            'tempHigh':self.tempHigh,
+            'type_clothing':self.type_clothing,
+            'url_path':self.url_path
+        }
  
