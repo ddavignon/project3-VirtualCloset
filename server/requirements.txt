@@ -3,3 +3,5 @@ flask-ask
 flask-email
 clarifai
 python-forecastio
+psycopg2
+Flask-SQLAlchemy
