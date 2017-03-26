@@ -12,6 +12,8 @@ import json
 import boto3
 import rules
 import forecastio
+import smtplib
+
 
 
 
@@ -76,9 +78,6 @@ def something():
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
     
-
-    
-    
 @app.route('/test', methods=['GET'])
 def get_test():
     products = amazon.search(Keywords='kindle', SearchIndex='All')
@@ -87,14 +86,25 @@ def get_test():
     print products
     return "hello"
     
+@app.route('/sendText',methods=['GET'])
+def sendText():
+    # Use sms gateway provided by mobile carrier:
+    # at&t:     number@mms.att.net
+    # t-mobile: number@tmomail.net
+    # verizon:  number@vtext.com
+    # sprint:   number@page.nextel.com
+    # Establish a secure session with gmail's outgoing SMTP server using your gmail account4
+    number=request.args.get('number')
+    server = smtplib.SMTP( "smtp.gmail.com", 587 )
 
+    server.starttls()
+    
+    server.login( os.getenv('email'), os.getenv('password') )
 
-@app.route('/todo/api/v1.0/tasks', methods=['POST'])
-def create_task():
-    if not request.json or not 'picture' in request.json:
-        abort(400)
-    print request.json['picture']
-    return jsonify({'picture': request.json['picture']}), 201
+    # Send text message through SMS gateway of destination number
+    server.sendmail( 'virtualcloset', str(number)+'@mms.att.net', 'hello' )
+    return "Success"
+
     
 
 
