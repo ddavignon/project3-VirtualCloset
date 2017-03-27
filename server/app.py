@@ -133,7 +133,7 @@ def getClothes():
     forecast = forecastio.load_forecast(dark_sky_key, lat, lng)
     today=forecast.hourly()
     print today.icon
-    tempLow=40
+    tempLow=200
     tempHigh=-100
     for data in today.data:
         if(data.temperature<tempLow):
