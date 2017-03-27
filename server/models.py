@@ -6,6 +6,7 @@ import os
 #TODO REPLACE ALL ADD messges with DB adds :) add extra stuff more commands 
 
 app.app.config['SQLALCHEMY_DATABASE_URI'] = app.os.getenv('DATABASE_URL')
+app.app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 #app.app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql://brandan:blockwood@localhost/postgres'
 db = flask_sqlalchemy.SQLAlchemy(app.app)
 
