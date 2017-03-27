@@ -58,6 +58,6 @@ class Clothes(db.Model):
         }
  
 
-db.create_all()
-db.session.commit()
+#db.create_all()
+#db.session.commit()
 
