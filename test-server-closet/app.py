@@ -8,7 +8,7 @@ from resources.item import Item, ItemList
 from resources.closet import Closet, ClosetList
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dustin:potato@localhost/flask-vc-api'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dustin:potato@localhost/dustin'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'SuperSecretPasskey'
 api = Api(app)
