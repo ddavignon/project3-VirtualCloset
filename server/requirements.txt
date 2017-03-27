@@ -3,5 +3,5 @@ flask-ask
 flask-email
 clarifai
 python-forecastio
-psycopg2
-Flask-SQLAlchemy
+Flask-SQLAlchemy==2.1
+psycopg2==2.6.2
