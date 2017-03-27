@@ -1,12 +1,12 @@
 // const BASE_URL = 'https://dustind.net/api/v1/closet';
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://glacial-everglades-16804.herokuapp.com'; //'http://localhost:5000';
 
 // const HEROKU_BASE_URL = 'https://mighty-chamber-19968.herokuapp.com/virtual/api/v1.0/upload';
 
 export const AUTH_USER = BASE_URL.concat('/auth'); //'https://dustind.net/api/v1/account/register';
 export const REGISTER_USER = BASE_URL.concat('/register');
 
-export const GET_CLOTHING_ITEMS = BASE_URL.concat('/items'); // 'http://localhost:8080/virtual/api/v1.0/closet'; //BASE_URL; //
+export const GET_CLOTHING_ITEMS = 'https://mighty-chamber-19968.herokuapp.com/virtual/api/v1.0/closet'; //BASE_URL.concat('/items'); // 'http://localhost:8080/virtual/api/v1.0/closet'; //BASE_URL; //
 export const ADD_CLOTHING_ITEM = BASE_URL.concat('/item/');  // 'https://mighty-chamber-19968.herokuapp.com/virtual/api/v1.0/confirmation'; // BASE_URL.concat('/add'); //
 // export const ADD_CLOTHING_ITEM_IMAGE = 'http://localhost:8080/virtual/api/v1.0/closet/add_image';
 

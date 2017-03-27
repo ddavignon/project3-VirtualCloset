@@ -15,26 +15,61 @@ class ClosetList extends Component {
         showText: true,
         shirtItems: [],
         pantsItems: [],
-        shoesItems: []
+        shoesItems: [],
+        latitudePosition: '37.4829525',
+        longitudePosition: '-122.1480473',
     };
 
     componentWillMount() {
-        axios.get(GET_CLOTHING_ITEMS, { 
-                headers: {
-                    'Authorization': 'JWT ' + this.props.token 
-                }
-            })
-            .then((response) => {
-                console.log(response);
-                this.setState({ 
-                    shirtItems: response.data.shirts,
-                    pantsItems: response.data.pants,
-                    shoesItems: response.data.shoes 
-                    });
-                })
-            .catch((err) => {
-                console.log(err);
+        // axios.get(GET_CLOTHING_ITEMS, { 
+        //         headers: {
+        //             'Authorization': 'JWT ' + this.props.token 
+        //         }
+        //     })
+        //     .then((response) => {
+        //         console.log(response);
+        //         this.setState({ 
+        //             shirtItems: response.data.shirts,
+        //             pantsItems: response.data.pants,
+        //             shoesItems: response.data.shoes 
+        //             });
+        //         })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     });
+        navigator.geolocation.getCurrentPosition( (position) => {
+            this.setState({
+                latitudePosition: JSON.stringify(position.coords.latitude),
+                longitudePosition: JSON.stringify(position.coords.longitude)
             });
+        },
+        (error) => alert(JSON.stringify(error)), {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 1000
+        });
+
+        axios.get(GET_CLOTHING_ITEMS, { 
+            headers: {
+                'Authorization': 'JWT ' + this.props.token 
+            },
+            params: {
+                lat: this.state.latitudePosition,
+                lng: this.state.longitudePosition,
+                user_id: 'tester@yahoo.com'
+            }
+        })
+        .then((response) => {
+            console.log(response);
+            this.setState({ 
+                shirtItems: response.data.shirts,
+                pantsItems: response.data.pants,
+                shoesItems: response.data.shoes 
+                });
+            })
+        .catch((err) => {
+            console.log(err);
+        });
     }
 
     renderShirtItems() {
