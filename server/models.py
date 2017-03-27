@@ -26,12 +26,12 @@ class Users(db.Model):
 class Clothes(db.Model):
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     user_id= db.Column(db.String(50), db.ForeignKey('users.email'))
-    color = db.Column(db.String(7))
+    color = db.Column(db.String(30))
     description = db.Column(db.String(1000))
     style = db.Column(db.String(30))
     tempLow = db.Column(db.Integer)
     tempHigh = db.Column(db.Integer)
-    type_clothing= db.Column(db.String(10))
+    type_clothing= db.Column(db.String(30))
     url_path=db.Column(db.String(1000))
     
     
@@ -57,3 +57,7 @@ class Clothes(db.Model):
             'url_path':self.url_path
         }
  
+
+db.create_all()
+db.session.commit()
+

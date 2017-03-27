@@ -144,8 +144,8 @@ def getClothes():
     print tempHigh
     shirt=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="shirt").all()]
     pants=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="pants").all()]
-    shoes=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="shoes").all()]
-    accessory=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="accessory").all()]
+    shoes=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.type_clothing=="shoes").all()]
+    accessory=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.type_clothing=="accessory").all()]
     return jsonify({'top':shirt ,'bottom':pants,'shoes':shoes,'accessory':accessory})
     
 @app.route('/virtual/api/v1.0/styles',methods=['GET'])
