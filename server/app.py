@@ -153,8 +153,8 @@ def checkDB():
     user_id=request.args.get('user_id')
     clothes=models.db.session.query(models.Clothes.style,models.Clothes.user_id).distinct().filter(models.Clothes.user_id==user_id).all()
     styles=[]
-    for i.styles in clothes:
-        styles.append(i.styles)
+    for clothing in clothes:
+        styles.append(clothing.style)
     return jsonify({'styles':styles})
 
 
