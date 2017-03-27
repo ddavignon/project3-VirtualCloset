@@ -94,6 +94,8 @@ export const clothingItemCreate = ({
                 // });
                 // // console.log('snaphot', snapshot.downloadURL);
                 // /* there we go ! */ 
+
+
                 fetch(ADD_CLOTHING_ITEM.concat(name), {
                     method: 'POST',
                       headers: {
