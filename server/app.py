@@ -152,10 +152,10 @@ def getClothes():
 def checkDB():
     user_id=request.args.get('user_id')
     clothes=models.db.session.query(models.Clothes.style,models.Clothes.user_id).distinct().filter(models.Clothes.user_id==user_id).all()
-    print clothes[0].style
-    print clothes[1].style
-    print clothes
-    return "Success"
+    styles=[]
+    for i.styles in clothes:
+        styles.append(i.styles)
+    return jsonify({'styles':styles})
 
 
 @app.route('/virtual/api/v1.0/confirmation', methods=['POST'])
