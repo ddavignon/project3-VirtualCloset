@@ -3,30 +3,22 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import { Actions } from 'react-native-router-flux';
 import { AUTH_USER, REGISTER_USER } from '../api/constants';
 import {
-    EMAIL_CHANGED,
-    PASSWORD_CHANGED,
+    LOGIN_ITEM_UPDATE,
     LOGIN_USER_SUCCESS,
     LOGIN_USER_FAIL,
     LOGIN_USER
 } from './types';
 
-export const emailChanged = (text) => {
+export const loginTextFieldUpdate = ({ prop, value }) => {
     return {
-        type: EMAIL_CHANGED,
-        payload: text
-    };
-};
-
-export const passwordChanged = (text) => {
-    return {
-        type: PASSWORD_CHANGED,     
-        payload: text
+        type: LOGIN_ITEM_UPDATE,
+        payload: { prop, value }
     };
 };
 
 export const registerUser = ({ email, password, phone_number, carrier }) => {
     return (dispatch) => {
-                dispatch({ type: LOGIN_USER });
+        dispatch({ type: LOGIN_USER });
         const data = {
             username: email,
             password,
@@ -98,18 +90,6 @@ export const loginUser = ({ email, password }) => {
         })
         .done();
     };
-    
-    //     firebase.auth().signInWithEmailAndPassword(email, password)
-    //         .then(user => {
-    //             console.log(user);
-    //             loginUserSuccess(dispatch, user);
-    //         })           
-    //         .catch(() => {
-    //             firebase.auth().createUserWithEmailAndPassword(email, password)
-    //                 .then(user => loginUserSuccess(dispatch, user))
-    //                 .catch(() => loginUserFail(dispatch));
-    //         });
-    // };
 };
 
 const loginUserFail = (dispatch) => {
