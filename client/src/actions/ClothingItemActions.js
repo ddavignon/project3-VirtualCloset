@@ -98,7 +98,7 @@ export const clothingItemCreate = ({
 
                 const itemPath = description.concat(style).concat(type_clothing);
 
-                fetch(ADD_CLOTHING_ITEM.concat(itemPath), {
+                fetch(ADD_CLOTHING_ITEM.concat(itemPath.replace(/ /g, '-')), {
                     method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
