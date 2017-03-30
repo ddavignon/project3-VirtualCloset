@@ -60,7 +60,7 @@ export const clothingItemResults = ({ response, token }) => {
 };
 
 export const clothingItemCreate = ({
-    name, description, style, color, type_clothing, image_data, token
+    description, style, type_clothing, image_data, token
 }) => {
     return (dispatch) => {  
         // Prepare Blob support
@@ -68,7 +68,7 @@ export const clothingItemCreate = ({
         window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
         window.Blob = Blob;
         
-        const testImageName = `${name}--${new Date()}.jpg`;
+        const testImageName = `${description}--${new Date()}.jpg`;
 
         Blob.build(RNFetchBlob.wrap(image_data.origURL), { type: 'image/jpeg' })
             .then((blob) => firebase.storage()
@@ -95,18 +95,17 @@ export const clothingItemCreate = ({
                 // // console.log('snaphot', snapshot.downloadURL);
                 // /* there we go ! */ 
 
+                const itemPath = description.concat(style).concat(type_clothing);
 
-                fetch(ADD_CLOTHING_ITEM.concat(name), {
+                fetch(ADD_CLOTHING_ITEM.concat(itemPath), {
                     method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'JWT '.concat(token)
                     },
                     body: JSON.stringify({
-                        name,
                         description,
                         style,
-                        color,
                         type_clothing,
                         url_path: snapshot.downloadURL
                     })

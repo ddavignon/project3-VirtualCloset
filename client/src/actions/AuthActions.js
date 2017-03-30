@@ -1,7 +1,11 @@
 // import firebase from 'firebase';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { Actions } from 'react-native-router-flux';
-import { AUTH_USER, REGISTER_USER } from '../api/constants';
+import {
+    AUTH_USER,
+    REGISTER_USER,
+    REGISTER_USER_CLOSET
+} from '../api/constants';
 import {
     LOGIN_ITEM_UPDATE,
     LOGIN_USER_SUCCESS,
@@ -21,9 +25,7 @@ export const registerUser = ({ email, password, phone_number, carrier }) => {
         dispatch({ type: LOGIN_USER });
         const data = {
             username: email,
-            password,
-            phone_number,
-            carrier
+            password
         };
         // Serialize and post the data
         const json = JSON.stringify(data);
@@ -43,7 +45,22 @@ export const registerUser = ({ email, password, phone_number, carrier }) => {
                     'Accept': 'application/json'
                 }, json)
                 .then((res) => {
-                    loginUserSuccess(dispatch, email, res.json().access_token); 
+                    const token = res.json().access_token;
+                    console.log(token);
+                    fetch(REGISTER_USER_CLOSET.concat(email), {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'JWT ' + token
+                        },
+                        body: JSON.stringify({
+                            phone_number,
+                            carrier
+                        })
+                    })
+                    .then((resp) => console.log(resp))
+                    .catch((err) => console.log(err));
+                    loginUserSuccess(dispatch, email, token); 
                 }); 
             } else {
                 loginUserFail(dispatch);
