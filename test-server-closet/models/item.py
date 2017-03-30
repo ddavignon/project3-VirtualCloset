@@ -4,8 +4,8 @@ class ItemModel(db.Model):
     __tablename__ = 'items'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    color = db.Column(db.String(80))
+    # name = db.Column(db.String(80))
+    # color = db.Column(db.String(80))
     description = db.Column(db.String(80))
     type_clothing = db.Column(db.String(80))
     style = db.Column(db.String(80))
@@ -14,9 +14,10 @@ class ItemModel(db.Model):
     closet_id = db.Column(db.Integer, db.ForeignKey('closet.id'))
     closet= db.relationship('ClosetModel')
 
-    def __init__(self, name, color, description, type_clothing, style, url_path, closet_id):
-        self.name = name
-        self.color = color
+    def __init__(self, description, type_clothing, style, url_path, closet_id):
+    # def __init__(self, name, color, description, type_clothing, style, url_path, closet_id):
+        # self.name = name
+        # self.color = color
         self.description = description
         self.type_clothing = type_clothing
         self.style = style
@@ -26,8 +27,8 @@ class ItemModel(db.Model):
     def json(self):
         return {
             '_id': self.id,
-            'name': self.name,
-            'color': self.color,
+            # 'name': self.name,
+            # 'color': self.color,
             'description': self.description,
             'type_clothing': self.type_clothing,
             'style': self.style,
@@ -35,9 +36,9 @@ class ItemModel(db.Model):
             'closet_id': self.closet_id
         }
 
-    @classmethod
-    def find_by_name(cls, name):
-        return cls.query.filter_by(name=name).first()
+    # @classmethod
+    # def find_by_name(cls, name):
+    #     return cls.query.filter_by(name=name).first()
 
     @classmethod
     def find_by_id(cls, _id):
