@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 //import { LoginButton, AccessToken } from 'react-native-fbsdk';
+const Permissions = require('react-native-permissions');
 
 class LoginForm extends Component {
 	state = {
 	latitudePosition: 'unknown',
 	longitudePosition: 'unknown',
+	locationPermission: 'undetermined',
 	};
 	
     onEmailChanged(text) {
@@ -33,22 +35,54 @@ class LoginForm extends Component {
             </Button>
         );
     }
+    
+    componentWillMount(){
+    Permissions.getPermissionStatus('location','whenInUse')
+      .then(response => {
+        //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined' 
+        this.setState({ locationPermission: response })
+      });
+      //for some reason android crashes as it asks for permission
+      if(this.state.locationPermission =='undetermined'){
+        	Permissions.requestPermission('location')
+        		.then(response => {
+        			this.setState({locationPermission: response})
+        		});
+        }
+    }
+    
 	componentDidMount() {
-		navigator.geolocation.getCurrentPosition( (position) => {
-			this.setState({
-			   latitudePosition:JSON.stringify(position['coords']['latitude']),
-			   longitudePosition:JSON.stringify(position['coords']['longitude'])
-			   });
-			},
-		(error) => alert(JSON.stringify(error)),{
-			enableHighAccuracy: true,
-			timeout: 20000,
-			maximumAge: 1000}
-		);
+	//This if statement crashes on android
+			// if(this.state.locationPermission =='undetermined'){
+//         	Permissions.requestPermission('location')
+//         		.then(response => {
+//         			this.setState({locationPermission: response})
+//         		});
+//         	}
+		
+			navigator.geolocation.getCurrentPosition( (position) => {
+				this.setState({
+				   latitudePosition:JSON.stringify(position['coords']['latitude']),
+				   longitudePosition:JSON.stringify(position['coords']['longitude'])
+				   });
+				},
+			(error) => alert(JSON.stringify(error)),{
+				enableHighAccuracy: true,
+				timeout: 20000,
+				maximumAge: 1000}
+													 );
+		
 	}
     render() {
+        
         return (
             <Card>
+            	<CardSection>
+					<Text>
+						<Text style={styles.title}>LocPermission:</Text>
+						{this.state.locationPermission}
+					</Text>
+				</CardSection>
 				<CardSection>
 					<Text>
 						<Text style={styles.title}>Latitude:</Text>
