@@ -24,6 +24,42 @@ export const passwordChanged = (text) => {
     };
 };
 
+export const registerUser = ({ email, password, phone_number, carrier }) => {
+    return (dispatch) => {
+                dispatch({ type: LOGIN_USER });
+        const data = {
+            username: email,
+            password,
+            phone_number,
+            carrier
+        };
+        // Serialize and post the data
+        const json = JSON.stringify(data);
+        fetch(REGISTER_USER, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: json
+        })
+        .then((response) => {
+            if (response.status === 201) {
+                console.log(response);
+                RNFetchBlob.fetch('POST', AUTH_USER, {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }, json)
+                .then((res) => {
+                    loginUserSuccess(dispatch, email, res.json().access_token); 
+                }); 
+            } else {
+                loginUserFail(dispatch);
+            }
+        });
+    };
+};
+
 export const loginUser = ({ email, password }) => {
     return (dispatch) => {
         dispatch({ type: LOGIN_USER });
@@ -52,34 +88,13 @@ export const loginUser = ({ email, password }) => {
                     loginUserSuccess(dispatch, email, res.json().access_token); 
                 });  
             } else {
-                fetch(REGISTER_USER, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    body: json
-                })
-                .then((response) => {
-                    if (response.status === 201) {
-                        console.log(response);
-                        RNFetchBlob.fetch('POST', AUTH_USER, {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        }, json)
-                        .then((res) => {
-                            loginUserSuccess(dispatch, email, res.json().access_token); 
-                        }); 
-                    } else {
-                        loginUserFail(dispatch);
-                    }
-                });
+                loginUserFail(dispatch);
             }      
         })
         .catch((error) => {
             loginUserFail(dispatch);
             console.log(error);
-            alert('There was an error creating your account.');
+            alert('There was an error logging in to your account.');
         })
         .done();
     };

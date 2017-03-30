@@ -85,6 +85,16 @@ class LoginForm extends Component {
                 <CardSection>
                     {this.renderButton()}
                 </CardSection>
+                <CardSection>
+                    <Text>
+                        OR
+                    </Text>
+                </CardSection>
+                <CardSection>
+                    <Button>
+                        Sign Up
+                    </Button>
+                </CardSection>
                 {/*<LoginButton
                 publishPermissions={["publish_actions"]}
                 onLoginFinished={
