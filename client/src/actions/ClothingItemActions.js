@@ -44,12 +44,13 @@ export const clothingItemResults = ({ response, token }) => {
                 ])
                 .then((res) => {
                     // console.log(res.json());
+                    console.log(res);
                     const description = res.json().apparel[0].name;
-                    const style = res.json().styles[0].name;
-                    const color = res.json().color;
+                    // const style = res.json().styles[0].name;
+                    // const color = res.json().color;
 
-                    console.log(res.json(), style, description);
-                    clothingItemInfoSuccess(dispatch, style, description, color);
+                    console.log(res.json(), description);
+                    clothingItemInfoSuccess(dispatch, description);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -169,9 +170,9 @@ export const clothingItemCreate = ({
 
 // clothing item delete
 
-const clothingItemInfoSuccess = (dispatch, style, description, color) => {
+const clothingItemInfoSuccess = (dispatch, description) => {
     dispatch({
         type: CLOTHING_ITEM_INFO_SUCCESS,
-        payload: { style, description, color }
+        payload: { description }
     });
 };

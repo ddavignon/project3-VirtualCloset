@@ -11,4 +11,4 @@ export const GET_CLOTHING_ITEMS = BASE_URL.concat('/items'); // 'http://localhos
 export const ADD_CLOTHING_ITEM = BASE_URL.concat('/item/');  // 'https://mighty-chamber-19968.herokuapp.com/virtual/api/v1.0/confirmation'; // BASE_URL.concat('/add'); //
 // export const ADD_CLOTHING_ITEM_IMAGE = 'http://localhost:8080/virtual/api/v1.0/closet/add_image';
 
-export const UPLOAD_ITEM_IMAGE = 'https://mighty-chamber-19968.herokuapp.com/virtual/api/v1.0/upload'; //'http://localhost:8080/virtual/api/v1.0/upload';//
+export const UPLOAD_ITEM_IMAGE = BASE_URL.concat('/virtual/api/v1.0/upload'); //'http://localhost:8080/virtual/api/v1.0/upload';//
