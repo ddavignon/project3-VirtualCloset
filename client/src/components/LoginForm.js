@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Platform} from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, Spinner } from './common';
@@ -43,12 +43,12 @@ class LoginForm extends Component {
         this.setState({ locationPermission: response })
       });
       //for some reason android crashes as it asks for permission
-      if(this.state.locationPermission =='undetermined'){
-        	Permissions.requestPermission('location')
-        		.then(response => {
-        			this.setState({locationPermission: response})
-        		});
-        }
+      // if(this.state.locationPermission =='undetermined'){
+//         	Permissions.requestPermission('location')
+//         		.then(response => {
+//         			this.setState({locationPermission: response})
+//         		});
+//         }
     }
     
 	componentDidMount() {
@@ -59,7 +59,35 @@ class LoginForm extends Component {
 //         			this.setState({locationPermission: response})
 //         		});
 //         	}
-		
+		// if(Platform.OS === 'android'){
+// 			async function requestCameraPermission() { 
+// 				try { 
+// 					const granted = await PermissionsAndroid.request( 
+// 						PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, { 
+// 							'title': 'Cool Fashion App needs location Permission', 
+// 							'message': 'Cool Fashion App needs access to your location ' + 'so you can acces the weather.' 
+// 						} 
+// 					) 
+// 					if (granted === PermissionsAndroid.RESULTS.GRANTED) { 
+// 						navigator.geolocation.getCurrentPosition( (position) => {
+// 							this.setState({
+// 							   latitudePosition:JSON.stringify(position['coords']['latitude']),
+// 							   longitudePosition:JSON.stringify(position['coords']['longitude'])
+// 							   });
+// 							},
+// 						(error) => alert(JSON.stringify(error)),{
+// 							enableHighAccuracy: true,
+// 							timeout: 20000,
+// 							maximumAge: 1000}
+// 																 );
+// 					} else { 
+// 						console.log("Location permission denied") 
+// 					} 
+// 				} catch (err) { 
+// 					console.warn(err) 
+// 				} 
+// 			}
+// 		}
 			navigator.geolocation.getCurrentPosition( (position) => {
 				this.setState({
 				   latitudePosition:JSON.stringify(position['coords']['latitude']),

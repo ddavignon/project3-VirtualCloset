@@ -34,7 +34,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>${PRODUCT_NAME} WhenInUse Location</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To select image from camera roll</string>
 	<key>UIBackgroundModes</key>
