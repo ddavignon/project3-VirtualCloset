@@ -66,14 +66,14 @@ class ClothingItemForm extends Component {
                     />
                 </CardSection>
 
-                <CardSection>
+                {/*<CardSection>
                     <Input
                         label="Color"
                         placeholder="red"
                         value={this.props.color}
                         onChangeText={value => this.props.clothingItemUpdate({ prop: 'color', value })}
                     />
-                </CardSection>
+                </CardSection>*/}
             </View>
         );
     }
@@ -96,14 +96,14 @@ class ClothingItemForm extends Component {
                     </View>
                 </CardSection>
 
-                <CardSection>
+                {/*<CardSection>
                     <Input
                         label="Name"
                         placeholder="sweater"
                         value={this.props.name}
                         onChangeText={value => this.props.clothingItemUpdate({ prop: 'name', value })}
                     />
-                </CardSection>
+                </CardSection>*/}
                 {this.renderForm()}
 
                 <CardSection style={{ flexDirection: 'column' }}>
@@ -117,6 +117,7 @@ class ClothingItemForm extends Component {
                         <Picker label="pants" value="pants" />
                         <Picker label="shoes" value="shoes" />
                         <Picker label="accessories" value="accessories" />
+                        <Picker label="outerwear" value="outerwear" />
 
                     </Picker>
                 </CardSection>
@@ -146,12 +147,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     const {
-        name, description, style, color, type_clothing, uri, image_data, loading
+        description, style, type_clothing, uri, image_data, loading
     } = state.clothingItemForm;
 
     const { token } = state.auth;
 
-    return { name, description, style, color, type_clothing, uri, image_data, loading, token };
+    return { description, style, type_clothing, uri, image_data, loading, token };
 };
 
-export default connect(mapStateToProps, { clothingItemUpdate, clothingItemResults })(ClothingItemForm);
+export default connect(mapStateToProps, {
+    clothingItemUpdate, clothingItemResults
+})(ClothingItemForm);

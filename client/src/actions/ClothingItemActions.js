@@ -44,12 +44,13 @@ export const clothingItemResults = ({ response, token }) => {
                 ])
                 .then((res) => {
                     // console.log(res.json());
+                    console.log(res);
                     const description = res.json().apparel[0].name;
-                    const style = res.json().styles[0].name;
-                    const color = res.json().color;
+                    // const style = res.json().styles[0].name;
+                    // const color = res.json().color;
 
-                    console.log(res.json(), style, description);
-                    clothingItemInfoSuccess(dispatch, style, description, color);
+                    console.log(res.json(), description);
+                    clothingItemInfoSuccess(dispatch, description);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -60,7 +61,7 @@ export const clothingItemResults = ({ response, token }) => {
 };
 
 export const clothingItemCreate = ({
-    name, description, style, color, type_clothing, image_data, token
+    description, style, type_clothing, image_data, token
 }) => {
     return (dispatch) => {  
         // Prepare Blob support
@@ -68,7 +69,7 @@ export const clothingItemCreate = ({
         window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
         window.Blob = Blob;
         
-        const testImageName = `${name}--${new Date()}.jpg`;
+        const testImageName = `${description}--${new Date()}.jpg`;
 
         Blob.build(RNFetchBlob.wrap(image_data.origURL), { type: 'image/jpeg' })
             .then((blob) => firebase.storage()
@@ -95,18 +96,17 @@ export const clothingItemCreate = ({
                 // // console.log('snaphot', snapshot.downloadURL);
                 // /* there we go ! */ 
 
+                const itemPath = description.concat(style).concat(type_clothing);
 
-                fetch(ADD_CLOTHING_ITEM.concat(name), {
+                fetch(ADD_CLOTHING_ITEM.concat(itemPath.replace(/ /g, '-')), {
                     method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'JWT '.concat(token)
                     },
                     body: JSON.stringify({
-                        name,
                         description,
                         style,
-                        color,
                         type_clothing,
                         url_path: snapshot.downloadURL
                     })
@@ -170,9 +170,9 @@ export const clothingItemCreate = ({
 
 // clothing item delete
 
-const clothingItemInfoSuccess = (dispatch, style, description, color) => {
+const clothingItemInfoSuccess = (dispatch, description) => {
     dispatch({
         type: CLOTHING_ITEM_INFO_SUCCESS,
-        payload: { style, description, color }
+        payload: { description }
     });
 };

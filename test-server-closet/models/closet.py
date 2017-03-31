@@ -5,22 +5,41 @@ class ClosetModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
+    phone_number = db.Column(db.String(80))
+    carrier = db.Column(db.String(80))
 
     items = db.relationship('ItemModel', lazy='dynamic')
 
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    # user = db.relationship('UserModel')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('UserModel')
 
-    # def __init__(self, name, user_id):
-    #     self.name = name
-    #     self.user_id = user_id
-
-
-    def __init__(self, name):
+    def __init__(self, name, user_id, phone_number, carrier):
         self.name = name
+        self.user_id = user_id
+        self.phone_number = phone_number
+        self.carrier = carrier
+
+
+    # def __init__(self, name):
+    #     self.name = name
 
     def json(self):
-        return {'name': self.name, 'items': [item.json() for item in self.items.all()]}
+        return {
+            '_id': self.id,
+            'name': self.name,
+            'user_id': self.user_id,
+            'phone_number': self.phone_number,
+            'carrier': self.carrier,
+            'items': [item.json() for item in self.items.all()]
+        }
+
+    @classmethod
+    def find_by_id(cls, _id):
+        return cls.query.filter_by(id=_id).first()
+
+    @classmethod
+    def find_by_uid(cls, uid):
+        return cls.query.filter_by(user_id=uid).first()
 
     @classmethod
     def find_by_name(cls, name):

@@ -1,26 +1,71 @@
 // import firebase from 'firebase';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { Actions } from 'react-native-router-flux';
-import { AUTH_USER, REGISTER_USER } from '../api/constants';
 import {
-    EMAIL_CHANGED,
-    PASSWORD_CHANGED,
+    AUTH_USER,
+    REGISTER_USER,
+    REGISTER_USER_CLOSET
+} from '../api/constants';
+import {
+    LOGIN_ITEM_UPDATE,
     LOGIN_USER_SUCCESS,
     LOGIN_USER_FAIL,
     LOGIN_USER
 } from './types';
 
-export const emailChanged = (text) => {
+export const loginTextFieldUpdate = ({ prop, value }) => {
     return {
-        type: EMAIL_CHANGED,
-        payload: text
+        type: LOGIN_ITEM_UPDATE,
+        payload: { prop, value }
     };
 };
 
-export const passwordChanged = (text) => {
-    return {
-        type: PASSWORD_CHANGED,     
-        payload: text
+export const registerUser = ({ email, password, phone_number, carrier }) => {
+    return (dispatch) => {
+        dispatch({ type: LOGIN_USER });
+        const data = {
+            username: email,
+            password
+        };
+        // Serialize and post the data
+        const json = JSON.stringify(data);
+        fetch(REGISTER_USER, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: json
+        })
+        .then((response) => {
+            if (response.status === 201) {
+                console.log(response);
+                RNFetchBlob.fetch('POST', AUTH_USER, {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }, json)
+                .then((res) => {
+                    const token = res.json().access_token;
+                    console.log(token);
+                    fetch(REGISTER_USER_CLOSET.concat(email), {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'JWT ' + token
+                        },
+                        body: JSON.stringify({
+                            phone_number,
+                            carrier
+                        })
+                    })
+                    .then((resp) => console.log(resp))
+                    .catch((err) => console.log(err));
+                    loginUserSuccess(dispatch, email, token); 
+                }); 
+            } else {
+                loginUserFail(dispatch);
+            }
+        });
     };
 };
 
@@ -52,49 +97,16 @@ export const loginUser = ({ email, password }) => {
                     loginUserSuccess(dispatch, email, res.json().access_token); 
                 });  
             } else {
-                fetch(REGISTER_USER, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    body: json
-                })
-                .then((response) => {
-                    if (response.status === 201) {
-                        console.log(response);
-                        RNFetchBlob.fetch('POST', AUTH_USER, {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        }, json)
-                        .then((res) => {
-                            loginUserSuccess(dispatch, email, res.json().access_token); 
-                        }); 
-                    } else {
-                        loginUserFail(dispatch);
-                    }
-                });
+                loginUserFail(dispatch);
             }      
         })
         .catch((error) => {
             loginUserFail(dispatch);
             console.log(error);
-            alert('There was an error creating your account.');
+            alert('There was an error logging in to your account.');
         })
         .done();
     };
-    
-    //     firebase.auth().signInWithEmailAndPassword(email, password)
-    //         .then(user => {
-    //             console.log(user);
-    //             loginUserSuccess(dispatch, user);
-    //         })           
-    //         .catch(() => {
-    //             firebase.auth().createUserWithEmailAndPassword(email, password)
-    //                 .then(user => loginUserSuccess(dispatch, user))
-    //                 .catch(() => loginUserFail(dispatch));
-    //         });
-    // };
 };
 
 const loginUserFail = (dispatch) => {
