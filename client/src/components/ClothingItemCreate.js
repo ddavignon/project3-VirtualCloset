@@ -8,43 +8,55 @@ import {
 import {
     Card,
     CardSection,
-    Button
+    Button,
+    Spinner
 } from './common';
 import ClothingItemForm from './ClothingItemForm';
 
 class ClothingItemCreate extends Component {
     onButtonPress() {
         const { description, style, type_clothing, image_data, token } = this.props;
-        
+
         this.props.clothingItemCreate({
-            description, style, type_clothing, image_data, token 
+            description, style, type_clothing, image_data, token
         });
     }
-
+    _renderForm() {
+      if (this.props.loading) {
+        return (
+        <CardSection>
+            <Spinner size="large" />
+        </CardSection>
+      );
+    }
+      return (
+        <Card>
+            <ClothingItemForm {...this.props} />
+            <CardSection>
+                <Button onPress={this.onButtonPress.bind(this)}>
+                    Add Item
+                </Button>
+            </CardSection>
+        </Card>
+      );
+    }
     render() {
         return (
             <ScrollView>
-                <Card>
-                    <ClothingItemForm {...this.props} />
-                    <CardSection>
-                        <Button onPress={this.onButtonPress.bind(this)}>
-                            Add Item
-                        </Button>
-                    </CardSection>  
-                </Card> 
+                { this._renderForm() }
             </ScrollView>
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    const { 
-        description, style, type_clothing, uri, image_data
+    const {
+        description, style, type_clothing, uri, image_data, loading
     } = state.clothingItemForm;
 
     const { token } = state.auth;
 
-    return { description, style, type_clothing, uri, image_data, token };
+    return { description, style, type_clothing, uri, image_data, token, loading };
 };
 
 export default connect(mapStateToProps, {
