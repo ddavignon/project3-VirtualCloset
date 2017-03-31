@@ -15,19 +15,53 @@ class LoginForm extends Component {
 	latitudePosition: 'unknown',
 	longitudePosition: 'unknown',
 	locationPermission: 'undetermined',
+    showSignupFields: 'hide',
 	};
 	
     onEmailChanged(text) {
         this.props.emailChanged(text);
     }
+    
     onPasswordChanged(text) {
         this.props.passwordChanged(text);
-
+    }
+    
     onSignUpButtonPress() {
         const { email, password, phone_number, carrier } = this.props;
+        this.setState({showSignupFields: 'show'});
+        if(this.state.showSignupFields === 'show'){
+            this.props.registerUser({ email, password, phone_number, carrier });
+        }
 
-        this.props.registerUser({ email, password, phone_number, carrier });
-
+    }
+    
+    _renderSIgnupFields() {
+        if(this.state.showSignupFields === 'show'){
+            return(
+                   <View>
+                   <Card>
+                       <CardSection>
+                           <Input
+                           label="Phone"
+                           placeholder="555-555-5555"
+                           onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'phone_number', value })}
+                           value={this.props.phone_number}
+                           />
+                       </CardSection>
+                       <CardSection>
+                           <Input
+                           label="Carrier"
+                           placeholder="ATT"
+                           onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'carrier', value })}
+                           value={this.props.carrier}
+                           />
+                       </CardSection>
+                   </Card>
+                   </View>
+            );
+        } else {
+            return null;
+        }
     }
 	
     onLoginButtonPress() {
@@ -61,17 +95,69 @@ class LoginForm extends Component {
     }
     
     componentWillMount(){
-    Permissions.getPermissionStatus('location','whenInUse')
-      .then(response => {
-        //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined' 
-        this.setState({ locationPermission: response })
-      });
+        Permissions.getPermissionStatus('location','whenInUse')
+          .then(response => {
+            //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined' 
+            this.setState({ locationPermission: response })
+        });
+        navigator.geolocation.getCurrentPosition( (position) => {
+         this.setState({
+                       latitudePosition:JSON.stringify(position['coords']['latitude']),
+                       longitudePosition:JSON.stringify(position['coords']['longitude'])
+                       });
+         },
+         (error) => alert(JSON.stringify(error)),{
+         enableHighAccuracy: true,
+         timeout: 20000,
+         maximumAge: 1000}
+         );
       //for some reason android crashes as it asks for permission
       // if(this.state.locationPermission =='undetermined'){
 //         	Permissions.requestPermission('location')
 //         		.then(response => {
 //         			this.setState({locationPermission: response})
 //         		});
+//         }
+//         if(Platform.OS === 'android'){
+//            async function requestCameraPermission() {
+//                try {
+//                    const granted = await PermissionsAndroid.request(
+//                        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+//                            'title': 'Cool Fashion App needs location Permission',
+//                            'message': 'Cool Fashion App needs access to your location ' + 'so you can acces the weather.'
+//                        }
+//                    )
+//                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+//                        navigator.geolocation.getCurrentPosition( (position) => {
+//                            this.setState({
+//                               latitudePosition:JSON.stringify(position['coords']['latitude']),
+//                               longitudePosition:JSON.stringify(position['coords']['longitude'])
+//                               });
+//                            },
+//                        (error) => alert(JSON.stringify(error)),{
+//                            enableHighAccuracy: true,
+//                            timeout: 20000,
+//                            maximumAge: 1000}
+//                                                                 );
+//                    } else { 
+//                        console.log("Location permission denied") 
+//                    } 
+//                } catch (err) { 
+//                    console.warn(err) 
+//                } 
+//            }
+//         }else{
+//             navigator.geolocation.getCurrentPosition( (position) => {
+//              this.setState({
+//                            latitudePosition:JSON.stringify(position['coords']['latitude']),
+//                            longitudePosition:JSON.stringify(position['coords']['longitude'])
+//                            });
+//              },
+//              (error) => alert(JSON.stringify(error)),{
+//              enableHighAccuracy: true,
+//              timeout: 20000,
+//              maximumAge: 1000}
+//              );
 //         }
     }
     
@@ -112,28 +198,35 @@ class LoginForm extends Component {
 // 				} 
 // 			}
 // 		}
-			navigator.geolocation.getCurrentPosition( (position) => {
-				this.setState({
-				   latitudePosition:JSON.stringify(position['coords']['latitude']),
-				   longitudePosition:JSON.stringify(position['coords']['longitude'])
-				   });
-				},
-			(error) => alert(JSON.stringify(error)),{
-				enableHighAccuracy: true,
-				timeout: 20000,
-				maximumAge: 1000}
-													 );
+//			navigator.geolocation.getCurrentPosition( (position) => {
+//				this.setState({
+//				   latitudePosition:JSON.stringify(position['coords']['latitude']),
+//				   longitudePosition:JSON.stringify(position['coords']['longitude'])
+//				   });
+//				},
+//			(error) => alert(JSON.stringify(error)),{
+//				enableHighAccuracy: true,
+//				timeout: 20000,
+//				maximumAge: 1000}
+//													 );
 		
 	}
     render() {
         
         return (
+                <View>
             <Card>
             	<CardSection>
 					<Text>
 						<Text style={styles.title}>LocPermission:</Text>
 						{this.state.locationPermission}
 					</Text>
+                </CardSection>
+                <CardSection>
+                    <Text>
+                        <Text style={styles.title}>showsignup:</Text>
+                        {this.state.showSignupFields}
+                    </Text>
 				</CardSection>
 				<CardSection>
 					<Text>
@@ -165,25 +258,14 @@ class LoginForm extends Component {
                         value={this.props.password}
                     />
                 </CardSection>
+            </Card>
+                <View>
+                {this._renderSIgnupFields()}
+                </View>
                 <Text style={styles.errorTextStyle} >
-                    {this.props.error}
+                {this.props.error}
                 </Text>
-                 <CardSection>
-                    <Input
-                        label="Phone"
-                        placeholder="555-555-5555"
-                        onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'phone_number', value })}
-                        value={this.props.phone_number}
-                    />
-                </CardSection>
-                 <CardSection>
-                    <Input
-                        label="Carrier"
-                        placeholder="ATT"
-                        onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'carrier', value })}
-                        value={this.props.carrier}
-                    />
-                </CardSection>
+            <Card>
                 {this.renderButton()}
                 {/*<LoginButton
                 publishPermissions={["publish_actions"]}
@@ -205,6 +287,7 @@ class LoginForm extends Component {
                 onLogoutFinished={() => alert("logout.")}
             />*/}
             </Card>
+                </View>
         );
     }
 }
