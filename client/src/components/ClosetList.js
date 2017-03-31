@@ -21,7 +21,7 @@ class ClosetList extends Component {
     };
 
     componentWillMount() {
-        axios.get(GET_CLOTHING_ITEMS, { 
+        axios.get(GET_CLOTHING_ITEMS.concat(this.props.email), { 
                 headers: {
                     'Authorization': 'JWT ' + this.props.token 
                 }
@@ -139,9 +139,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    const { token } = state.auth;
+    const { email, token } = state.auth;
 
-    return { token };
+    return { email, token };
 };
 
 export default connect(mapStateToProps, null)(ClosetList);

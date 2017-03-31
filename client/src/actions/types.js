@@ -1,5 +1,5 @@
-export const EMAIL_CHANGED = 'email_changed';
-export const PASSWORD_CHANGED = 'password_changed';
+// login item update should probaly be switched to login item change
+export const LOGIN_ITEM_UPDATE = 'login_item_update';
 export const LOGIN_USER_SUCCESS = 'login_user_success';
 export const LOGIN_USER_FAIL = 'login_user_fail';
 export const LOGIN_USER = 'login_user';

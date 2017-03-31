@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { Text, View, Platform} from 'react-native';
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, loginUser } from '../actions';
+import {
+    loginTextFieldUpdate,
+    loginUser,
+    registerUser
+} from '../actions';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 //import { LoginButton, AccessToken } from 'react-native-fbsdk';
 const Permissions = require('react-native-permissions');
@@ -18,21 +22,41 @@ class LoginForm extends Component {
     }
     onPasswordChanged(text) {
         this.props.passwordChanged(text);
+
+    onSignUpButtonPress() {
+        const { email, password, phone_number, carrier } = this.props;
+
+        this.props.registerUser({ email, password, phone_number, carrier });
+
     }
-    onButtonPress() {
+	
+    onLoginButtonPress() {
         const { email, password } = this.props;
 
         this.props.loginUser({ email, password });
     }
     renderButton() {
         if (this.props.loading) {
-            return <Spinner size="large" />;
+            return (
+                <CardSection>
+                    <Spinner size="large" />
+                </CardSection>
+            );
         }
 
         return (
-            <Button onPress={this.onButtonPress.bind(this)}>
-                Login
-            </Button>
+            <View>
+                <CardSection>
+                    <Button onPress={this.onLoginButtonPress.bind(this)}>
+                        Login
+                    </Button>
+                </CardSection>
+                <CardSection>
+                    <Button onPress={this.onSignUpButtonPress.bind(this)}>
+                        Sign Up
+                    </Button>
+                </CardSection>
+            </View>
         );
     }
     
@@ -128,7 +152,7 @@ class LoginForm extends Component {
                     <Input
                         label="Email"
                         placeholder="email@email.com"
-                        onChangeText={this.onEmailChanged.bind(this)}
+                        onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'email', value })}
                         value={this.props.email}
                     />
                 </CardSection>
@@ -137,16 +161,30 @@ class LoginForm extends Component {
                         secureTextEntry
                         label="Password"
                         placeholder="password"
-                        onChangeText={this.onPasswordChanged.bind(this)}
+                        onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'password', value })}
                         value={this.props.password}
                     />
                 </CardSection>
                 <Text style={styles.errorTextStyle} >
                     {this.props.error}
                 </Text>
-                <CardSection>
-                    {this.renderButton()}
+                 <CardSection>
+                    <Input
+                        label="Phone"
+                        placeholder="555-555-5555"
+                        onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'phone_number', value })}
+                        value={this.props.phone_number}
+                    />
                 </CardSection>
+                 <CardSection>
+                    <Input
+                        label="Carrier"
+                        placeholder="ATT"
+                        onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'carrier', value })}
+                        value={this.props.carrier}
+                    />
+                </CardSection>
+                {this.renderButton()}
                 {/*<LoginButton
                 publishPermissions={["publish_actions"]}
                 onLoginFinished={
@@ -180,10 +218,12 @@ const styles = {
 };
 
 const mapStateToProps = ({ auth }) => {
-    const { email, password, error, loading, token } = auth;
-    return { email, password, error, loading, token };
+    const { email, password, phone_number, carrier, error, loading, token } = auth;
+    return { email, password, phone_number, carrier, error, loading, token };
 };
 
 export default connect(mapStateToProps, {
-    emailChanged, passwordChanged, loginUser
+    loginTextFieldUpdate,
+    loginUser,
+    registerUser
 })(LoginForm);

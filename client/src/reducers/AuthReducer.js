@@ -1,6 +1,5 @@
 import {
-    EMAIL_CHANGED,
-    PASSWORD_CHANGED,
+    LOGIN_ITEM_UPDATE,
     LOGIN_USER_SUCCESS,
     LOGIN_USER_FAIL,
     LOGIN_USER
@@ -9,6 +8,8 @@ import {
 const INITIAL_STATE = {
     email: '',
     password: '',
+    phone_number: '',
+    carrier: '',
     user: null,
     error: '',
     loading: false,
@@ -17,10 +18,8 @@ const INITIAL_STATE = {
 
 export default(state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case EMAIL_CHANGED:
-            return { ...state, email: action.payload };
-        case PASSWORD_CHANGED:
-            return { ...state, password: action.payload };
+        case LOGIN_ITEM_UPDATE:
+            return { ...state, [action.payload.prop]: action.payload.value };
         case LOGIN_USER_SUCCESS:
             return { ...state,
                 ...INITIAL_STATE,

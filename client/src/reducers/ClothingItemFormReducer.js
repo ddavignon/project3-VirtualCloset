@@ -10,7 +10,6 @@ const INTIAL_STATE = {
     name: '',
     description: '',
     style: '',
-    color: '',
     type_clothing: 'shirt',
     uri: null,
     url_path: null,
@@ -31,8 +30,6 @@ export default (state = INTIAL_STATE, action) => {
         case CLOTHING_ITEM_INFO_SUCCESS:
             return { ...state,
                 description: action.payload.description,
-                style: action.payload.style,
-                color: action.payload.color,
                 loading: false
             };
         case CLOTHING_ITEM_INFO_FAIL:
