@@ -11,7 +11,8 @@ import {
     CLOTHING_ITEM_CREATE,
     CLOTHING_ITEM_SELECTED,
     CLOTHING_ITEM_INFO_SUCCESS,
-    CLOTHING_ITEM_INFO_FAIL
+    CLOTHING_ITEM_INFO_FAIL,
+    CLOTHING_ITEM_IMAGE_UPLOAD
 } from './types';
 
 
@@ -63,14 +64,14 @@ export const clothingItemResults = ({ response, token }) => {
 export const clothingItemCreate = ({
     description, style, type_clothing, image_data, token
 }) => {
-    return (dispatch) => {  
+    return (dispatch) => {
         // Prepare Blob support
         const Blob = RNFetchBlob.polyfill.Blob;
         window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
         window.Blob = Blob;
-        
-        const testImageName = `${description}--${new Date()}.jpg`;
 
+        const testImageName = `${description}--${new Date()}.jpg`;
+        dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD });
         Blob.build(RNFetchBlob.wrap(image_data.origURL), { type: 'image/jpeg' })
             .then((blob) => firebase.storage()
                     .ref('images')
@@ -94,7 +95,7 @@ export const clothingItemCreate = ({
                 //     console.log('axios error', error);
                 // });
                 // // console.log('snaphot', snapshot.downloadURL);
-                // /* there we go ! */ 
+                // /* there we go ! */
 
                 const itemPath = description.concat(style).concat(type_clothing);
 
@@ -148,10 +149,10 @@ export const clothingItemCreate = ({
     // };
 
 
-    /*** 
+    /***
      *
-     * FIREBASE - for testing 
-     * 
+     * FIREBASE - for testing
+     *
      ***/
 
     // const { currentUser } = firebase.auth();
