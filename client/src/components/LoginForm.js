@@ -15,17 +15,17 @@ class LoginForm extends Component {
 	latitudePosition: 'unknown',
 	longitudePosition: 'unknown',
 	locationPermission: 'undetermined',
-    showSignupFields: 'hide',
+  showSignupFields: 'hide',
 	};
-	
+
     onEmailChanged(text) {
         this.props.emailChanged(text);
     }
-    
+
     onPasswordChanged(text) {
         this.props.passwordChanged(text);
     }
-    
+
     onSignUpButtonPress() {
         const { email, password, phone_number, carrier } = this.props;
         this.setState({showSignupFields: 'show'});
@@ -34,7 +34,7 @@ class LoginForm extends Component {
         }
 
     }
-    
+
     _renderSIgnupFields() {
         if(this.state.showSignupFields === 'show'){
             return(
@@ -63,7 +63,7 @@ class LoginForm extends Component {
             return null;
         }
     }
-	
+
     onLoginButtonPress() {
         const { email, password } = this.props;
 
@@ -79,12 +79,16 @@ class LoginForm extends Component {
         }
 
         return (
+
             <View>
-                <CardSection>
-                    <Button onPress={this.onLoginButtonPress.bind(this)}>
-                        Login
-                    </Button>
-                </CardSection>
+                {this.state.showSignupFields === 'hide'
+                    ?(<CardSection>
+                        <Button onPress={this.onLoginButtonPress.bind(this)}>
+                            Login
+                        </Button>
+                    </CardSection>)
+                    :null
+                  }
                 <CardSection>
                     <Button onPress={this.onSignUpButtonPress.bind(this)}>
                         Sign Up
@@ -93,11 +97,11 @@ class LoginForm extends Component {
             </View>
         );
     }
-    
+
     componentWillMount(){
         Permissions.getPermissionStatus('location','whenInUse')
           .then(response => {
-            //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined' 
+            //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
             this.setState({ locationPermission: response })
         });
         navigator.geolocation.getCurrentPosition( (position) => {
@@ -106,113 +110,47 @@ class LoginForm extends Component {
                        longitudePosition:JSON.stringify(position['coords']['longitude'])
                        });
          },
-         (error) => alert(JSON.stringify(error)),{
+         (error) => {
+            console.log(error);
+          //    if(Platform.OS === 'android'){
+          //    async function requestCameraPermission() {
+          //    try {
+          //    const granted = await PermissionsAndroid.request(
+          //         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+          //         'title': 'Cool Fashion App needs location Permission',
+          //         'message': 'Cool Fashion App needs access to your location ' + 'so you can acces the weather.'
+          //         }
+          //         )
+          //    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          //    navigator.geolocation.getCurrentPosition( (position) => {
+          //         this.setState({
+          //                       latitudePosition:JSON.stringify(position['coords']['latitude']),
+          //                       longitudePosition:JSON.stringify(position['coords']['longitude'])
+          //                       });
+          //         },
+          //         (error) => alert(JSON.stringify(error)),{
+          //         enableHighAccuracy: true,
+          //         timeout: 20000,
+          //         maximumAge: 1000}
+          //         );
+          //    } else {
+          //    console.log("Location permission denied")
+          //    }
+          //    } catch (err) {
+          //    console.warn(err)
+          //    }
+          //  }
+         },{
          enableHighAccuracy: true,
          timeout: 20000,
          maximumAge: 1000}
          );
-      //for some reason android crashes as it asks for permission
-      // if(this.state.locationPermission =='undetermined'){
-//         	Permissions.requestPermission('location')
-//         		.then(response => {
-//         			this.setState({locationPermission: response})
-//         		});
-//         }
-//         if(Platform.OS === 'android'){
-//            async function requestCameraPermission() {
-//                try {
-//                    const granted = await PermissionsAndroid.request(
-//                        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-//                            'title': 'Cool Fashion App needs location Permission',
-//                            'message': 'Cool Fashion App needs access to your location ' + 'so you can acces the weather.'
-//                        }
-//                    )
-//                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-//                        navigator.geolocation.getCurrentPosition( (position) => {
-//                            this.setState({
-//                               latitudePosition:JSON.stringify(position['coords']['latitude']),
-//                               longitudePosition:JSON.stringify(position['coords']['longitude'])
-//                               });
-//                            },
-//                        (error) => alert(JSON.stringify(error)),{
-//                            enableHighAccuracy: true,
-//                            timeout: 20000,
-//                            maximumAge: 1000}
-//                                                                 );
-//                    } else { 
-//                        console.log("Location permission denied") 
-//                    } 
-//                } catch (err) { 
-//                    console.warn(err) 
-//                } 
-//            }
-//         }else{
-//             navigator.geolocation.getCurrentPosition( (position) => {
-//              this.setState({
-//                            latitudePosition:JSON.stringify(position['coords']['latitude']),
-//                            longitudePosition:JSON.stringify(position['coords']['longitude'])
-//                            });
-//              },
-//              (error) => alert(JSON.stringify(error)),{
-//              enableHighAccuracy: true,
-//              timeout: 20000,
-//              maximumAge: 1000}
-//              );
-//         }
+      
     }
-    
-	componentDidMount() {
-	//This if statement crashes on android
-			// if(this.state.locationPermission =='undetermined'){
-//         	Permissions.requestPermission('location')
-//         		.then(response => {
-//         			this.setState({locationPermission: response})
-//         		});
-//         	}
-		// if(Platform.OS === 'android'){
-// 			async function requestCameraPermission() { 
-// 				try { 
-// 					const granted = await PermissionsAndroid.request( 
-// 						PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, { 
-// 							'title': 'Cool Fashion App needs location Permission', 
-// 							'message': 'Cool Fashion App needs access to your location ' + 'so you can acces the weather.' 
-// 						} 
-// 					) 
-// 					if (granted === PermissionsAndroid.RESULTS.GRANTED) { 
-// 						navigator.geolocation.getCurrentPosition( (position) => {
-// 							this.setState({
-// 							   latitudePosition:JSON.stringify(position['coords']['latitude']),
-// 							   longitudePosition:JSON.stringify(position['coords']['longitude'])
-// 							   });
-// 							},
-// 						(error) => alert(JSON.stringify(error)),{
-// 							enableHighAccuracy: true,
-// 							timeout: 20000,
-// 							maximumAge: 1000}
-// 																 );
-// 					} else { 
-// 						console.log("Location permission denied") 
-// 					} 
-// 				} catch (err) { 
-// 					console.warn(err) 
-// 				} 
-// 			}
-// 		}
-//			navigator.geolocation.getCurrentPosition( (position) => {
-//				this.setState({
-//				   latitudePosition:JSON.stringify(position['coords']['latitude']),
-//				   longitudePosition:JSON.stringify(position['coords']['longitude'])
-//				   });
-//				},
-//			(error) => alert(JSON.stringify(error)),{
-//				enableHighAccuracy: true,
-//				timeout: 20000,
-//				maximumAge: 1000}
-//													 );
-		
-	}
+
+
     render() {
-        
+
         return (
                 <View>
             <Card>
@@ -239,7 +177,7 @@ class LoginForm extends Component {
 						<Text style={styles.title}>Longitude:</Text>
 						{this.state.longitudePosition}
 					</Text>
-				
+
 				</CardSection>
                 <CardSection>
                     <Input

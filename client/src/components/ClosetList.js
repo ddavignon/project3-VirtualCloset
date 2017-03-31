@@ -21,26 +21,26 @@ class ClosetList extends Component {
     };
 
     componentWillMount() {
-        axios.get(GET_CLOTHING_ITEMS.concat(this.props.email), { 
+        axios.get(GET_CLOTHING_ITEMS, { 
                 headers: {
-                    'Authorization': 'JWT ' + this.props.token 
+                    'Authorization': 'JWT ' + this.props.token
                 }
             })
             .then((response) => {
                 console.log(response);
-                this.setState({ 
+                this.setState({
                     shirtItems: response.data.shirts,
                     pantsItems: response.data.pants,
-                    shoesItems: response.data.shoes 
+                    shoesItems: response.data.shoes
                     });
                 })
             .catch((err) => {
                 console.log(err);
         });
-        
-        // axios.get(GET_CLOTHING_ITEMS, { 
+
+        // axios.get(GET_CLOTHING_ITEMS, {
         //     headers: {
-        //         'Authorization': 'JWT ' + this.props.token 
+        //         'Authorization': 'JWT ' + this.props.token
         //     },
         //     params: {
         //         lat: this.state.latitudePosition,
@@ -50,10 +50,10 @@ class ClosetList extends Component {
         // })
         // .then((response) => {
         //     console.log(response);
-        //     this.setState({ 
+        //     this.setState({
         //         shirtItems: response.data.shirts,
         //         pantsItems: response.data.pants,
-        //         shoesItems: response.data.shoes 
+        //         shoesItems: response.data.shoes
         //         });
         //     })
         // .catch((err) => {
@@ -62,17 +62,17 @@ class ClosetList extends Component {
     }
 
     renderShirtItems() {
-        return this.state.shirtItems.map(item => 
+        return this.state.shirtItems.map(item =>
             <ClosetItem key={item._id} uri={item.url_path} item={item} />);
     }
 
     renderPantsItems() {
-        return this.state.pantsItems.map(item => 
+        return this.state.pantsItems.map(item =>
             <ClosetItem key={item._id} uri={item.url_path} item={item} />);
     }
 
     renderShoesItems() {
-        return this.state.shoesItems.map(item => 
+        return this.state.shoesItems.map(item =>
             <ClosetItem key={item._id} uri={item.url_path} item={item} />);
     }
 
@@ -87,7 +87,7 @@ class ClosetList extends Component {
                 </View>
 
                 <View style={{ height: 150 }}>
-                  <ScrollView 
+                  <ScrollView
                       automaticallyAdjustContentInsets={false}
                       horizontal
                       onScroll={() => { console.log('onScroll!'); }}
@@ -98,7 +98,7 @@ class ClosetList extends Component {
                 </View>
 
                 <View style={{ height: 150 }}>
-                  <ScrollView 
+                  <ScrollView
                       automaticallyAdjustContentInsets={false}
                       horizontal
                       onScroll={() => { console.log('onScroll!'); }}
@@ -109,7 +109,7 @@ class ClosetList extends Component {
                 </View>
 
                 <View style={{ height: 150 }}>
-                  <ScrollView 
+                  <ScrollView
                       automaticallyAdjustContentInsets={false}
                       horizontal
                       onScroll={() => { console.log('onScroll!'); }}
