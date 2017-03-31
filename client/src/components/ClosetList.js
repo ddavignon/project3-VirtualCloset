@@ -21,7 +21,7 @@ class ClosetList extends Component {
     };
 
     componentWillMount() {
-        axios.get(GET_CLOTHING_ITEMS.concat(this.props.email), { 
+        axios.get(GET_CLOTHING_ITEMS, { 
                 headers: {
                     'Authorization': 'JWT ' + this.props.token 
                 }
@@ -37,17 +37,17 @@ class ClosetList extends Component {
             .catch((err) => {
                 console.log(err);
         });
-        // navigator.geolocation.getCurrentPosition( (position) => {
-        //     this.setState({
-        //         latitudePosition: JSON.stringify(position.coords.latitude),
-        //         longitudePosition: JSON.stringify(position.coords.longitude)
-        //     });
-        // },
-        // (error) => alert(JSON.stringify(error)), {
-        //     enableHighAccuracy: true,
-        //     timeout: 20000,
-        //     maximumAge: 1000
-        // });
+        navigator.geolocation.getCurrentPosition( (position) => {
+            this.setState({
+                latitudePosition: JSON.stringify(position.coords.latitude),
+                longitudePosition: JSON.stringify(position.coords.longitude)
+            });
+        },
+        (error) => alert(JSON.stringify(error)), {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 1000
+        });
 
         // axios.get(GET_CLOTHING_ITEMS, { 
         //     headers: {
