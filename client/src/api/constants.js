@@ -1,5 +1,5 @@
 // const BASE_URL = 'https://dustind.net/api/v1/closet';
-const BASE_URL = 'https://glacial-everglades-16804.herokuapp.com'; //'http://localhost:5000';
+const BASE_URL = 'http://localhost:5000';//'https://glacial-everglades-16804.herokuapp.com'; //'http://localhost:5000';
 
 // const HEROKU_BASE_URL = 'https://mighty-chamber-19968.herokuapp.com/virtual/api/v1.0/upload';
 
