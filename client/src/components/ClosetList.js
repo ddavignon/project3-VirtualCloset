@@ -23,24 +23,6 @@ class ClosetList extends Component {
     };
 
     componentWillMount() {
-        // axios.get(GET_CLOTHING_ITEMS, { 
-        //         headers: {
-        //             'Authorization': 'JWT ' + this.props.token 
-        //         }
-        //     })
-        //     .then((response) => {
-        //         console.log(response);
-        //         this.setState({ 
-        //             shirtItems: response.data.shirts,
-        //             pantsItems: response.data.pants,
-        //             shoesItems: response.data.shoes,
-        //             accessoriesItems: response.data.accessories,
-        //             outerwearItems: response.data.outerwear 
-        //             });
-        //         })
-        //     .catch((err) => {
-        //         console.log(err);
-        // });
         navigator.geolocation.getCurrentPosition( (position) => {
             this.setState({
                 latitudePosition: JSON.stringify(position.coords.latitude),
@@ -55,7 +37,7 @@ class ClosetList extends Component {
 
         axios.get(GET_CLOTHING_ITEMS, { 
             headers: {
-                'Authorization': 'JWT ' + this.props.token 
+                'Authorization': 'JWT ' + this.props.token
             },
             params: {
                 lat: this.state.latitudePosition,
