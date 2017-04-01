@@ -1,4 +1,3 @@
-import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import RNFetchBlob from 'react-native-fetch-blob';
 import axios from 'axios';
@@ -72,15 +71,14 @@ export const clothingItemCreate = ({
 
         dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD });
 
-        const itemPath = description.concat(style).concat(type_clothing);
-        const urlToken = Math.random().toString(36).slice(-5);
+        const urlToken = Math.random().toString(36).slice(-8);
 
-        RNFetchBlob.fetch('POST', ADD_CLOTHING_ITEM.concat(itemPath.replace(/ /g, '-')), {
+        RNFetchBlob.fetch('POST', ADD_CLOTHING_ITEM.concat(urlToken), {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'JWT '.concat(token)
             }, [
                 { name: 'info', data: 'itemCreate' },
-                { name: 'image_data', filename: urlToken.concat('image.png'), data: image_data.uri },
+                { name: 'image_data', filename: urlToken.concat('-image.png'), data: image_data.data },
                 { name: 'description', data: description },
                 { name: 'style', data: style },
                 { name: 'type_clothing', data: type_clothing }

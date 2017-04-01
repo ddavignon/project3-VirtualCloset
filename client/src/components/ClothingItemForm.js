@@ -17,15 +17,10 @@ import { CardSection, Input, Spinner } from './common';
 
 class ClothingItemForm extends Component {
 
-    state = {
-        trueSwitchIsOn: true,
-        falseSwitchIsOn: false,
-    };
-
-    componentWillMount() {
-        // this.displayImagePicker();
-        console.log('props', this.props);
-    }
+    // componentWillMount() {
+    //     // this.displayImagePicker();
+    //     console.log('props', this.props);
+    // }
 
     displayImagePicker() {
         const options = {
