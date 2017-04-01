@@ -1,5 +1,12 @@
-import os
-from flask import Flask, request
+import os, json, tempfile, smtplib
+from clarifai import rest
+from clarifai.rest import ClarifaiApp
+from clarifai.rest import Image as ClImage
+
+from werkzeug.utils import secure_filename
+
+
+from flask import Flask, request, jsonify
 from flask_restful import Api
 from flask_jwt import JWT
 
@@ -9,10 +16,10 @@ from resources.item import Item, ItemList
 from resources.closet import Closet, ClosetList
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dustin:potato@localhost/dustin'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
 app.secret_key = 'SuperSecretPasskey'
 api = Api(app)
 
@@ -32,73 +39,6 @@ api.add_resource(UserRegister, '/register')
 #####################################################################################
 # MIGRATIONS BELOW
 #####################################################################################
-
-'''
-
-###################################Clarifai methods#############################
-#returns an an array of  possible apparel
-#attr
-#name-apparelName
-#value-confidence
-def possibleApparel(appCont,name):
-    model=appCont.models.get('e0be3b9d6a454f0493ac3a30784001ff')
-    image = ClImage(file_obj=open(name, 'rb'))
-    response=model.predict([image])
-    response=response["outputs"][0]["data"]["concepts"]
-    item =response
-    items=[]
-    items.append(item[0])
-    items.append(item[2])
-    items.append(item[3])
-    return items
-
-#returns an an array of  possible styles and what type of clothes it could be
-#attr
-#name-apparelName
-#value-confidence
-def possibleStyles(appCont,name):
-    model=appCont.models.get('general-v1.3')
-    image = ClImage(file_obj=open(name, 'rb'))
-    response=model.predict([image])
-    response=response["outputs"][0]["data"]["concepts"]
-    item =response
-    items=[]
-    items.append(item[0])
-    items.append(item[2])
-    items.append(item[3])
-    return items
-
-#returns an an array of  possible colors
-#attr
-#name-apparelName
-#value-confidence
-def getColor(appCont,name):
-    model = appCont.models.get('color', model_type='color')
-    image = ClImage(file_obj=open(name,'rb'))
-    response=model.predict([image])
-    response=response["outputs"][0]["data"]["colors"][0]["w3c"]["hex"]
-    print json.dumps(response, indent=2)
-    return response
-
-###################################################################################
-
-
-from clarifai import rest
-from clarifai.rest import ClarifaiApp
-from clarifai.rest import Image as ClImage
-import tempfile
-from werkzeug.utils import secure_filename
-import json
-import boto3
-import rules
-import forecastio
-import smtplib
-
-
-s3 = boto3.resource('s3')
-dark_sky_key = os.getenv("DARK_SKY_KEY")
-appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
-
 
 @app.route('/test', methods=['GET'])
 def get_test():
@@ -127,31 +67,9 @@ def sendText():
     server.sendmail( 'virtualcloset', str(number)+'@mms.att.net', 'hello' )
     return "Success"
 
-@app.route('/virtual/api/v1.0/closet',methods=['GET'])
-def getClothes():
-    user_id=request.args.get('user_id')
-    if len(models.Users.query.filter_by(email=user_id).all()) !=1:
-        return jsonify({"error": "no user by that id"})
-    lat = request.args.get('lat')
-    lng = request.args.get('lng')
-    forecast = forecastio.load_forecast(dark_sky_key, lat, lng)
-    today=forecast.hourly()
-    print today.icon
-    tempLow=200
-    tempHigh=-100
-    for data in today.data:
-        if(data.temperature<tempLow):
-           tempLow=data.temperature
-        if(data.temperature>tempHigh):
-            tempHigh=data.temperature
-    print tempLow
-    print tempHigh
-    shirt=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="shirt").all()]
-    pants=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="pants").all()]
-    shoes=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="shoes").all()]
-    accessory=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="accessory").all()]
-    return jsonify({'top':shirt ,'bottom':pants,'shoes':shoes,'accessory':accessory})
 
+'''
+############# Need refactor for databas ######################
 
 @app.route('/virtual/api/v1.0/styles',methods=['GET'])
 def checkDB():
@@ -161,48 +79,36 @@ def checkDB():
     print clothes[1].style
     print clothes
     return "Success"
+'''
 
-@app.route('/virtual/api/v1.0/confirmation', methods=['POST'])
-def confirmation():
-    #user email that they signed up with
-    user_id=request.form["email"]
-    #info =request.form["info"]
-    #checks if the user exist
-    if len(models.Users.query.filter_by(email=user_id).all()) !=1:
-        return jsonify({"error": "no user by that id"})
-    #stuff from request
-    uri =request.files["image_data"]
-    name=request.form["name"]
-    description = request.form["description"]
-    style = request.form["style"]
-    color = request.form["color"]
-    type_clothing= request.form["type_clothing"]
-    #add file name it unique
-    #where its going to be stored in s3 storage
-    image_uri="https://s3-us-west-1.amazonaws.com/"+os.getenv("bucket_name")+"/"+user_id+"/"+uri.filename
-    print request.form
-    print request.files
-    #S3#####################################
-    directory_name=os.getcwd()+"/tmp"
-    filename = secure_filename(uri.filename)
-    uri.save(os.path.join(directory_name, filename))
-    data = open(directory_name+"/"+uri.filename, 'rb')
-    s3.Bucket(os.getenv("bucket_name")).put_object(Key=user_id+"/"+uri.filename, Body=data)
-    os.remove(directory_name+"/"+uri.filename)
-    clothing_item = models.Clothes(user_id,color,description,style,rules.getLowTemp(type_clothing),rules.getHighTemp(type_clothing),type_clothing,image_uri)
-    models.db.session.add(clothing_item)
-    models.db.session.commit()
-    ######################################
-    #testing purposes only send back to client what was just sent
-    return "Success"
 
+'''
+Clarfai stuff
+'''
+###################################Clarifai methods#############################
+
+#returns an an array of  possible apparel
+#attr
+#name-apparelName
+#value-confidence
+def possibleApparel(appCont,name):
+    model=appCont.models.get('e0be3b9d6a454f0493ac3a30784001ff')
+    image = ClImage(file_obj=open(name, 'rb'))
+    response=model.predict([image])
+    response=response["outputs"][0]["data"]["concepts"]
+    item =response
+    items=[]
+    items.append(item[0])
+    items.append(item[2])
+    items.append(item[3])
+    return items
 
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])
 def sendToClarfai():
     #stuff from form can be grabbed by id of the tag
     #stuff = request.form['something']
     file = request.files['uri']
-    data ={"apparel":"apparel","styles":"styles","color":"color"}
+    data = {}
     #get working directory
     directory_name=os.getcwd()+"/tmp"
     print directory_name
@@ -212,17 +118,15 @@ def sendToClarfai():
     file.save(os.path.join(directory_name, filename))
     #send to Clarfai API
     data["apparel"]=possibleApparel(appClar,directory_name+"/"+file.filename)
-    data["styles"]=possibleStyles(appClar,directory_name+"/"+file.filename)
-    data["color"]=getColor(appClar,directory_name+"/"+file.filename)
+    # data["styles"]=possibleStyles(appClar,directory_name+"/"+file.filename)
+    # data["color"]=getColor(appClar,directory_name+"/"+file.filename)
     #remove file
     os.remove(directory_name+"/"+file.filename)
     #does take a little time
-
     #print file.mimetype_params
     return jsonify(data)
 
-
-'''
+''''''
 
 #####################################################################################
 # MIGRATIONS ABOVE
