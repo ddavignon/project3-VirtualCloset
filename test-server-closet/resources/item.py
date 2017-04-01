@@ -77,7 +77,6 @@ class Item(Resource):
         filename = secure_filename(uri.filename)
         uri.save(os.path.join(directory_name, filename))
         data = open(directory_name+"/"+uri.filename, 'rb')
-        #fix boto3 resource?
         boto3.resource('s3').Bucket(os.getenv("bucket_name")).put_object(Key=user_id+"/"+uri.filename, Body=data)
         os.remove(directory_name+"/"+uri.filename)
 
