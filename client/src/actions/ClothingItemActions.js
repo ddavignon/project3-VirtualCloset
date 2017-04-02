@@ -12,7 +12,8 @@ import {
     CLOTHING_ITEM_SELECTED,
     CLOTHING_ITEM_INFO_SUCCESS,
     CLOTHING_ITEM_INFO_FAIL,
-    CLOTHING_ITEM_IMAGE_UPLOAD
+    CLOTHING_ITEM_IMAGE_UPLOAD,
+    CLOTHING_ITEM_IMAGE_UPLOAD_FAIL
 } from './types';
 
 
@@ -112,6 +113,10 @@ export const clothingItemCreate = ({
                         url_path: snapshot.downloadURL
                     })
                 })
+                .catch((error) => {
+                    console.log('upload', error);
+                    dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD_FAIL });
+                })
                 .then((res) => {
                     console.log(res);
                     dispatch({ type: CLOTHING_ITEM_CREATE });
@@ -119,11 +124,13 @@ export const clothingItemCreate = ({
                 })
                 .catch((error) => {
                     console.log('fetch error', error);
+                    dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD_FAIL });
                 });
                 // console.log('snaphot', snapshot.downloadURL);
             })
             .catch((error) => {
                 console.log('upload', error);
+                dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD_FAIL });
             });
         };
 
