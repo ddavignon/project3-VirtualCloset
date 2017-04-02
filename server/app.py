@@ -208,8 +208,8 @@ def sendToClarfai():
     file.save(os.path.join(directory_name, filename))
     #send to Clarfai API
     data["apparel"]=possibleApparel(appClar,directory_name+"/"+file.filename)
-    data["styles"]=possibleStyles(appClar,directory_name+"/"+file.filename)
-    data["color"]=getColor(appClar,directory_name+"/"+file.filename)
+    #data["styles"]=possibleStyles(appClar,directory_name+"/"+file.filename)
+    #data["color"]=getColor(appClar,directory_name+"/"+file.filename)
     #remove file
     os.remove(directory_name+"/"+file.filename) 
     #does take a little time 
