@@ -10,16 +10,17 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
+import RadioForm from 'react-native-simple-radio-button';
 import { clothingItemUpdate, clothingItemResults } from '../actions';
 import { CardSection, Input, Spinner } from './common';
 
 
 class ClothingItemForm extends Component {
 
-    componentWillMount() {
-        // this.displayImagePicker();
-        console.log('props', this.props);
-    }
+    // componentWillMount() {
+    //     // this.displayImagePicker();
+    //     console.log('props', this.props);
+    // }
 
     displayImagePicker() {
         const options = {
@@ -56,24 +57,17 @@ class ClothingItemForm extends Component {
                         onChangeText={value => this.props.clothingItemUpdate({ prop: 'description', value })}
                     />
                 </CardSection>
-
                 <CardSection>
-                    <Input
-                        label="Style"
-                        placeholder="warm"
-                        value={this.props.style}
-                        onChangeText={value => this.props.clothingItemUpdate({ prop: 'style', value })}
+                    <Text style={{ fontSize: 18, flex: 1 }}>
+                        Style
+                    </Text>
+                    <RadioForm
+                        style={{ padding: 5 }}
+                        radio_props={[{ label: 'warm', value: 'warm' }, { label: 'cold', value: 'cold' }]}
+                        initial={0}
+                        onPress={value => this.props.clothingItemUpdate({ prop: 'style', value })}
                     />
                 </CardSection>
-
-                {/*<CardSection>
-                    <Input
-                        label="Color"
-                        placeholder="red"
-                        value={this.props.color}
-                        onChangeText={value => this.props.clothingItemUpdate({ prop: 'color', value })}
-                    />
-                </CardSection>*/}
             </View>
         );
     }

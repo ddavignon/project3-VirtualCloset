@@ -3,13 +3,14 @@ import {
     CLOTHING_ITEM_CREATE,
     CLOTHING_ITEM_SELECTED,
     CLOTHING_ITEM_INFO_SUCCESS,
-    CLOTHING_ITEM_INFO_FAIL
+    CLOTHING_ITEM_INFO_FAIL,
+    CLOTHING_ITEM_IMAGE_UPLOAD
 } from '../actions/types';
 
 const INTIAL_STATE = {
     name: '',
     description: '',
-    style: '',
+    style: 'warm',
     type_clothing: 'shirt',
     uri: null,
     url_path: null,
@@ -21,6 +22,8 @@ export default (state = INTIAL_STATE, action) => {
     switch (action.type) {
         case CLOTHING_ITEM_UPDATE:
             return { ...state, [action.payload.prop]: action.payload.value };
+        case CLOTHING_ITEM_IMAGE_UPLOAD:
+            return { ...state, loading: true };
         case CLOTHING_ITEM_SELECTED:
             return { ...state,
                 loading: true,
