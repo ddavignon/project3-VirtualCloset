@@ -11,7 +11,7 @@ import {
 const INTIAL_STATE = {
     name: '',
     description: '',
-    style: '',
+    style: 'warm',
     type_clothing: 'shirt',
     uri: null,
     url_path: null,

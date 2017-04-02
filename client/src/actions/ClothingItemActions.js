@@ -71,107 +71,30 @@ export const clothingItemCreate = ({
         window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
         window.Blob = Blob;
 
-        const testImageName = `${description}--${new Date()}.jpg`;
         dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD });
-        Blob.build(RNFetchBlob.wrap(image_data.origURL), { type: 'image/jpeg' })
-            .then((blob) => firebase.storage()
-                    .ref('images')
-                    .child(testImageName)
-                    .put(blob, { contentType: 'image/png' })
-            )
-            .then((snapshot) => {
-                console.log(snapshot);
-                // axios.post(ADD_CLOTHING_ITEM.concat(name), {
-                //     // name, description, style, color, type_clothing, url_path: snapshot.downloadURL
-                //     name, description, style, color, type_clothing, url_path: snapshot.downloadURL
-                // }, {
-                //     'Content-Type': 'application/json',
-                // })
-                // .then((res) => {
-                //     console.log(res);
-                //     dispatch({ type: CLOTHING_ITEM_CREATE });
-                //     Actions.closetList({ type: 'reset' });
-                // })
-                // .catch((error) => {
-                //     console.log('axios error', error);
-                // });
-                // // console.log('snaphot', snapshot.downloadURL);
-                // /* there we go ! */
 
-                const itemPath = description.concat(style).concat(type_clothing);
+        const urlToken = Math.random().toString(36).slice(-8);
 
-                fetch(ADD_CLOTHING_ITEM.concat(itemPath.replace(/ /g, '-')), {
-                    method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'JWT '.concat(token)
-                    },
-                    body: JSON.stringify({
-                        description,
-                        style,
-                        type_clothing,
-                        url_path: snapshot.downloadURL
-                    })
-                })
-                .catch((error) => {
-                    console.log('upload', error);
-                    dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD_FAIL });
-                })
+        RNFetchBlob.fetch('POST', ADD_CLOTHING_ITEM.concat(urlToken), {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'JWT '.concat(token)
+            }, [
+                { name: 'info', data: 'itemCreate' },
+                { name: 'image_data', filename: urlToken.concat('-image.png'), data: image_data.data },
+                { name: 'description', data: description },
+                { name: 'style', data: style },
+                { name: 'type_clothing', data: type_clothing }
+                ])
                 .then((res) => {
                     console.log(res);
                     dispatch({ type: CLOTHING_ITEM_CREATE });
                     Actions.closetList({ type: 'reset' });
                 })
                 .catch((error) => {
-                    console.log('fetch error', error);
+                    console.log(error);
                     dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD_FAIL });
                 });
-                // console.log('snaphot', snapshot.downloadURL);
-            })
-            .catch((error) => {
-                console.log('upload', error);
-                dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD_FAIL });
-            });
-        };
-
-    //     RNFetchBlob.fetch('POST', ADD_CLOTHING_ITEM, {
-    //             'Content-Type': 'multipart/form-data',
-    //         }, [
-    //             { name: 'info', data: 'itemCreate' },
-    //             { name: 'image_data', filename: 'image.png', data: image_data },
-    //             { name: 'name', data: name },
-    //             { name: 'description', data: description },
-    //             { name: 'style', data: style },
-    //             { name: 'color', data: color },
-    //             { name: 'type_clothing', data: type_clothing }
-    //             ])
-    //             .then((res) => {
-    //                 console.log(res);
-    //                 dispatch({ type: CLOTHING_ITEM_CREATE });
-    //                 Actions.closetList({ type: 'reset' });
-    //             })
-    //             .catch((error) => {
-    //                 console.log(error);
-    //             });
-    // };
-
-
-    /***
-     *
-     * FIREBASE - for testing
-     *
-     ***/
-
-    // const { currentUser } = firebase.auth();
-
-    // return (dispatch) => {
-    //     firebase.database().ref(`/users/${currentUser.uid}/closet`)
-    //         .push({ name, description, style, color, type })
-    //         .then(() => {
-    //             dispatch({ type: CLOTHING_ITEM_CREATE });
-    //             Actions.closetList({ type: 'reset' });
-    //         });
-    // };
+    };
 };
 
 // clothing item save

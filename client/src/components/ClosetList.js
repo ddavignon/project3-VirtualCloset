@@ -16,64 +16,68 @@ class ClosetList extends Component {
         shirtItems: [],
         pantsItems: [],
         shoesItems: [],
+        accessoriesItems: [],
+        outerwearItems: [],
         latitudePosition: '37.4829525',
         longitudePosition: '-122.1480473',
     };
 
     componentWillMount() {
-        axios.get(GET_CLOTHING_ITEMS, { 
-                headers: {
-                    'Authorization': 'JWT ' + this.props.token
-                }
-            })
-            .then((response) => {
-                console.log(response);
-                this.setState({
-                    shirtItems: response.data.shirts,
-                    pantsItems: response.data.pants,
-                    shoesItems: response.data.shoes
-                    });
-                })
-            .catch((err) => {
-                console.log(err);
+        navigator.geolocation.getCurrentPosition( (position) => {
+            this.setState({
+                latitudePosition: JSON.stringify(position.coords.latitude),
+                longitudePosition: JSON.stringify(position.coords.longitude)
+            });
+        },
+        (error) => alert(JSON.stringify(error)), {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 1000
         });
 
-        // axios.get(GET_CLOTHING_ITEMS, {
-        //     headers: {
-        //         'Authorization': 'JWT ' + this.props.token
-        //     },
-        //     params: {
-        //         lat: this.state.latitudePosition,
-        //         lng: this.state.longitudePosition,
-        //         user_id: 'tester@yahoo.com'
-        //     }
-        // })
-        // .then((response) => {
-        //     console.log(response);
-        //     this.setState({
-        //         shirtItems: response.data.shirts,
-        //         pantsItems: response.data.pants,
-        //         shoesItems: response.data.shoes
-        //         });
-        //     })
-        // .catch((err) => {
-        //     console.log(err);
-        // });
+        axios.get(GET_CLOTHING_ITEMS, { 
+            headers: {
+                'Authorization': 'JWT ' + this.props.token
+            },
+            params: {
+                lat: this.state.latitudePosition,
+                lng: this.state.longitudePosition
+            }
+        })
+        .then((response) => {
+            console.log(response);
+            this.setState({ 
+                shirtItems: response.data.shirts,
+                pantsItems: response.data.pants,
+                shoesItems: response.data.shoes,
+                accessoriesItems: response.data.accessories,
+                outerwearItems: response.data.outerwear 
+                });
+            })
+        .catch((err) => {
+            console.log(err);
+        });
     }
 
-    renderShirtItems() {
-        return this.state.shirtItems.map(item =>
-            <ClosetItem key={item._id} uri={item.url_path} item={item} />);
-    }
-
-    renderPantsItems() {
-        return this.state.pantsItems.map(item =>
-            <ClosetItem key={item._id} uri={item.url_path} item={item} />);
-    }
-
-    renderShoesItems() {
-        return this.state.shoesItems.map(item =>
-            <ClosetItem key={item._id} uri={item.url_path} item={item} />);
+    renderItems(items) {
+        return (
+            <View style={{ height: 150 }}>
+                <ScrollView 
+                    automaticallyAdjustContentInsets={false}
+                    horizontal
+                    onScroll={() => { console.log('onScroll!'); }}
+                    scrollEventThrottle={200}
+                >
+                    {items.map(item => 
+                        <ClosetItem
+                            key={item._id}
+                            uri={item.url_path}
+                            item={item} 
+                        />
+                    )}
+                </ScrollView>
+            </View>
+        );  
     }
 
     render() {
@@ -85,39 +89,11 @@ class ClosetList extends Component {
                         "Here's what I got to work with!"
                     </Text>
                 </View>
-
-                <View style={{ height: 150 }}>
-                  <ScrollView
-                      automaticallyAdjustContentInsets={false}
-                      horizontal
-                      onScroll={() => { console.log('onScroll!'); }}
-                      scrollEventThrottle={200}
-                  >
-                      {this.renderShirtItems()}
-                  </ScrollView>
-                </View>
-
-                <View style={{ height: 150 }}>
-                  <ScrollView
-                      automaticallyAdjustContentInsets={false}
-                      horizontal
-                      onScroll={() => { console.log('onScroll!'); }}
-                      scrollEventThrottle={200}
-                  >
-                      {this.renderPantsItems()}
-                  </ScrollView>
-                </View>
-
-                <View style={{ height: 150 }}>
-                  <ScrollView
-                      automaticallyAdjustContentInsets={false}
-                      horizontal
-                      onScroll={() => { console.log('onScroll!'); }}
-                      scrollEventThrottle={200}
-                  >
-                      {this.renderShoesItems()}
-                  </ScrollView>
-                </View>
+                {this.renderItems(this.state.shirtItems)}
+                {this.renderItems(this.state.pantsItems)}
+                {this.renderItems(this.state.shoesItems)}
+                {this.renderItems(this.state.outerwearItems)}
+                {this.renderItems(this.state.accessoriesItems)}
               </View>
             </ScrollView>
         );

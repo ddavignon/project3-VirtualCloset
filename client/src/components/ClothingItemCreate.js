@@ -43,7 +43,7 @@ class ClothingItemCreate extends Component {
     render() {
         return (
             <ScrollView>
-                { this._renderForm() }
+                {this._renderForm()}
             </ScrollView>
         );
     }
