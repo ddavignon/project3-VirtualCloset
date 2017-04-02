@@ -7,18 +7,26 @@
 
 **Who worked on it?**
 > Brandan Lockwood
+
 > Daniel Wilson
+
 > Dustin D’Avignon
+
 > Brandon Woodard
+
 > Luigi D’Antonio
 
 **What were you able to complete for this handin?**
 
-> Basic API, general Mobile Application flow, avatar design.
+> Basic API, general Mobile Application flow with test api, avatar design.
 
 **What are known problems, if any, with your project?**
 
+> Avatar is not implimented into mobile app yet, not all connectivity between mobile app and api are connected, closet is one shared closet at this time, update item is not working, delete is not working
+
 **How would you improve it if you had more time?**
+
+> Get the basic CRUD functionality working with the backend api so user can add / get recommended clothes with third-party recommendations, add avatar in view
 
 ## 
 

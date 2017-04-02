@@ -1,4 +1,3 @@
-import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import RNFetchBlob from 'react-native-fetch-blob';
 import axios from 'axios';
@@ -11,7 +10,8 @@ import {
     CLOTHING_ITEM_CREATE,
     CLOTHING_ITEM_SELECTED,
     CLOTHING_ITEM_INFO_SUCCESS,
-    CLOTHING_ITEM_INFO_FAIL
+    CLOTHING_ITEM_INFO_FAIL,
+    CLOTHING_ITEM_IMAGE_UPLOAD
 } from './types';
 
 
@@ -44,12 +44,13 @@ export const clothingItemResults = ({ response, token }) => {
                 ])
                 .then((res) => {
                     // console.log(res.json());
+                    console.log(res);
                     const description = res.json().apparel[0].name;
-                    const style = res.json().styles[0].name;
-                    const color = res.json().color;
+                    // const style = res.json().styles[0].name;
+                    // const color = res.json().color;
 
-                    console.log(res.json(), style, description);
-                    clothingItemInfoSuccess(dispatch, style, description, color);
+                    console.log(res.json(), description);
+                    clothingItemInfoSuccess(dispatch, description);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -60,117 +61,46 @@ export const clothingItemResults = ({ response, token }) => {
 };
 
 export const clothingItemCreate = ({
-    name, description, style, color, type_clothing, image_data, token
+    description, style, type_clothing, image_data, token
 }) => {
-    return (dispatch) => {  
+    return (dispatch) => {
         // Prepare Blob support
         const Blob = RNFetchBlob.polyfill.Blob;
         window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
         window.Blob = Blob;
-        
-        const testImageName = `${name}--${new Date()}.jpg`;
 
-        Blob.build(RNFetchBlob.wrap(image_data.origURL), { type: 'image/jpeg' })
-            .then((blob) => firebase.storage()
-                    .ref('images')
-                    .child(testImageName)
-                    .put(blob, { contentType: 'image/png' })
-            )
-            .then((snapshot) => {
-                console.log(snapshot);
-                // axios.post(ADD_CLOTHING_ITEM.concat(name), {
-                //     // name, description, style, color, type_clothing, url_path: snapshot.downloadURL
-                //     name, description, style, color, type_clothing, url_path: snapshot.downloadURL
-                // }, {
-                //     'Content-Type': 'application/json',
-                // })
-                // .then((res) => {
-                //     console.log(res);
-                //     dispatch({ type: CLOTHING_ITEM_CREATE });
-                //     Actions.closetList({ type: 'reset' });
-                // })
-                // .catch((error) => {
-                //     console.log('axios error', error);
-                // });
-                // // console.log('snaphot', snapshot.downloadURL);
-                // /* there we go ! */ 
-                fetch(ADD_CLOTHING_ITEM.concat(name), {
-                    method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'JWT '.concat(token)
-                    },
-                    body: JSON.stringify({
-                        name,
-                        description,
-                        style,
-                        color,
-                        type_clothing,
-                        url_path: snapshot.downloadURL
-                    })
-                })
+        dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD });
+
+        const urlToken = Math.random().toString(36).slice(-8);
+
+        RNFetchBlob.fetch('POST', ADD_CLOTHING_ITEM.concat(urlToken), {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'JWT '.concat(token)
+            }, [
+                { name: 'info', data: 'itemCreate' },
+                { name: 'image_data', filename: urlToken.concat('-image.png'), data: image_data.data },
+                { name: 'description', data: description },
+                { name: 'style', data: style },
+                { name: 'type_clothing', data: type_clothing }
+                ])
                 .then((res) => {
                     console.log(res);
                     dispatch({ type: CLOTHING_ITEM_CREATE });
                     Actions.closetList({ type: 'reset' });
                 })
                 .catch((error) => {
-                    console.log('fetch error', error);
+                    console.log(error);
                 });
-                // console.log('snaphot', snapshot.downloadURL);
-            })
-            .catch((error) => {
-                console.log('upload', error);
-            });
-        };
-
-    //     RNFetchBlob.fetch('POST', ADD_CLOTHING_ITEM, {
-    //             'Content-Type': 'multipart/form-data',
-    //         }, [
-    //             { name: 'info', data: 'itemCreate' },
-    //             { name: 'image_data', filename: 'image.png', data: image_data },
-    //             { name: 'name', data: name },
-    //             { name: 'description', data: description },
-    //             { name: 'style', data: style },
-    //             { name: 'color', data: color },
-    //             { name: 'type_clothing', data: type_clothing }
-    //             ])
-    //             .then((res) => {
-    //                 console.log(res);
-    //                 dispatch({ type: CLOTHING_ITEM_CREATE });
-    //                 Actions.closetList({ type: 'reset' });
-    //             })
-    //             .catch((error) => {
-    //                 console.log(error);
-    //             });
-    // };
-
-
-    /*** 
-     *
-     * FIREBASE - for testing 
-     * 
-     ***/
-
-    // const { currentUser } = firebase.auth();
-
-    // return (dispatch) => {
-    //     firebase.database().ref(`/users/${currentUser.uid}/closet`)
-    //         .push({ name, description, style, color, type })
-    //         .then(() => {
-    //             dispatch({ type: CLOTHING_ITEM_CREATE });
-    //             Actions.closetList({ type: 'reset' });
-    //         });
-    // };
+    };
 };
 
 // clothing item save
 
 // clothing item delete
 
-const clothingItemInfoSuccess = (dispatch, style, description, color) => {
+const clothingItemInfoSuccess = (dispatch, description) => {
     dispatch({
         type: CLOTHING_ITEM_INFO_SUCCESS,
-        payload: { style, description, color }
+        payload: { description }
     });
 };
