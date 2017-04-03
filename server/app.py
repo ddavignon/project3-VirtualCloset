@@ -15,6 +15,13 @@ from resources.user import UserRegister
 from resources.item import Item, ItemList
 from resources.closet import Closet, ClosetList
 
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+from email.MIMEImage import MIMEImage
+from PIL import Image
+import requests
+from StringIO import StringIO
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -40,6 +47,10 @@ api.add_resource(UserRegister, '/register')
 # MIGRATIONS BELOW
 #####################################################################################
 
+@app.route('/')
+def default():
+    return "Success"
+    
 @app.route('/test', methods=['GET'])
 def get_test():
     products = amazon.search(Keywords='kindle', SearchIndex='All')
@@ -60,123 +71,74 @@ def sendText():
     server = smtplib.SMTP( "smtp.gmail.com", 587 )
 
     server.starttls()
-
+    
     server.login( os.getenv('email'), os.getenv('password') )
 
     # Send text message through SMS gateway of destination number
     server.sendmail( 'virtualcloset', str(number)+'@mms.att.net', 'hello' )
     return "Success"
-
-
-'''
-############# Need refactor for databas ######################
-
-<<<<<<< HEAD
-        else:
-            return jsonify({"message":'user already exist'})
-     
-
-@app.route('/virtual/api/v1.0/closet',methods=['GET'])
-def getClothes():
-    user_id=request.args.get('user_id')
-    if len(models.Users.query.filter_by(email=user_id).all()) !=1:
-        return jsonify({"error": "no user by that id"})
-    lat = request.args.get('lat')
-    lng = request.args.get('lng')
-    forecast = forecastio.load_forecast(dark_sky_key, lat, lng)
-    today=forecast.hourly()
-    print today.icon
-    tempLow=200
-    tempHigh=-100
-    for data in today.data:
-        if(data.temperature<tempLow):
-           tempLow=data.temperature
-        if(data.temperature>tempHigh):
-            tempHigh=data.temperature
-    print tempLow
-    print tempHigh
-    shirt=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="shirt").all()]
-    pants=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.tempLow>=tempLow).filter(models.Clothes.type_clothing=="pants").all()]
-    shoes=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.type_clothing=="shoes").all()]
-    accessory=[i.serialize for i in models.db.session.query(models.Clothes).filter(models.Clothes.user_id==user_id).filter(models.Clothes.type_clothing=="accessory").all()]
-    return jsonify({'top':shirt ,'bottom':pants,'shoes':shoes,'accessory':accessory})
     
-=======
->>>>>>> c0c6638c1b914309e7e5cdba6d50071294d3ae5f
-@app.route('/virtual/api/v1.0/styles',methods=['GET'])
-def checkDB():
-    user_id=request.args.get('user_id')
-    clothes=models.db.session.query(models.Clothes.style,models.Clothes.user_id).distinct().filter(models.Clothes.user_id==user_id).all()
-<<<<<<< HEAD
-    styles=[]
-    for clothing in clothes:
-        styles.append(clothing.style)
-    return jsonify({'styles':styles})
-=======
-    print clothes[0].style
-    print clothes[1].style
-    print clothes
+@app.route('/sendTextImage',methods=['GET'])
+def sendTextImage():
+    # Use sms gateway provided by mobile carrier:
+    # at&t:     number@mms.att.net
+    # t-mobile: number@tmomail.net
+    # verizon:  number@vtext.com
+    # sprint:   number@page.nextel.com
+    # Establish a secure session with gmail's outgoing SMTP server using your gmail account4
+    number=request.args.get('number')
+    img = request.args.get('img')
+       # Define these once; use them twice!
+    strFrom = 'virtualcloset100@gmail.com'
+    strTo = str(number)+'@mms.att.net'
+
+    # Create the root message and fill in the from, to, and subject headers
+    msgRoot = MIMEMultipart('related')
+    msgRoot['Subject'] = 'test message'
+    msgRoot['From'] = strFrom
+    msgRoot['To'] = strTo
+    msgRoot.preamble = 'This is a multi-part message in MIME format.'
+
+    # Encapsulate the plain and HTML versions of the message body in an
+    # 'alternative' part, so message agents can decide which they want to display.
+    msgAlternative = MIMEMultipart('alternative')
+    msgRoot.attach(msgAlternative)
+
+    msgText = MIMEText('This is the alternative plain text message.')
+    msgAlternative.attach(msgText)
+
+    # We reference the image in the IMG SRC attribute by the ID we give it below
+    msgText = MIMEText('<b>Some <i>HTML</i> text</b> and an image.<br><img src="cid:image1"><br>Nifty!', 'html')
+    msgAlternative.attach(msgText)
+    response = requests.get("https://s3-us-west-1.amazonaws.com/virtualcloset2030/tester%40yahoo.com/hello.jpg")
+    img = StringIO(response.content)
+    print img
+    # This example assumes the image is in the current directory
+    msgImage = MIMEImage(img.getvalue())
+    
+
+    # Define the image's ID as referenced above
+    msgImage.add_header('Content-ID', '<image1>')
+    msgRoot.attach(msgImage)
+    
+    #start emailing
+    server = smtplib.SMTP( "smtp.gmail.com", 587 )
+    
+    # Send the email (this example assumes SMTP authentication is required)
+    server.starttls();
+    server.login( os.getenv('email'), os.getenv('password') )
+
+    server.sendmail(strFrom, strTo, msgRoot.as_string())
+    server.quit()
     return "Success"
-'''
->>>>>>> c0c6638c1b914309e7e5cdba6d50071294d3ae5f
-
-
-'''
-Clarfai stuff
-'''
-###################################Clarifai methods#############################
-
-#returns an an array of  possible apparel
-#attr
-#name-apparelName
-#value-confidence
-def possibleApparel(appCont,name):
-    model=appCont.models.get('e0be3b9d6a454f0493ac3a30784001ff')
-    image = ClImage(file_obj=open(name, 'rb'))
-    response=model.predict([image])
-    response=response["outputs"][0]["data"]["concepts"]
-    item =response
-    items=[]
-    items.append(item[0])
-    items.append(item[2])
-    items.append(item[3])
-    return items
-
-@app.route('/virtual/api/v1.0/upload', methods=['POST'])
-def sendToClarfai():
-    #stuff from form can be grabbed by id of the tag
-    #stuff = request.form['something']
-    file = request.files['uri']
-    data = {}
-    #get working directory
-    directory_name=os.getcwd()+"/tmp"
-    print directory_name
-    #make a filename note need to add extnesion probably only jpg or jpeg at this point less data
-    filename = secure_filename(file.filename)
-    #save fiel
-    file.save(os.path.join(directory_name, filename))
-    #send to Clarfai API
-    data["apparel"]=possibleApparel(appClar,directory_name+"/"+file.filename)
-<<<<<<< HEAD
-    #data["styles"]=possibleStyles(appClar,directory_name+"/"+file.filename)
-    #data["color"]=getColor(appClar,directory_name+"/"+file.filename)
-=======
-    # data["styles"]=possibleStyles(appClar,directory_name+"/"+file.filename)
-    # data["color"]=getColor(appClar,directory_name+"/"+file.filename)
->>>>>>> c0c6638c1b914309e7e5cdba6d50071294d3ae5f
-    #remove file
-    os.remove(directory_name+"/"+file.filename)
-    #does take a little time
-    #print file.mimetype_params
-    return jsonify(data)
-
-''''''
-
-#####################################################################################
-# MIGRATIONS ABOVE
-#####################################################################################
+    
+    
 
 from db import db
 db.init_app(app)
 if __name__ == '__main__':
-    app.run(debug=True)  # important to mention debug=True
+    app.run(debug=True,host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))  # important to mention debug=True
+
+
+
+
