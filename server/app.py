@@ -47,9 +47,53 @@ api.add_resource(UserRegister, '/register')
 # MIGRATIONS BELOW
 #####################################################################################
 
+
+###################################Clarifai methods#############################
+
+#returns an an array of  possible apparel
+#attr
+#name-apparelName
+#value-confidence
+def possibleApparel(appCont,name):
+    model=appCont.models.get('e0be3b9d6a454f0493ac3a30784001ff')
+    image = ClImage(file_obj=open(name, 'rb'))
+    response=model.predict([image])
+    response=response["outputs"][0]["data"]["concepts"]
+    item =response
+    items=[]
+    items.append(item[0])
+    items.append(item[2])
+    items.append(item[3])
+    return items
+
 @app.route('/')
 def default():
-    return "Success"
+  return "Success"
+  
+@app.route('/virtual/api/v1.0/upload', methods=['POST'])
+def sendToClarfai():
+    #stuff from form can be grabbed by id of the tag
+    #stuff = request.form['something']
+    file = request.files['uri']
+    data = {}
+    #get working directory
+    directory_name=os.getcwd()+"/tmp"
+    print directory_name
+    #make a filename note need to add extnesion probably only jpg or jpeg at this point less data
+    filename = secure_filename(file.filename)
+    #save fiel
+    file.save(os.path.join(directory_name, filename))
+    #send to Clarfai API
+    data["apparel"]=possibleApparel(appClar,directory_name+"/"+file.filename)
+    # data["styles"]=possibleStyles(appClar,directory_name+"/"+file.filename)
+    # data["color"]=getColor(appClar,directory_name+"/"+file.filename)
+    #remove file
+    os.remove(directory_name+"/"+file.filename)
+    #does take a little time
+    #print file.mimetype_params
+    return jsonify(data)
+
+
     
 @app.route('/test', methods=['GET'])
 def get_test():
@@ -87,14 +131,14 @@ def sendTextImage():
     # sprint:   number@page.nextel.com
     # Establish a secure session with gmail's outgoing SMTP server using your gmail account4
     number=request.args.get('number')
-    img = request.args.get('img')
+    img = request.args.get('url')
        # Define these once; use them twice!
     strFrom = 'virtualcloset100@gmail.com'
     strTo = str(number)+'@mms.att.net'
 
     # Create the root message and fill in the from, to, and subject headers
     msgRoot = MIMEMultipart('related')
-    msgRoot['Subject'] = 'test message'
+    msgRoot['Subject'] = 'Virtual Closet'
     msgRoot['From'] = strFrom
     msgRoot['To'] = strTo
     msgRoot.preamble = 'This is a multi-part message in MIME format.'
@@ -104,13 +148,13 @@ def sendTextImage():
     msgAlternative = MIMEMultipart('alternative')
     msgRoot.attach(msgAlternative)
 
-    msgText = MIMEText('This is the alternative plain text message.')
+    msgText = MIMEText('Here is a piece of clothing')
     msgAlternative.attach(msgText)
 
     # We reference the image in the IMG SRC attribute by the ID we give it below
     msgText = MIMEText('<b>Some <i>HTML</i> text</b> and an image.<br><img src="cid:image1"><br>Nifty!', 'html')
     msgAlternative.attach(msgText)
-    response = requests.get("https://s3-us-west-1.amazonaws.com/virtualcloset2030/tester%40yahoo.com/hello.jpg")
+    response = requests.get(img)
     img = StringIO(response.content)
     print img
     # This example assumes the image is in the current directory
