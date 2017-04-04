@@ -5,6 +5,7 @@ from clarifai.rest import Image as ClImage
 
 from werkzeug.utils import secure_filename
 
+from flask_ask import Ask,statement,question,session
 
 from flask import Flask, request, jsonify
 from flask_restful import Api
@@ -23,6 +24,7 @@ import requests
 from StringIO import StringIO
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -30,6 +32,7 @@ appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client
 app.secret_key = 'SuperSecretPasskey'
 api = Api(app)
 
+ask = Ask(app,"/clothing_text_message")
 
 @app.before_first_request
 def create_tables():
@@ -65,6 +68,21 @@ def possibleApparel(appCont,name):
     items.append(item[2])
     items.append(item[3])
     return items
+
+@ask.launch
+def start_skill():
+    welcome_message= "Would you like a recommendation?"
+    return question(welcome_message)
+
+@ask.intent("YesIntent")
+def yes_intent():
+    message= "I found this in your closet."
+    return statement(message)
+
+@ask.intent("NoIntent")
+def no_intent():
+    message = "Have good then."
+    return statement(message)
 
 @app.route('/')
 def default():
