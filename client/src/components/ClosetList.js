@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
-  Text,
-  ScrollView,
-  View
+    View,
+    ScrollView,
+    Text,
+    StatusBar 
 } from 'react-native';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -11,7 +11,10 @@ import {
     GET_CLOTHING_ITEMS,
     GET_ALL_CLOTHING_ITEMS
 } from '../api/constants';
+import Carousel from 'react-native-snap-carousel';
+import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import ClosetItem from './ClosetItem';
+import styles from '../styles/index.style';
 
 class ClosetList extends Component {
     state = {
@@ -78,61 +81,137 @@ class ClosetList extends Component {
         });
     }
 
+    getSlides(entries) {
+        if (!entries) {
+            return false;
+        }
+        return entries.map((entry, index) => {
+            return (
+                <ClosetItem
+                  key={`carousel-entry-${index}`}
+                  even={(index + 1) % 2 === 0}
+                  {...entry}
+                />
+            );
+        });
+    }
+
+    /*// no momentum scal opacity
+    get example1() {
+        return (
+            <Carousel
+              sliderWidth={sliderWidth}
+              itemWidth={itemWidth}
+              firstItem={1}
+              inactiveSlideScale={0.94}
+              inactiveSlideOpacity={0.6}
+              enableMomentum={false}
+              containerCustomStyle={styles.slider}
+              contentContainerCustomStyle={styles.sliderContainer}
+              showsHorizontalScrollIndicator={false}
+              snapOnAndroid={true}
+              removeClippedSubviews={false}
+            >
+                { this.getSlides(ENTRIES1) }
+            </Carousel>
+        );
+    }
+
+    // momenteum / autoplay
+    get example2(items) {
+        return (
+            <Carousel
+              sliderWidth={sliderWidth}
+              itemWidth={itemWidth}
+              inactiveSlideScale={1}
+              inactiveSlideOpacity={1}
+              enableMomentum={true}
+              autoplay={true}
+              autoplayDelay={500}
+              autoplayInterval={2500}
+              containerCustomStyle={styles.slider}
+              contentContainerCustomStyle={styles.sliderContainer}
+              showsHorizontalScrollIndicator={false}
+              snapOnAndroid={true}
+              removeClippedSubviews={false}
+              >
+                  { this.getSlides(items) }
+              </Carousel>
+        );
+    }*/
+
     renderItems(items) {
         return (
-            <View style={{ height: 150 }}>
-                <ScrollView 
-                    automaticallyAdjustContentInsets={false}
-                    horizontal
-                    onScroll={() => { console.log('onScroll!'); }}
-                    scrollEventThrottle={200}
-                >
-                    {items.map(item => 
-                        <ClosetItem
-                            key={item._id}
-                            uri={item.url_path}
-                            item={item} 
-                        />
-                    )}
-                </ScrollView>
-            </View>
-        );  
+            <Carousel
+              sliderWidth={sliderWidth}
+              itemWidth={itemWidth}
+              inactiveSlideScale={1}
+              inactiveSlideOpacity={1}
+              enableMomentum={true}
+              autoplay={true}
+              autoplayDelay={500}
+              autoplayInterval={2500}
+              containerCustomStyle={styles.slider}
+              contentContainerCustomStyle={styles.sliderContainer}
+              showsHorizontalScrollIndicator={false}
+              snapOnAndroid={true}
+              removeClippedSubviews={false}
+              >
+                  { this.getSlides(items) }
+              </Carousel>
+        );
     }
 
     render() {
+        const {
+            container,
+            colorsContainer,
+            color1,
+            color2,
+            scrollview,
+            title,
+            subtitle,
+        } = styles;
         return (
-            <ScrollView>
-              <View style={styles.container}>
-                <View>
-                    <Text style={styles.welcome}>
-                        "Here's what I got to work with!"
-                    </Text>
+            <View style={container}>
+                <StatusBar
+                  translucent={true}
+                  backgroundColor={'rgba(0, 0, 0, 0.3)'}
+                  barStyle={'light-content'}
+                />
+                <View style={colorsContainer}>
+                    <View style={color1} />
+                    <View style={color2} />
                 </View>
-                {this.renderItems(this.state.shirtItems)}
-                {this.renderItems(this.state.pantsItems)}
-                {this.renderItems(this.state.shoesItems)}
-                {this.renderItems(this.state.outerwearItems)}
-                {this.renderItems(this.state.accessoriesItems)}
-                {this.renderItems(this.state.allClosetItems)}
-              </View>
-            </ScrollView>
+                <ScrollView
+                  style={scrollview}
+                  indicatorStyle={'white'}
+                  scrollEventThrottle={200}
+                >
+                    {/*<Text style={title}>Example 1</Text>
+                    <Text style={subtitle}>No momentum | Scale | Opacity</Text>
+                    { this.example1 }
+                    <Text style={title}>Example 2</Text>
+                    <Text style={subtitle}>Momentum | Autoplay</Text>
+                    { this.example2 }*/}
+
+                    <Text style={title}>Shirts</Text>
+                    {this.renderItems(this.state.shirtItems)}
+                    <Text style={title}>Pants</Text>
+                    {this.renderItems(this.state.pantsItems)}
+                    <Text style={title}>Shoes</Text>
+                    {this.renderItems(this.state.shoesItems)}
+                    <Text style={title}>Outerwear</Text>
+                    {this.renderItems(this.state.outerwearItems)}
+                    <Text style={title}>Accessories</Text>
+                    {this.renderItems(this.state.accessoriesItems)}
+                    <Text style={title}>All Items</Text>
+                    {this.renderItems(this.state.allClosetItems)}
+                </ScrollView>
+            </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  }
-});
 
 const mapStateToProps = (state) => {
     const { user, token } = state.auth;

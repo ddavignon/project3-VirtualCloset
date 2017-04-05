@@ -3,8 +3,10 @@ import { StyleSheet } from 'react-native';
 export const colors = {
     black: '#1a1917',
     gray: '#888888',
-    background1: 'hsl(15, 55%, 50%)',
-    background2: 'hsl(230, 30%, 45%)'
+    background1: 'rgb(224, 224, 224)',
+    backround2: 'rgb(224, 224, 224)'
+    // background1: 'hsl(15, 55%, 50%)',
+    // background2: 'hsl(230, 30%, 45%)'
 };
 
 export default StyleSheet.create({
@@ -31,7 +33,7 @@ export default StyleSheet.create({
     title: {
         marginTop: 15,
         backgroundColor: 'transparent',
-        color: 'rgba(255, 255, 255, 0.9)',
+        color: 'rgba(0, 0, 0, 0.9)',
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center'
@@ -40,7 +42,7 @@ export default StyleSheet.create({
         marginTop: 5,
         marginBottom: 15,
         backgroundColor: 'transparent',
-        color: 'rgba(255, 255, 255, 0.75)',
+        color: 'rgba(0, 0, 0, 0.75)',
         fontSize: 16,
         fontStyle: 'italic',
         textAlign: 'center'

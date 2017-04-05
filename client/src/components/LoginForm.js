@@ -154,31 +154,6 @@ class LoginForm extends Component {
         return (
                 <View>
             <Card>
-            	<CardSection>
-					<Text>
-						<Text style={styles.title}>LocPermission:</Text>
-						{this.state.locationPermission}
-					</Text>
-                </CardSection>
-                <CardSection>
-                    <Text>
-                        <Text style={styles.title}>showsignup:</Text>
-                        {this.state.showSignupFields}
-                    </Text>
-				</CardSection>
-				<CardSection>
-					<Text>
-						<Text style={styles.title}>Latitude:</Text>
-						{this.state.latitudePosition}
-					</Text>
-				</CardSection>
-				<CardSection>
-					<Text>
-						<Text style={styles.title}>Longitude:</Text>
-						{this.state.longitudePosition}
-					</Text>
-
-				</CardSection>
                 <CardSection>
                     <Input
                         label="Email"

@@ -1,15 +1,20 @@
 import React from 'react';
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import LoginForm from './components/LoginForm';
-import ClosetListV2 from './components/ClosetListV2';
+import ClosetList from './components/ClosetList';
 import ClothingItemCreate from './components/ClothingItemCreate';
 import ClothingItemEdit from './components/ClothingItemEdit';
 
 const RouterComponent = () => {
     return (
-        <Router sceneStyle={{ paddingTop: 55 }}>
-            <Scene key="auth">
-                <Scene key="login" component={LoginForm} title="Please Login" />
+        <Router sceneStyle={{ paddingTop: 50 }} >
+            <Scene key="auth" >
+                <Scene
+                    key="login"
+                    component={LoginForm}
+                    title="Please Login"
+                    navigationBarStyle={styles.viewStyle}
+                />
             </Scene>
 
             <Scene key="main">
@@ -17,23 +22,38 @@ const RouterComponent = () => {
                     onRight={() => Actions.clothingItemCreate()}
                     rightTitle="Add"
                     key="closetList"
-                    component={ClosetListV2}
+                    component={ClosetList}
                     title="My Closet"
                     initial
+                    navigationBarStyle={styles.viewStyle}
                 />
                 <Scene
                     key="clothingItemCreate"
                     component={ClothingItemCreate}
                     title="Upload Image"
+                    navigationBarStyle={styles.viewStyle}
                 />
                 <Scene
                     key="clothingItemEdit"
                     component={ClothingItemEdit}
                     title="Edit Item"
+                    navigationBarStyle={styles.viewStyle}
                 />
             </Scene>
         </Router>
     );
+};
+
+const styles = {
+    viewStyle: {
+        backgroundColor: '#00BCD4', // 'rgb(0,188,212)',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+    },
+    textStyle: {
+        fontSize: 20,
+        color: '#FFF'
+    }
 };
 
 export default RouterComponent;
