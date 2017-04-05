@@ -18,7 +18,7 @@ class LoginForm extends Component {
         showSignupFields: 'hide',
 	};
 
-    componentWillMount(){
+    componentWillMount() {
         Permissions.getPermissionStatus('location', 'whenInUse')
           .then(response => {
             //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
@@ -143,55 +143,55 @@ class LoginForm extends Component {
 
     render() {
         return (
-                <View>
-            <Card>
-                <CardSection>
-                    <Input
-                        label="Email"
-                        placeholder="email@email.com"
-                        onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'email', value })}
-                        value={this.props.email}
-                    />
-                </CardSection>
-                <CardSection>
-                    <Input
-                        secureTextEntry
-                        label="Password"
-                        placeholder="password"
-                        onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'password', value })}
-                        value={this.props.password}
-                    />
-                </CardSection>
-            </Card>
-                <View>
-                {this.renderSIgnupFields()}
-                </View>
-                <Text style={styles.errorTextStyle} >
-                    {this.props.error}
-                </Text>
-            <Card>
-                {this.renderButton()}
-                {/*<LoginButton
-                publishPermissions={["publish_actions"]}
-                onLoginFinished={
-                    (error, result) => {
-                    if (error) {
-                        alert("login has error: " + result.error);
-                    } else if (result.isCancelled) {
-                        alert("login is cancelled.");
-                    } else {
-                        AccessToken.getCurrentAccessToken().then(
-                        (data) => {
-                            alert(data.accessToken.toString())
+            <View>
+                <Card>
+                    <CardSection>
+                        <Input
+                            label="Email"
+                            placeholder="email@email.com"
+                            onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'email', value })}
+                            value={this.props.email}
+                        />
+                    </CardSection>
+                    <CardSection>
+                        <Input
+                            secureTextEntry
+                            label="Password"
+                            placeholder="password"
+                            onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'password', value })}
+                            value={this.props.password}
+                        />
+                    </CardSection>
+                </Card>
+                    <View>
+                    {this.renderSIgnupFields()}
+                    </View>
+                    <Text style={styles.errorTextStyle} >
+                        {this.props.error}
+                    </Text>
+                <Card>
+                    {this.renderButton()}
+                    {/*<LoginButton
+                    publishPermissions={["publish_actions"]}
+                    onLoginFinished={
+                        (error, result) => {
+                        if (error) {
+                            alert("login has error: " + result.error);
+                        } else if (result.isCancelled) {
+                            alert("login is cancelled.");
+                        } else {
+                            AccessToken.getCurrentAccessToken().then(
+                            (data) => {
+                                alert(data.accessToken.toString())
+                            }
+                            )
                         }
-                        )
+                        }
                     }
-                    }
-                }
-                onLogoutFinished={() => alert("logout.")}
-            />*/}
-            </Card>
-        </View>
+                    onLogoutFinished={() => alert("logout.")}
+                />*/}
+                </Card>
+            </View>
         );
     }
 }
