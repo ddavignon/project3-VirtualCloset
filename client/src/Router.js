@@ -1,7 +1,7 @@
 import React from 'react';
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import LoginForm from './components/LoginForm';
-import ClosetList from './components/ClosetList';
+import ClosetListV2 from './components/ClosetListV2';
 import ClothingItemCreate from './components/ClothingItemCreate';
 import ClothingItemEdit from './components/ClothingItemEdit';
 
@@ -17,7 +17,7 @@ const RouterComponent = () => {
                     onRight={() => Actions.clothingItemCreate()}
                     rightTitle="Add"
                     key="closetList"
-                    component={ClosetList}
+                    component={ClosetListV2}
                     title="My Closet"
                     initial
                 />

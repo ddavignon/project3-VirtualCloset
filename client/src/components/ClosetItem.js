@@ -32,8 +32,8 @@ const styles = {
         borderRadius: 3,
     },
     img: {
-        width: 150,
-        height: 125,
+        width: 200,
+        height: 200,
     }
 };
 
