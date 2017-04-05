@@ -1,40 +1,44 @@
-import React, { Component } from 'react';
-import { Text, TouchableWithoutFeedback, View, Image } from 'react-native';
-import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
-import { clothingItemUpdate } from '../actions';
 
-class ClosetItem extends Component {	
-  onTilePress() {
-      this.props.clothingItemUpdate({ prop: 'uri', value: this.props.uri });
-      Actions.clothingItemEdit({ item: this.props.item });
-  }
+import React, { Component, PropTypes } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import styles from '../styles/SliderEntry.style';
 
-  render() {
-    const { img, button } = styles;
+class ClosetItem extends Component {
 
-    return (
-        <TouchableWithoutFeedback onPress={this.onTilePress.bind(this)}>
-            <View style={button}>
-                <Image style={img} source={{ uri: this.props.uri }} />
-            </View>
-        </TouchableWithoutFeedback>
-    );
-  }
+    static propTypes = {
+        description: PropTypes.string.isRequired,
+        style: PropTypes.string,
+        url_path: PropTypes.string,
+        even: PropTypes.bool
+    };
+
+    render() {
+        const { description, style, url_path, even } = this.props;
+
+        const uppercaseTitle = description ? (
+            <Text style={[styles.title, even ? styles.titleEven : {}]} numberOfLines={2}>{ description.toUpperCase() }</Text>
+        ) : false;
+
+        return (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.slideInnerContainer}
+              onPress={() => { alert(`You've clicked '${description}'`); }}
+              >
+                <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
+                    <Image
+                      source={{ uri: url_path }}
+                      style={styles.image}
+                    />
+                    <View style={[styles.radiusMask, even ? styles.radiusMaskEven : {}]} />
+                </View>
+                <View style={[styles.textContainer, even ? styles.textContainerEven : {}]}>
+                    { uppercaseTitle }
+                    <Text style={[styles.style, even ? styles.subtitleEven : {}]} numberOfLines={2}>{ style }</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
 }
 
-const styles = {
-    button: {
-        margin: 7,
-        padding: 5,
-        alignItems: 'center',
-        backgroundColor: '#eaeaea',
-        borderRadius: 3,
-    },
-    img: {
-        width: 150,
-        height: 125,
-    }
-};
-
-export default connect(null, { clothingItemUpdate })(ClosetItem);
+export default ClosetItem;
