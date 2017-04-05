@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 
 from flask_ask import Ask,statement,question,session
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,render_template
 from flask_restful import Api
 from flask_jwt import JWT
 
@@ -86,7 +86,7 @@ def no_intent():
 
 @app.route('/')
 def default():
-  return flask.render_template('avatar_webGL/index.html')
+  return render_template('avatar_webGL/index.html')
 
   
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])
