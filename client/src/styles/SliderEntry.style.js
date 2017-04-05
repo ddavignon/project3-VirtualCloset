@@ -23,13 +23,12 @@ export default StyleSheet.create({
         height: slideHeight,
         paddingHorizontal: itemHorizontalMargin,
         paddingBottom: 18, // needed for shadow
-        borderColor: 'black'
     },
     imageContainer: {
         flex: 1,
         backgroundColor: 'white',
         borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
+        borderTopRightRadius: entryBorderRadius,
     },
     imageContainerEven: {
         backgroundColor: colors.black
@@ -55,8 +54,8 @@ export default StyleSheet.create({
     },
     textContainer: {
         justifyContent: 'center',
-        paddingTop: 20 - entryBorderRadius,
-        paddingBottom: 20,
+        paddingTop: 10 - entryBorderRadius,
+        paddingBottom: 10,
         paddingHorizontal: 16,
         backgroundColor: 'white',
         borderBottomLeftRadius: entryBorderRadius,

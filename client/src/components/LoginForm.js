@@ -12,102 +12,22 @@ const Permissions = require('react-native-permissions');
 
 class LoginForm extends Component {
 	state = {
-	latitudePosition: 'unknown',
-	longitudePosition: 'unknown',
-	locationPermission: 'undetermined',
-  showSignupFields: 'hide',
+        latitudePosition: 'unknown',
+        longitudePosition: 'unknown',
+        locationPermission: 'undetermined',
+        showSignupFields: 'hide',
 	};
 
-    onEmailChanged(text) {
-        this.props.emailChanged(text);
-    }
-
-    onPasswordChanged(text) {
-        this.props.passwordChanged(text);
-    }
-
-    onSignUpButtonPress() {
-        const { email, password, phone_number, carrier } = this.props;
-        this.setState({showSignupFields: 'show'});
-        if(this.state.showSignupFields === 'show'){
-            this.props.registerUser({ email, password, phone_number, carrier });
-        }
-
-    }
-
-    _renderSIgnupFields() {
-        if(this.state.showSignupFields === 'show'){
-            return(
-                   <View>
-                   <Card>
-                       <CardSection>
-                           <Input
-                           label="Phone"
-                           placeholder="555-555-5555"
-                           onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'phone_number', value })}
-                           value={this.props.phone_number}
-                           />
-                       </CardSection>
-                       <CardSection>
-                           <Input
-                           label="Carrier"
-                           placeholder="ATT"
-                           onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'carrier', value })}
-                           value={this.props.carrier}
-                           />
-                       </CardSection>
-                   </Card>
-                   </View>
-            );
-        } else {
-            return null;
-        }
-    }
-
-    onLoginButtonPress() {
-        const { email, password } = this.props;
-
-        this.props.loginUser({ email, password });
-    }
-    renderButton() {
-        if (this.props.loading) {
-            return (
-                <CardSection>
-                    <Spinner size="large" />
-                </CardSection>
-            );
-        }
-
-        return (
-
-            <View>
-                {this.state.showSignupFields === 'hide'
-                    ?(<CardSection>
-                        <Button onPress={this.onLoginButtonPress.bind(this)}>
-                            Login
-                        </Button>
-                    </CardSection>)
-                    :null
-                  }
-                <CardSection>
-                    <Button onPress={this.onSignUpButtonPress.bind(this)}>
-                        Sign Up
-                    </Button>
-                </CardSection>
-            </View>
-        );
-    }
-
     componentWillMount(){
-        Permissions.getPermissionStatus('location','whenInUse')
+        Permissions.getPermissionStatus('location', 'whenInUse')
           .then(response => {
             //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
-            this.setState({ locationPermission: response })
+            this.setState({ locationPermission: response });
         });
-        navigator.geolocation.getCurrentPosition( (position) => {
+        navigator.geolocation.getCurrentPosition((position) => {
          this.setState({
-                       latitudePosition:JSON.stringify(position['coords']['latitude']),
-                       longitudePosition:JSON.stringify(position['coords']['longitude'])
+                       latitudePosition: JSON.stringify(position.coords.latitude),
+                       longitudePosition: JSON.stringify(position.coords.longitude)
                        });
          },
          (error) => {
@@ -140,17 +60,88 @@ class LoginForm extends Component {
           //    console.warn(err)
           //    }
           //  }
-         },{
+         }, {
          enableHighAccuracy: true,
          timeout: 20000,
-         maximumAge: 1000}
-         );
-      
+         maximumAge: 1000 }
+         ); 
     }
 
+    onSignUpButtonPress() {
+        const { email, password, phone_number, carrier } = this.props;
+
+        if (this.state.showSignupFields === 'show') {
+            this.props.registerUser({ email, password, phone_number, carrier });
+        }
+        this.setState({ showSignupFields: 'show' });
+    }
+
+    onLoginButtonPress() {
+        const { email, password } = this.props;
+
+        if (this.state.showSignupFields === 'hide') {
+            this.props.loginUser({ email, password });
+        }
+        this.setState({ showSignupFields: 'hide' });
+    }
+
+    renderSIgnupFields() {
+        if (this.state.showSignupFields === 'show') {
+            return (
+                   <View>
+                   <Card>
+                       <CardSection>
+                           <Input
+                           label="Phone"
+                           placeholder="555-555-5555"
+                           onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'phone_number', value })}
+                           value={this.props.phone_number}
+                           />
+                       </CardSection>
+                       <CardSection>
+                           <Input
+                           label="Carrier"
+                           placeholder="ATT"
+                           onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'carrier', value })}
+                           value={this.props.carrier}
+                           />
+                       </CardSection>
+                   </Card>
+                   </View>
+            );
+        }
+        return null;
+    }
+
+    renderButton() {
+        if (this.props.loading) {
+            return (
+                <CardSection>
+                    <Spinner size="large" />
+                </CardSection>
+            );
+        }
+
+        return (
+            <View>
+                <CardSection>
+                    {this.state.showSignupFields === 'hide'
+                        ? (<Button onPress={this.onLoginButtonPress.bind(this)}>
+                                Login
+                            </Button>)
+                        : (<Button onPress={this.onLoginButtonPress.bind(this)}>
+                                Back
+                            </Button>)
+                    }
+                    <Button onPress={this.onSignUpButtonPress.bind(this)}>
+                        Sign Up
+                    </Button>
+                </CardSection>
+            </View>
+        );
+    }
 
     render() {
-
         return (
                 <View>
             <Card>
@@ -173,10 +164,10 @@ class LoginForm extends Component {
                 </CardSection>
             </Card>
                 <View>
-                {this._renderSIgnupFields()}
+                {this.renderSIgnupFields()}
                 </View>
                 <Text style={styles.errorTextStyle} >
-                {this.props.error}
+                    {this.props.error}
                 </Text>
             <Card>
                 {this.renderButton()}
