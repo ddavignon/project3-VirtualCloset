@@ -6,7 +6,7 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-    email: '',
+    //email: '',
     password: '',
     phone_number: '',
     carrier: '',

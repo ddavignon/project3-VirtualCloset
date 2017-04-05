@@ -7,7 +7,10 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { GET_CLOTHING_ITEMS } from '../api/constants';
+import {
+    GET_CLOTHING_ITEMS,
+    GET_ALL_CLOTHING_ITEMS
+} from '../api/constants';
 import ClosetItem from './ClosetItem';
 
 class ClosetList extends Component {
@@ -18,12 +21,13 @@ class ClosetList extends Component {
         shoesItems: [],
         accessoriesItems: [],
         outerwearItems: [],
+        allClosetItems: [],
         latitudePosition: '37.4829525',
         longitudePosition: '-122.1480473',
     };
 
     componentWillMount() {
-        navigator.geolocation.getCurrentPosition( (position) => {
+        navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitudePosition: JSON.stringify(position.coords.latitude),
                 longitudePosition: JSON.stringify(position.coords.longitude)
@@ -54,6 +58,21 @@ class ClosetList extends Component {
                 outerwearItems: response.data.outerwear 
                 });
             })
+        .catch((err) => {
+            console.log(err);
+        });
+
+        axios.get(GET_ALL_CLOTHING_ITEMS.concat(this.props.user), { 
+            headers: {
+                'Authorization': 'JWT ' + this.props.token
+            }
+        })
+        .then((response) => {
+            console.log(response);
+            this.setState({ 
+                allClosetItems: response.data.items, 
+            });
+        })
         .catch((err) => {
             console.log(err);
         });
@@ -94,6 +113,7 @@ class ClosetList extends Component {
                 {this.renderItems(this.state.shoesItems)}
                 {this.renderItems(this.state.outerwearItems)}
                 {this.renderItems(this.state.accessoriesItems)}
+                {this.renderItems(this.state.allClosetItems)}
               </View>
             </ScrollView>
         );
@@ -115,9 +135,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    const { email, token } = state.auth;
-
-    return { email, token };
+    const { user, token } = state.auth;
+    
+    return { user, token };
 };
 
 export default connect(mapStateToProps, null)(ClosetList);

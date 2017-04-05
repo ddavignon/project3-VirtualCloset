@@ -225,7 +225,7 @@ class LoginForm extends Component {
                 onLogoutFinished={() => alert("logout.")}
             />*/}
             </Card>
-                </View>
+        </View>
         );
     }
 }
