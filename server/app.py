@@ -86,7 +86,8 @@ def no_intent():
 
 @app.route('/')
 def default():
-  return "Success"
+  return flask.render_template('avatar_webGL/index.html')
+
   
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])
 def sendToClarfai():
