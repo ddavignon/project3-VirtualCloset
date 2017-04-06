@@ -86,6 +86,10 @@ def no_intent():
 
 @app.route('/')
 def default():
+  return "Success"
+  
+@app.route('/webHead')
+def webHead():
   return render_template('avatar_webGL/index.html')
 
   
