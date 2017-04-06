@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Platform} from 'react-native';
+import { Text, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import {
     loginTextFieldUpdate,
@@ -64,17 +64,43 @@ class LoginForm extends Component {
          enableHighAccuracy: true,
          timeout: 20000,
          maximumAge: 1000 }
-         ); 
+         );
+    }
+
+    onLoginButtonPress() {
+        const { email, password } = this.props;
+        this.props.loginUser({ email, password });
     }
 
     onSignUpButtonPress() {
         const { email, password, phone_number, carrier } = this.props;
 
-        if (this.state.showSignupFields === 'show') {
-            this.props.registerUser({ email, password, phone_number, carrier });
-        }
         this.setState({ showSignupFields: 'show' });
+        if (this.state.showSignupFields === 'show') {
+          if (this.validateEmail(email) &&
+              this.validatePassword(password) &&
+              this.validatePhone(phone_number)) {
+            this.props.registerUser({ email, password, phone_number, carrier });
+          }
+        }
+
     }
+
+    validateEmail(email) {
+      const emailRe = /([\w.\-_]+)?\w+@[\w-_]+(\.\w+){1,}/igm;
+      return emailRe.test(email);
+    }
+
+    validatePhone(phone_number) {
+      const phoneRe = /\d{3}[-]{1}\d{3}[-]{1}\d{4}\b/;
+      return phoneRe.test(phone_number);
+    }
+
+    validatePassword(password) {
+      const passwordRe = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+      return passwordRe.test(password);
+    }
+
 
     onLoginButtonPress() {
         const { email, password } = this.props;

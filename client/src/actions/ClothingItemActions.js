@@ -1,3 +1,4 @@
+import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import RNFetchBlob from 'react-native-fetch-blob';
 import axios from 'axios';
@@ -11,7 +12,8 @@ import {
     CLOTHING_ITEM_SELECTED,
     CLOTHING_ITEM_INFO_SUCCESS,
     CLOTHING_ITEM_INFO_FAIL,
-    CLOTHING_ITEM_IMAGE_UPLOAD
+    CLOTHING_ITEM_IMAGE_UPLOAD,
+    CLOTHING_ITEM_IMAGE_UPLOAD_FAIL
 } from './types';
 
 
@@ -90,6 +92,7 @@ export const clothingItemCreate = ({
                 })
                 .catch((error) => {
                     console.log(error);
+                    dispatch({ type: CLOTHING_ITEM_IMAGE_UPLOAD_FAIL });
                 });
     };
 };
