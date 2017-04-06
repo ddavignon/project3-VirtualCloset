@@ -1,0 +1,6 @@
+python-amazon-simple-product-api
+boto3
+sudo easy_install --upgrade distribute
+flask-ask
+flask-email
+clarifai

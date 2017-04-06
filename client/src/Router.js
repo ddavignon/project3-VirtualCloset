@@ -7,9 +7,14 @@ import ClothingItemEdit from './components/ClothingItemEdit';
 
 const RouterComponent = () => {
     return (
-        <Router sceneStyle={{ paddingTop: 55 }}>
-            <Scene key="auth">
-                <Scene key="login" component={LoginForm} title="Please Login" />
+        <Router sceneStyle={{ paddingTop: 50 }} >
+            <Scene key="auth" >
+                <Scene
+                    key="login"
+                    component={LoginForm}
+                    title="Please Login"
+                    navigationBarStyle={styles.viewStyle}
+                />
             </Scene>
 
             <Scene key="main">
@@ -20,20 +25,35 @@ const RouterComponent = () => {
                     component={ClosetList}
                     title="My Closet"
                     initial
+                    navigationBarStyle={styles.viewStyle}
                 />
                 <Scene
                     key="clothingItemCreate"
                     component={ClothingItemCreate}
                     title="Upload Image"
+                    navigationBarStyle={styles.viewStyle}
                 />
                 <Scene
                     key="clothingItemEdit"
                     component={ClothingItemEdit}
                     title="Edit Item"
+                    navigationBarStyle={styles.viewStyle}
                 />
             </Scene>
         </Router>
     );
+};
+
+const styles = {
+    viewStyle: {
+        backgroundColor: '#00BCD4', // 'rgb(0,188,212)',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+    },
+    textStyle: {
+        fontSize: 20,
+        color: '#FFF'
+    }
 };
 
 export default RouterComponent;

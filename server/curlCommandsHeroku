@@ -1,0 +1,4 @@
+curl -i -X GET 'https://mighty-chamber-19968.herokuapp.com/virtual/api/v1.0/closet?lat=40.741895&lng=-73.989308&user_id=tester@yahoo.com'
+curl -i -X POST  -F image_data=@/home/ubuntu/workspace/projectSE/server/images/hello.jpg -F color=red -F description="red t-shirt" -F style="cool style" -F name=someName   -F type_clothing=shirt -F  email=tester@yahoo.com -F info=imageUpload   "https://mighty-chamber-19968.herokuapp.com/virtual/api/v1.0/confirmation"
+curl -H "Content-Type: application/json" -X POST -d '{"email":"tester@yahoo.com","password":"xyz","phoneNumber":"209-333-3333","closetName":"myCloset"}' https://mighty-chamber-19968.herokuapp.com/virtual/api/v1.0/signUp
+ curl -i -X GET 'https://mighty-chamber-19968.herokuapp.com/virtual/api/v1.0/styles?user_id=tester@yahoo.com'
