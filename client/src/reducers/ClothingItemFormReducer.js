@@ -4,7 +4,8 @@ import {
     CLOTHING_ITEM_SELECTED,
     CLOTHING_ITEM_INFO_SUCCESS,
     CLOTHING_ITEM_INFO_FAIL,
-    CLOTHING_ITEM_IMAGE_UPLOAD
+    CLOTHING_ITEM_IMAGE_UPLOAD,
+    CLOTHING_ITEM_IMAGE_UPLOAD_FAIL
 } from '../actions/types';
 
 const INTIAL_STATE = {
@@ -24,6 +25,8 @@ export default (state = INTIAL_STATE, action) => {
             return { ...state, [action.payload.prop]: action.payload.value };
         case CLOTHING_ITEM_IMAGE_UPLOAD:
             return { ...state, loading: true };
+        case CLOTHING_ITEM_IMAGE_UPLOAD_FAIL:
+            return { ...state, loading: false };
         case CLOTHING_ITEM_SELECTED:
             return { ...state,
                 loading: true,

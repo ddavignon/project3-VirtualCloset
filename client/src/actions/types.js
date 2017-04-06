@@ -10,3 +10,4 @@ export const CLOTHING_ITEM_SELECTED = 'clothing_item_selected';
 export const CLOTHING_ITEM_INFO_SUCCESS = 'clothing_item_info_success';
 export const CLOTHING_ITEM_INFO_FAIL = 'clothing_item_info_fail';
 export const CLOTHING_ITEM_IMAGE_UPLOAD = 'clothing_item_image_upload';
+export const CLOTHING_ITEM_IMAGE_UPLOAD_FAIL = 'clothing_item_image_upload_fail';
