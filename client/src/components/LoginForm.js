@@ -67,11 +67,6 @@ class LoginForm extends Component {
          );
     }
 
-    onLoginButtonPress() {
-        const { email, password } = this.props;
-        this.props.loginUser({ email, password });
-    }
-
     onSignUpButtonPress() {
         const { email, password, phone_number, carrier } = this.props;
 
@@ -83,7 +78,15 @@ class LoginForm extends Component {
             this.props.registerUser({ email, password, phone_number, carrier });
           }
         }
+    }
 
+    onLoginButtonPress() {
+        const { email, password } = this.props;
+
+        if (this.state.showSignupFields === 'hide') {
+            this.props.loginUser({ email, password });
+        }
+        this.setState({ showSignupFields: 'hide' });
     }
 
     validateEmail(email) {
@@ -99,16 +102,6 @@ class LoginForm extends Component {
     validatePassword(password) {
       const passwordRe = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
       return passwordRe.test(password);
-    }
-
-
-    onLoginButtonPress() {
-        const { email, password } = this.props;
-
-        if (this.state.showSignupFields === 'hide') {
-            this.props.loginUser({ email, password });
-        }
-        this.setState({ showSignupFields: 'hide' });
     }
 
     renderSIgnupFields() {
