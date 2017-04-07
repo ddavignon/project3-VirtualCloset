@@ -205,6 +205,25 @@ class ClosetList extends Component {
         );
     }
 
+    renderButtons() {
+        if (this.state.getAllClothes) {
+            return (
+                <View style={{ flex: 1 }}>
+                    <Button onPress={this.getWeatherClothes.bind(this)}>
+                        Get Clothes for Weather!
+                    </Button>
+                </View>
+            );
+        }
+        return (
+            <View style={{ flex: 1 }}>
+                <Button onPress={this.getAllClothes.bind(this)}>
+                    Get All Clothes
+                </Button>
+            </View>
+        );
+    }
+
     render() {
         const {
             container,
@@ -233,12 +252,7 @@ class ClosetList extends Component {
                 </ScrollView>
                 <CardSection>
                     <View style={avatarStyle.containerStyle}>
-                        <Button onPress={this.getAllClothes.bind(this)}>
-                            Get All Clothes
-                        </Button>
-                        <Button onPress={this.getWeatherClothes.bind(this)}>
-                            Get Clothes for Weather!
-                        </Button>
+                        {this.renderButtons()}
                         <Image
                             style={{ width: 75, height: 75 }}
                             source={{ uri: 'https://9to5mac.files.wordpress.com/2015/09/face-yellow-loop-60-emoji.gif' }}
