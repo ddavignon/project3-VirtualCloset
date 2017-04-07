@@ -48,7 +48,7 @@ export default StyleSheet.create({
         textAlign: 'center'
     },
     slider: {
-        marginBottom: 30
+        marginBottom: 10
     },
     sliderContainer: {
     }

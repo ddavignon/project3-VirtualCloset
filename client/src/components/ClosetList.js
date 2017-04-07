@@ -186,22 +186,20 @@ class ClosetList extends Component {
     renderItems(items) {
         return (
             <Carousel
-              sliderWidth={sliderWidth}
-              itemWidth={itemWidth}
-              inactiveSlideScale={1}
-              inactiveSlideOpacity={1}
-              enableMomentum={true}
-              autoplay={false}
-              autoplayDelay={500}
-              autoplayInterval={2500}
-              containerCustomStyle={styles.slider}
-              contentContainerCustomStyle={styles.sliderContainer}
-              showsHorizontalScrollIndicator={false}
-              snapOnAndroid={true}
-              removeClippedSubviews={false}
-              >
-                  { this.getSlides(items) }
-              </Carousel>
+                sliderWidth={sliderWidth}
+                itemWidth={itemWidth}
+                firstItem={1}
+                inactiveSlideScale={1}
+                inactiveSlideOpacity={1}
+                enableMomentum={false}
+                containerCustomStyle={styles.slider}
+                contentContainerCustomStyle={styles.sliderContainer}
+                showsHorizontalScrollIndicator={false}
+                snapOnAndroid
+                removeClippedSubviews={false}
+            >
+                { this.getSlides(items) }
+            </Carousel>
         );
     }
 
