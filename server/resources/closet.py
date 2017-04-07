@@ -38,3 +38,4 @@ class ClosetList(Resource):
     @jwt_required()
     def get(self):
         return {'closets': [closet.json() for closet in ClosetModel.query.filter_by(user_id=current_identity.id).all()]}
+    

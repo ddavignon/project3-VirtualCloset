@@ -156,9 +156,20 @@ class ItemList(Resource):
         closet = ClosetModel.find_by_uid(current_identity.id).json()
         print get_style
         return {
+            'weather':today,
             'shirts': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='shirt').filter_by(closet_id=closet['_id']).all()],
             'pants': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='pants').filter_by(closet_id=closet['_id']).all()],
             'shoes': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='shoes').filter_by(closet_id=closet['_id']).all()],
             'accessories': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='accessories').filter_by(closet_id=closet['_id']).all()],
             'outerwear': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='outerwear').filter_by(closet_id=closet['_id']).all()],
         }
+        
+class TextList(Resource):
+     @jwt_required()
+     def get(self):
+        closet = ClosetModel.find_by_uid(current_identity.id)
+        print closet
+        if closet:
+            return closet.json()
+         
+         

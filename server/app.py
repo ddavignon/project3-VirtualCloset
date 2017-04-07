@@ -13,7 +13,7 @@ from flask_jwt import JWT
 
 from security import authenticate, identity
 from resources.user import UserRegister
-from resources.item import Item, ItemList
+from resources.item import Item, ItemList,TextList
 from resources.closet import Closet, ClosetList
 
 from email.MIMEMultipart import MIMEMultipart
@@ -45,7 +45,7 @@ api.add_resource(Item, '/item/<string:name>')
 api.add_resource(ClosetList, '/closets')
 api.add_resource(ItemList, '/items')
 api.add_resource(UserRegister, '/register')
-
+api.add_resource(TextList,'/text')
 #####################################################################################
 # MIGRATIONS BELOW
 #####################################################################################
