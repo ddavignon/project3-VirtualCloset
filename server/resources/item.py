@@ -167,9 +167,10 @@ class ItemList(Resource):
 class TextList(Resource):
      @jwt_required()
      def get(self):
-        closet = ClosetModel.find_by_uid(current_identity.id)
+        closet = ClosetModel.query.filter_by(user_id=current_identity.id).all()
         print closet
         if closet:
             return closet.json()
+        return 401
          
          
