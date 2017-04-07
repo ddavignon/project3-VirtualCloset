@@ -26,11 +26,16 @@ class ClosetList extends Component {
         accessoriesItems: [],
         outerwearItems: [],
         allClosetItems: [],
+        getAllClothes: false,
         latitudePosition: '37.4829525',
         longitudePosition: '-122.1480473',
     };
 
     componentWillMount() {
+        this.getWeatherClothes();
+    }
+
+    getWeatherClothes() {
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitudePosition: JSON.stringify(position.coords.latitude),
@@ -42,7 +47,6 @@ class ClosetList extends Component {
             timeout: 20000,
             maximumAge: 1000
         });
-
         axios.get(GET_CLOTHING_ITEMS, { 
             headers: {
                 'Authorization': 'JWT ' + this.props.token
@@ -65,7 +69,10 @@ class ClosetList extends Component {
         .catch((err) => {
             console.log(err);
         });
+        this.setState({ getAllClothes: false });
+    }
 
+    getAllClothes() {
         axios.get(GET_ALL_CLOTHING_ITEMS.concat(this.props.user), { 
             headers: {
                 'Authorization': 'JWT ' + this.props.token
@@ -73,13 +80,48 @@ class ClosetList extends Component {
         })
         .then((response) => {
             console.log(response);
+
+            const shirts = [];
+            const pants = [];
+            const shoes = [];
+            const accessories = [];
+            const outerwear = [];
+
+            response.data.items.map(item => {
+                switch (item.type_clothing) {
+                    case 'shirt':
+                        shirts.push(item);
+                        break;
+                    case 'pants':
+                        pants.push(item);
+                        break;
+                    case 'shoes':
+                        shoes.push(item);
+                        break;
+                    case 'accessories':
+                        accessories.push(item);
+                        break;
+                    case 'outerwear ':
+                        outerwear.push(item);
+                        break;
+                    default:
+                        console.log('no clothes!');
+                }
+                return null;
+            });
             this.setState({ 
-                allClosetItems: response.data.items, 
+                shirtItems: shirts,
+                pantsItems: pants,
+                shoesItems: shoes,
+                accessoriesItems: accessories,
+                outerwearItems: outerwear, 
+                allClosetItems: response.data.items,
             });
         })
         .catch((err) => {
             console.log(err);
         });
+        this.setState({ getAllClothes: true });
     }
 
     getSlides(entries) {
@@ -144,22 +186,39 @@ class ClosetList extends Component {
     renderItems(items) {
         return (
             <Carousel
-              sliderWidth={sliderWidth}
-              itemWidth={itemWidth}
-              inactiveSlideScale={1}
-              inactiveSlideOpacity={1}
-              enableMomentum={true}
-              autoplay={false}
-              autoplayDelay={500}
-              autoplayInterval={2500}
-              containerCustomStyle={styles.slider}
-              contentContainerCustomStyle={styles.sliderContainer}
-              showsHorizontalScrollIndicator={false}
-              snapOnAndroid={true}
-              removeClippedSubviews={false}
-              >
-                  { this.getSlides(items) }
-              </Carousel>
+                sliderWidth={sliderWidth}
+                itemWidth={itemWidth}
+                firstItem={1}
+                inactiveSlideScale={1}
+                inactiveSlideOpacity={1}
+                enableMomentum={false}
+                containerCustomStyle={styles.slider}
+                contentContainerCustomStyle={styles.sliderContainer}
+                showsHorizontalScrollIndicator={false}
+                snapOnAndroid
+                removeClippedSubviews={false}
+            >
+                { this.getSlides(items) }
+            </Carousel>
+        );
+    }
+
+    renderButtons() {
+        if (this.state.getAllClothes) {
+            return (
+                <View style={{ flex: 1 }}>
+                    <Button onPress={this.getWeatherClothes.bind(this)}>
+                        Get Clothes for Weather!
+                    </Button>
+                </View>
+            );
+        }
+        return (
+            <View style={{ flex: 1 }}>
+                <Button onPress={this.getAllClothes.bind(this)}>
+                    Get All Clothes
+                </Button>
+            </View>
         );
     }
 
@@ -191,13 +250,16 @@ class ClosetList extends Component {
                 </ScrollView>
                 <CardSection>
                     <View style={avatarStyle.containerStyle}>
-                        <Button>
-                            Does Nothing
-                        </Button>
+                        {this.renderButtons()}
                         <Image
                             style={{ width: 75, height: 75 }}
                             source={{ uri: 'https://9to5mac.files.wordpress.com/2015/09/face-yellow-loop-60-emoji.gif' }}
                         />
+                        <View style={{ flex: 1 }}>
+                            <Button>
+                                Send Clothes! (Not working)
+                            </Button>
+                        </View>
                     </View>
                 </CardSection>
             </View>
