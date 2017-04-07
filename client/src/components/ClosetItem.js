@@ -7,13 +7,15 @@ class ClosetItem extends Component {
 
     static propTypes = {
         description: PropTypes.string.isRequired,
+        _id: PropTypes.number,
         style: PropTypes.string,
         url_path: PropTypes.string,
         even: PropTypes.bool
     };
 
     render() {
-        const { description, style, url_path, even } = this.props;
+        console.log(this.props);
+        const { description, _id, style, url_path, even } = this.props;
 
         const uppercaseTitle = description ? (
             <Text style={[styles.title, even ? styles.titleEven : {}]} numberOfLines={2}>{ description.toUpperCase() }</Text>
@@ -23,7 +25,7 @@ class ClosetItem extends Component {
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.slideInnerContainer}
-              onPress={() => { alert(`You've clicked '${description}'`); }}
+              onPress={() => { alert(`You've clicked '${_id}'`); }}
               >
                 <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
                     <Image
@@ -34,7 +36,7 @@ class ClosetItem extends Component {
                 </View>
                 <View style={[styles.textContainer, even ? styles.textContainerEven : {}]}>
                     { uppercaseTitle }
-                    <Text style={[styles.style, even ? styles.subtitleEven : {}]} numberOfLines={2}>{ style }</Text>
+                    <Text style={[styles.style, even ? styles.subtitleEven : {}]} numberOfLines={2}>{_id}: {style}</Text>
                 </View>
             </TouchableOpacity>
         );

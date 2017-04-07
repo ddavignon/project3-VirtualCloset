@@ -257,6 +257,11 @@ class ClosetList extends Component {
                             style={{ width: 75, height: 75 }}
                             source={{ uri: 'https://9to5mac.files.wordpress.com/2015/09/face-yellow-loop-60-emoji.gif' }}
                         />
+                        <View style={{ flex: 1 }}>
+                            <Button>
+                                Send Clothes! (Not working)
+                            </Button>
+                        </View>
                     </View>
                 </CardSection>
             </View>
