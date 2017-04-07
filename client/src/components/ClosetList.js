@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
-  Text,
-  ScrollView,
-  View
+    View,
+    ScrollView,
+    Text,
+    Image 
 } from 'react-native';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { GET_CLOTHING_ITEMS } from '../api/constants';
+import {
+    GET_CLOTHING_ITEMS,
+    GET_ALL_CLOTHING_ITEMS
+} from '../api/constants';
+import Carousel from 'react-native-snap-carousel';
 import ClosetItem from './ClosetItem';
+import { CardSection, Card, Button } from './common';
+import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
+import styles from '../styles/index.style';
 
 class ClosetList extends Component {
     state = {
@@ -18,12 +25,18 @@ class ClosetList extends Component {
         shoesItems: [],
         accessoriesItems: [],
         outerwearItems: [],
+        allClosetItems: [],
+        getAllClothes: false,
         latitudePosition: '37.4829525',
         longitudePosition: '-122.1480473',
     };
 
     componentWillMount() {
-        navigator.geolocation.getCurrentPosition( (position) => {
+        this.getWeatherClothes();
+    }
+
+    getWeatherClothes() {
+        navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitudePosition: JSON.stringify(position.coords.latitude),
                 longitudePosition: JSON.stringify(position.coords.longitude)
@@ -34,7 +47,6 @@ class ClosetList extends Component {
             timeout: 20000,
             maximumAge: 1000
         });
-
         axios.get(GET_CLOTHING_ITEMS, { 
             headers: {
                 'Authorization': 'JWT ' + this.props.token
@@ -57,67 +69,217 @@ class ClosetList extends Component {
         .catch((err) => {
             console.log(err);
         });
+        this.setState({ getAllClothes: false });
     }
+
+    getAllClothes() {
+        axios.get(GET_ALL_CLOTHING_ITEMS.concat(this.props.user), { 
+            headers: {
+                'Authorization': 'JWT ' + this.props.token
+            }
+        })
+        .then((response) => {
+            console.log(response);
+
+            const shirts = [];
+            const pants = [];
+            const shoes = [];
+            const accessories = [];
+            const outerwear = [];
+
+            response.data.items.map(item => {
+                switch (item.type_clothing) {
+                    case 'shirt':
+                        shirts.push(item);
+                        break;
+                    case 'pants':
+                        pants.push(item);
+                        break;
+                    case 'shoes':
+                        shoes.push(item);
+                        break;
+                    case 'accessories':
+                        accessories.push(item);
+                        break;
+                    case 'outerwear ':
+                        outerwear.push(item);
+                        break;
+                    default:
+                        console.log('no clothes!');
+                }
+                return null;
+            });
+            this.setState({ 
+                shirtItems: shirts,
+                pantsItems: pants,
+                shoesItems: shoes,
+                accessoriesItems: accessories,
+                outerwearItems: outerwear, 
+                allClosetItems: response.data.items,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+        this.setState({ getAllClothes: true });
+    }
+
+    getSlides(entries) {
+        if (!entries) {
+            return false;
+        }
+        return entries.map((entry, index) => {
+            return (
+                <ClosetItem
+                  key={`carousel-entry-${index}`}
+                  even={(index + 1) % 2 === 0}
+                  {...entry}
+                />
+            );
+        });
+    }
+
+    /*// no momentum scal opacity
+    get example1() {
+        return (
+            <Carousel
+              sliderWidth={sliderWidth}
+              itemWidth={itemWidth}
+              firstItem={1}
+              inactiveSlideScale={0.94}
+              inactiveSlideOpacity={0.6}
+              enableMomentum={false}
+              containerCustomStyle={styles.slider}
+              contentContainerCustomStyle={styles.sliderContainer}
+              showsHorizontalScrollIndicator={false}
+              snapOnAndroid={true}
+              removeClippedSubviews={false}
+            >
+                { this.getSlides(ENTRIES1) }
+            </Carousel>
+        );
+    }
+
+    // momenteum / autoplay
+    get example2(items) {
+        return (
+            <Carousel
+              sliderWidth={sliderWidth}
+              itemWidth={itemWidth}
+              inactiveSlideScale={1}
+              inactiveSlideOpacity={1}
+              enableMomentum={true}
+              autoplay={true}
+              autoplayDelay={500}
+              autoplayInterval={2500}
+              containerCustomStyle={styles.slider}
+              contentContainerCustomStyle={styles.sliderContainer}
+              showsHorizontalScrollIndicator={false}
+              snapOnAndroid={true}
+              removeClippedSubviews={false}
+              >
+                  { this.getSlides(items) }
+              </Carousel>
+        );
+    }*/
 
     renderItems(items) {
         return (
-            <View style={{ height: 150 }}>
-                <ScrollView 
-                    automaticallyAdjustContentInsets={false}
-                    horizontal
-                    onScroll={() => { console.log('onScroll!'); }}
-                    scrollEventThrottle={200}
-                >
-                    {items.map(item => 
-                        <ClosetItem
-                            key={item._id}
-                            uri={item.url_path}
-                            item={item} 
-                        />
-                    )}
-                </ScrollView>
+            <Carousel
+                sliderWidth={sliderWidth}
+                itemWidth={itemWidth}
+                firstItem={1}
+                inactiveSlideScale={1}
+                inactiveSlideOpacity={1}
+                enableMomentum={false}
+                containerCustomStyle={styles.slider}
+                contentContainerCustomStyle={styles.sliderContainer}
+                showsHorizontalScrollIndicator={false}
+                snapOnAndroid
+                removeClippedSubviews={false}
+            >
+                { this.getSlides(items) }
+            </Carousel>
+        );
+    }
+
+    renderButtons() {
+        if (this.state.getAllClothes) {
+            return (
+                <View style={{ flex: 1 }}>
+                    <Button onPress={this.getWeatherClothes.bind(this)}>
+                        Get Clothes for Weather!
+                    </Button>
+                </View>
+            );
+        }
+        return (
+            <View style={{ flex: 1 }}>
+                <Button onPress={this.getAllClothes.bind(this)}>
+                    Get All Clothes
+                </Button>
             </View>
-        );  
+        );
     }
 
     render() {
+        const {
+            container,
+            scrollview,
+            title,
+        } = styles;
         return (
-            <ScrollView>
-              <View style={styles.container}>
-                <View>
-                    <Text style={styles.welcome}>
-                        "Here's what I got to work with!"
-                    </Text>
-                </View>
-                {this.renderItems(this.state.shirtItems)}
-                {this.renderItems(this.state.pantsItems)}
-                {this.renderItems(this.state.shoesItems)}
-                {this.renderItems(this.state.outerwearItems)}
-                {this.renderItems(this.state.accessoriesItems)}
-              </View>
-            </ScrollView>
+            <View style={container}>
+                <ScrollView
+                  style={scrollview}
+                  indicatorStyle={'white'}
+                  scrollEventThrottle={200}
+                >
+                    <Text style={title}>Shirts</Text>
+                    {this.renderItems(this.state.shirtItems)}
+                    <Text style={title}>Pants</Text>
+                    {this.renderItems(this.state.pantsItems)}
+                    <Text style={title}>Shoes</Text>
+                    {this.renderItems(this.state.shoesItems)}
+                    <Text style={title}>Outerwear</Text>
+                    {this.renderItems(this.state.outerwearItems)}
+                    <Text style={title}>Accessories</Text>
+                    {this.renderItems(this.state.accessoriesItems)}
+                    <Text style={title}>All Items</Text>
+                    {this.renderItems(this.state.allClosetItems)}
+                </ScrollView>
+                <CardSection>
+                    <View style={avatarStyle.containerStyle}>
+                        {this.renderButtons()}
+                        <Image
+                            style={{ width: 75, height: 75 }}
+                            source={{ uri: 'https://9to5mac.files.wordpress.com/2015/09/face-yellow-loop-60-emoji.gif' }}
+                        />
+                        <View style={{ flex: 1 }}>
+                            <Button>
+                                Send Clothes! (Not working)
+                            </Button>
+                        </View>
+                    </View>
+                </CardSection>
+            </View>
         );
     }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  }
-});
+const avatarStyle = {
+    containerStyle: {
+        height: 75,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center'
+    }
+};
 
 const mapStateToProps = (state) => {
-    const { email, token } = state.auth;
-
-    return { email, token };
+    const { user, token } = state.auth;
+    
+    return { user, token };
 };
 
 export default connect(mapStateToProps, null)(ClosetList);
