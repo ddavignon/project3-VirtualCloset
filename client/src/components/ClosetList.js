@@ -42,14 +42,17 @@ class ClosetList extends Component {
             timeout: 20000,
             maximumAge: 1000
         });
+        this.getWeatherClothes(this.state.latitudePosition, this.state.longitudePosition);
+    }
 
+    getWeatherClothes(lat, lng) {
         axios.get(GET_CLOTHING_ITEMS, { 
             headers: {
                 'Authorization': 'JWT ' + this.props.token
             },
             params: {
-                lat: this.state.latitudePosition,
-                lng: this.state.longitudePosition
+                lat,
+                lng
             }
         })
         .then((response) => {
@@ -65,7 +68,9 @@ class ClosetList extends Component {
         .catch((err) => {
             console.log(err);
         });
+    }
 
+    getAllClothes() {
         axios.get(GET_ALL_CLOTHING_ITEMS.concat(this.props.user), { 
             headers: {
                 'Authorization': 'JWT ' + this.props.token
@@ -73,8 +78,42 @@ class ClosetList extends Component {
         })
         .then((response) => {
             console.log(response);
+
+            const shirts = [];
+            const pants = [];
+            const shoes = [];
+            const accessories = [];
+            const outerwear = [];
+
+            response.data.items.map(item => {
+                switch (item.type_clothing) {
+                    case 'shirt':
+                        shirts.push(item);
+                        break;
+                    case 'pants':
+                        pants.push(item);
+                        break;
+                    case 'shoes':
+                        shoes.push(item);
+                        break;
+                    case 'accessories':
+                        accessories.push(item);
+                        break;
+                    case 'outerwear ':
+                        outerwear.push(item);
+                        break;
+                    default:
+                        console.log('no clothes!');
+                }
+                return null;
+            });
             this.setState({ 
-                allClosetItems: response.data.items, 
+                shirtItems: shirts,
+                pantsItems: pants,
+                shoesItems: shoes,
+                accessoriesItems: accessories,
+                outerwearItems: outerwear, 
+                allClosetItems: response.data.items,
             });
         })
         .catch((err) => {
@@ -191,8 +230,8 @@ class ClosetList extends Component {
                 </ScrollView>
                 <CardSection>
                     <View style={avatarStyle.containerStyle}>
-                        <Button>
-                            Does Nothing
+                        <Button onPress={this.getAllClothes.bind(this)}>
+                            Get All Clothes
                         </Button>
                         <Image
                             style={{ width: 75, height: 75 }}
