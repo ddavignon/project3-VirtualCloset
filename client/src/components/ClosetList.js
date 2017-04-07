@@ -26,11 +26,16 @@ class ClosetList extends Component {
         accessoriesItems: [],
         outerwearItems: [],
         allClosetItems: [],
+        getAllClothes: false,
         latitudePosition: '37.4829525',
         longitudePosition: '-122.1480473',
     };
 
     componentWillMount() {
+        this.getWeatherClothes();
+    }
+
+    getWeatherClothes() {
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitudePosition: JSON.stringify(position.coords.latitude),
@@ -42,17 +47,13 @@ class ClosetList extends Component {
             timeout: 20000,
             maximumAge: 1000
         });
-        this.getWeatherClothes(this.state.latitudePosition, this.state.longitudePosition);
-    }
-
-    getWeatherClothes(lat, lng) {
         axios.get(GET_CLOTHING_ITEMS, { 
             headers: {
                 'Authorization': 'JWT ' + this.props.token
             },
             params: {
-                lat,
-                lng
+                lat: this.state.latitudePosition,
+                lng: this.state.longitudePosition
             }
         })
         .then((response) => {
@@ -68,6 +69,7 @@ class ClosetList extends Component {
         .catch((err) => {
             console.log(err);
         });
+        this.setState({ getAllClothes: false });
     }
 
     getAllClothes() {
@@ -119,6 +121,7 @@ class ClosetList extends Component {
         .catch((err) => {
             console.log(err);
         });
+        this.setState({ getAllClothes: true });
     }
 
     getSlides(entries) {
@@ -232,6 +235,9 @@ class ClosetList extends Component {
                     <View style={avatarStyle.containerStyle}>
                         <Button onPress={this.getAllClothes.bind(this)}>
                             Get All Clothes
+                        </Button>
+                        <Button onPress={this.getWeatherClothes.bind(this)}>
+                            Get Clothes for Weather!
                         </Button>
                         <Image
                             style={{ width: 75, height: 75 }}
