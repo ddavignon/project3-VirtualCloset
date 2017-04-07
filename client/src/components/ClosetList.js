@@ -3,7 +3,7 @@ import {
     View,
     ScrollView,
     Text,
-    StatusBar 
+    Image 
 } from 'react-native';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -12,8 +12,9 @@ import {
     GET_ALL_CLOTHING_ITEMS
 } from '../api/constants';
 import Carousel from 'react-native-snap-carousel';
-import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import ClosetItem from './ClosetItem';
+import { CardSection, Card, Button } from './common';
+import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
 
 class ClosetList extends Component {
@@ -148,7 +149,7 @@ class ClosetList extends Component {
               inactiveSlideScale={1}
               inactiveSlideOpacity={1}
               enableMomentum={true}
-              autoplay={true}
+              autoplay={false}
               autoplayDelay={500}
               autoplayInterval={2500}
               containerCustomStyle={styles.slider}
@@ -165,36 +166,16 @@ class ClosetList extends Component {
     render() {
         const {
             container,
-            colorsContainer,
-            color1,
-            color2,
             scrollview,
             title,
-            subtitle,
         } = styles;
         return (
             <View style={container}>
-                <StatusBar
-                  translucent={true}
-                  backgroundColor={'rgba(0, 0, 0, 0.3)'}
-                  barStyle={'light-content'}
-                />
-                <View style={colorsContainer}>
-                    <View style={color1} />
-                    <View style={color2} />
-                </View>
                 <ScrollView
                   style={scrollview}
                   indicatorStyle={'white'}
                   scrollEventThrottle={200}
                 >
-                    {/*<Text style={title}>Example 1</Text>
-                    <Text style={subtitle}>No momentum | Scale | Opacity</Text>
-                    { this.example1 }
-                    <Text style={title}>Example 2</Text>
-                    <Text style={subtitle}>Momentum | Autoplay</Text>
-                    { this.example2 }*/}
-
                     <Text style={title}>Shirts</Text>
                     {this.renderItems(this.state.shirtItems)}
                     <Text style={title}>Pants</Text>
@@ -208,10 +189,30 @@ class ClosetList extends Component {
                     <Text style={title}>All Items</Text>
                     {this.renderItems(this.state.allClosetItems)}
                 </ScrollView>
+                <CardSection>
+                    <View style={avatarStyle.containerStyle}>
+                        <Button>
+                            Does Nothing
+                        </Button>
+                        <Image
+                            style={{ width: 75, height: 75 }}
+                            source={{ uri: 'https://9to5mac.files.wordpress.com/2015/09/face-yellow-loop-60-emoji.gif' }}
+                        />
+                    </View>
+                </CardSection>
             </View>
         );
     }
 }
+
+const avatarStyle = {
+    containerStyle: {
+        height: 75,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center'
+    }
+};
 
 const mapStateToProps = (state) => {
     const { user, token } = state.auth;
