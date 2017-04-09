@@ -79,6 +79,23 @@ class LoginForm extends Component {
       return passwordRe.test(password);
     }
 
+    async requestLocationPermission() {
+        try {
+             const granted = await PermissionsAndroid.request(
+             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+                'title': 'Cool Fashion App needs location Permission',
+                'message': 'Cool Fashion App needs access to your location so you can acces the weather.'
+             });
+             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                 this.getLocation();
+             } else {
+                 console.log('Location permission denied');
+             }
+        } catch (err) {
+             console.warn(err);
+        }
+     }
+
     renderSIgnupFields() {
         if (this.state.showSignupFields === 'show') {
             return (
@@ -119,24 +136,6 @@ class LoginForm extends Component {
         }
         return null;
     }
-
-    async requestLocationPermission() {
-        try {
-             const granted = await PermissionsAndroid.request(
-             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-             'title': 'Cool Fashion App needs location Permission',
-             'message': 'Cool Fashion App needs access to your location so you can acces the weather.'
-             }
-             )
-             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                 this.getLocation();
-             } else {
-                 console.log('Location permission denied')
-             }
-        } catch (err) {
-             console.warn(err);
-        }
-     }
 
     renderButton() {
         if (this.props.loading) {
