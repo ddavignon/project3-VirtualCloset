@@ -5,6 +5,15 @@ from werkzeug.utils import secure_filename
 
 import json, forecastio, os, boto3, random, string
 
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+from email.MIMEImage import MIMEImage
+import requests
+import smtplib
+from PIL import Image
+from StringIO import StringIO
+
+
 from models.item import ItemModel
 from models.closet import ClosetModel
 
@@ -139,6 +148,7 @@ class Item(Resource):
 class ItemList(Resource):
     @jwt_required()
     def get(self):
+        today = null
         # weatehr is assumed to be warm as of now if any errors
         dark_sky_key = os.getenv("DARK_SKY_KEY")
         get_style = 'warm'
@@ -156,9 +166,78 @@ class ItemList(Resource):
         closet = ClosetModel.find_by_uid(current_identity.id).json()
         print get_style
         return {
+            'weather':today,
             'shirts': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='shirt').filter_by(closet_id=closet['_id']).all()],
             'pants': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='pants').filter_by(closet_id=closet['_id']).all()],
             'shoes': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='shoes').filter_by(closet_id=closet['_id']).all()],
             'accessories': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='accessories').filter_by(closet_id=closet['_id']).all()],
             'outerwear': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='outerwear').filter_by(closet_id=closet['_id']).all()],
         }
+        
+class TextList(Resource):
+     @jwt_required()
+     def post(self):
+        provider=""
+        urls=request.get_json()
+        info =[closet.json() for closet in ClosetModel.query.filter_by(user_id=current_identity.id).all()]
+        if info:
+            provider = carrier(info[0]["carrier"])
+            phone = info [0]["phone_number"].replace("-","")
+            for i in urls["urls"]:
+                sendMessage(i,phone,provider)
+            return "Message has been sent"
+        return 401
+        
+def carrier(provider):
+         provider = provider.lower()
+         if "att" in provider:
+             return "@mms.att.net"
+         elif "tmobile" in provider:
+             return "@tmomail.net"
+         elif "sprint" in provider:
+             return "@page.nextel.com"
+         elif "verizon" in provider:
+             return "@vtext.com"
+             
+def sendMessage(url,number,carrier):
+            # Define these once; use them twice!
+    strFrom = 'virtualcloset100@gmail.com'
+    strTo = str(number)+carrier
+
+    # Create the root message and fill in the from, to, and subject headers
+    msgRoot = MIMEMultipart('related')
+    msgRoot['From'] = strFrom
+    msgRoot['To'] = strTo
+    msgRoot.preamble = 'This is a multi-part message in MIME format.'
+
+    # Encapsulate the plain and HTML versions of the message body in an
+    # 'alternative' part, so message agents can decide which they want to display.
+    msgAlternative = MIMEMultipart('alternative')
+    msgRoot.attach(msgAlternative)
+
+
+    # We reference the image in the IMG SRC attribute by the ID we give it below
+    msgText = MIMEText('<img src="cid:image1">', 'html')
+    msgAlternative.attach(msgText)
+    response = requests.get(url)
+    img = StringIO(response.content)
+    
+    print img
+    # This example assumes the image is in the current directory
+    msgImage = MIMEImage(img.getvalue())
+    
+
+    # Define the image's ID as referenced above
+    msgImage.add_header('Content-ID', '<image1>')
+    msgRoot.attach(msgImage)
+    
+    #start emailing
+    server = smtplib.SMTP( "smtp.gmail.com", 587 )
+    
+    # Send the email (this example assumes SMTP authentication is required)
+    server.starttls();
+    server.login( os.getenv('email'),os.getenv('password'))
+
+    server.sendmail(strFrom, strTo, msgRoot.as_string())
+    server.quit()
+         
