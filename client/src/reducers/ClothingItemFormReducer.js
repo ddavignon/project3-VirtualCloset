@@ -17,11 +17,11 @@ const INTIAL_STATE = {
     url_path: null,
     image_data: null,
     loading: false,
-    shirtUrl: '#',
-    pantsUrl: '#',
-    shoesUrl: '#',
-    outerwearUrl: '#',
-    accessoriesUrl: '#'
+    shirtUrl: '',
+    pantsUrl: '',
+    shoesUrl: '',
+    outerwearUrl: '',
+    accessoriesUrl: ''
 };
 
 export default (state = INTIAL_STATE, action) => {

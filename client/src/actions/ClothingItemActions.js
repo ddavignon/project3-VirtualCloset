@@ -16,6 +16,7 @@ import {
 
 
 export const clothingItemUpdate = ({ prop, value }) => {
+    console.log(prop, value);
     return {
         type: CLOTHING_ITEM_UPDATE,
         payload: { prop, value }

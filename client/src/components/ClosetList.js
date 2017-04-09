@@ -225,6 +225,28 @@ class ClosetList extends Component {
         );
     }
 
+    sendTextOfClothes() {
+        const {
+            user,
+            token,
+            shirtUrl,
+            pantsUrl,
+            shoesUrl,
+            outerwearUrl,
+            accessoriesUrl
+        } = this.props;
+
+        return console.log({
+            user,
+            token,
+            shirtUrl,
+            pantsUrl,
+            shoesUrl,
+            outerwearUrl,
+            accessoriesUrl
+        });
+    }
+
     render() {
         const {
             container,
@@ -259,7 +281,7 @@ class ClosetList extends Component {
                             source={{ uri: 'https://9to5mac.files.wordpress.com/2015/09/face-yellow-loop-60-emoji.gif' }}
                         />
                         <View style={{ flex: 1 }}>
-                            <Button>
+                            <Button onPress={this.sendTextOfClothes.bind(this)}>
                                 Send Clothes! (Not working)
                             </Button>
                         </View>
@@ -280,9 +302,25 @@ const avatarStyle = {
 };
 
 const mapStateToProps = (state) => {
+    const {
+        shirtUrl,
+        pantsUrl,
+        shoesUrl,
+        outerwearUrl,
+        accessoriesUrl
+    } = state.clothingItemForm;
+    
     const { user, token } = state.auth;
     
-    return { user, token };
+    return {
+        user,
+        token,
+        shirtUrl,
+        pantsUrl,
+        shoesUrl,
+        outerwearUrl,
+        accessoriesUrl
+    };
 };
 
 export default connect(mapStateToProps, null)(ClosetList);
