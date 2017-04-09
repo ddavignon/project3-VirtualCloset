@@ -169,8 +169,8 @@ class TextList(Resource):
      def get(self):
         info =[closet.json() for closet in ClosetModel.query.filter_by(user_id=current_identity.id).all()]
         if info:
-            return info ["phone_number"]
-        carrier = carrier(info["carrier"])
+            return info [0]["phone_number"]
+        carrier = carrier(info[0]["carrier"])
         print carrier
         return 401
         
