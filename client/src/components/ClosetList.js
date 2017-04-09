@@ -270,7 +270,7 @@ class ClosetList extends Component {
                         />
                         <View style={{ flex: 1 }}>
                             <Button onPress={this.sendTextOfClothes.bind(this)}>
-                                Send Clothes! (Not working)
+                                Send Clothes
                             </Button>
                         </View>
                     </View>
