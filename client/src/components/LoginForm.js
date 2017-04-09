@@ -37,10 +37,12 @@ class LoginForm extends Component {
     onSignUpButtonPress() {
         const { email, password, phone_number, carrier } = this.props;
         this.setState({ validationCheck: 0 });
+        var checkCount = 0;
         this.setState({ showSignupFields: 'show' });
         if (this.state.showSignupFields === 'show') {
           if (this.validateEmail(email)) {
-              this.setState({ validationCheck: 1 });
+              checkCount++;
+              this.setState({ validationCheck: checkCount });
           } else {
               Alert.alert(
                   'Error',
@@ -48,7 +50,8 @@ class LoginForm extends Component {
               );
           }
           if (this.validatePassword(password)) {
-              this.setState({ validationCheck: 2 });
+              checkCount++;
+              this.setState({ validationCheck: checkCount });
           } else {
               Alert.alert(
                   'Error',
@@ -57,7 +60,8 @@ class LoginForm extends Component {
               );
           }
           if (this.validatePhone(phone_number)) {
-              this.setState({ validationCheck: 3 });
+              checkCount++;
+              this.setState({ validationCheck: checkCount });
           } else {
               Alert.alert(
                   'Error',
