@@ -126,78 +126,9 @@ def get_test():
     print products
     return "hello"
 
-@app.route('/sendText',methods=['GET'])
-def sendText():
-    # Use sms gateway provided by mobile carrier:
-    # at&t:     number@mms.att.net
-    # t-mobile: number@tmomail.net
-    # verizon:  number@vtext.com
-    # sprint:   number@page.nextel.com
-    # Establish a secure session with gmail's outgoing SMTP server using your gmail account4
-    number=request.args.get('number')
-    server = smtplib.SMTP( "smtp.gmail.com", 587 )
 
-    server.starttls()
-    
-    server.login( os.getenv('email'), os.getenv('password') )
-
-    # Send text message through SMS gateway of destination number
-    server.sendmail( 'virtualcloset', str(number)+'@mms.att.net', 'hello' )
-    return "Success"
-    
-@app.route('/sendTextImage',methods=['GET'])
-def sendTextImage():
-    # Use sms gateway provided by mobile carrier:
-    # at&t:     number@mms.att.net
-    # t-mobile: number@tmomail.net
-    # verizon:  number@vtext.com
-    # sprint:   number@page.nextel.com
-    # Establish a secure session with gmail's outgoing SMTP server using your gmail account4
-    number=request.args.get('number')
-    img = request.args.get('url')
-       # Define these once; use them twice!
-    strFrom = 'virtualcloset100@gmail.com'
-    strTo = str(number)+'@mms.att.net'
-
-    # Create the root message and fill in the from, to, and subject headers
-    msgRoot = MIMEMultipart('related')
-    msgRoot['Subject'] = 'Virtual Closet'
-    msgRoot['From'] = strFrom
-    msgRoot['To'] = strTo
-    msgRoot.preamble = 'This is a multi-part message in MIME format.'
-
-    # Encapsulate the plain and HTML versions of the message body in an
-    # 'alternative' part, so message agents can decide which they want to display.
-    msgAlternative = MIMEMultipart('alternative')
-    msgRoot.attach(msgAlternative)
-
-    msgText = MIMEText('Here is a piece of clothing')
-    msgAlternative.attach(msgText)
-
-    # We reference the image in the IMG SRC attribute by the ID we give it below
-    msgText = MIMEText('<b>Some <i>HTML</i> text</b> and an image.<br><img src="cid:image1"><br>Nifty!', 'html')
-    msgAlternative.attach(msgText)
-    response = requests.get(img)
-    img = StringIO(response.content)
-    print img
-    # This example assumes the image is in the current directory
-    msgImage = MIMEImage(img.getvalue())
     
 
-    # Define the image's ID as referenced above
-    msgImage.add_header('Content-ID', '<image1>')
-    msgRoot.attach(msgImage)
-    
-    #start emailing
-    server = smtplib.SMTP( "smtp.gmail.com", 587 )
-    
-    # Send the email (this example assumes SMTP authentication is required)
-    server.starttls();
-    server.login( os.getenv('email'), os.getenv('password') )
-
-    server.sendmail(strFrom, strTo, msgRoot.as_string())
-    server.quit()
-    return "Success"
     
     
 

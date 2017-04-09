@@ -55,6 +55,27 @@ def sendToClarfai():
     #does take a little time
     #print file.mimetype_params
     return jsonify(data)
+    
+    
+    
+    @app.route('/sendText',methods=['GET'])
+def sendText():
+    # Use sms gateway provided by mobile carrier:
+    # at&t:     number@mms.att.net
+    # t-mobile: number@tmomail.net
+    # verizon:  number@vtext.com
+    # sprint:   number@page.nextel.com
+    # Establish a secure session with gmail's outgoing SMTP server using your gmail account4
+    number=request.args.get('number')
+    server = smtplib.SMTP( "smtp.gmail.com", 587 )
+
+    server.starttls()
+    
+    server.login( os.getenv('email'), os.getenv('password') )
+
+    # Send text message through SMS gateway of destination number
+    server.sendmail( 'virtualcloset', str(number)+'@mms.att.net', 'hello' )
+    return "Success"
 
 ''''''
 
