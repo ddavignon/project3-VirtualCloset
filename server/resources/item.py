@@ -148,7 +148,7 @@ class Item(Resource):
 class ItemList(Resource):
     @jwt_required()
     def get(self):
-        today = null
+        today = None
         # weatehr is assumed to be warm as of now if any errors
         dark_sky_key = os.getenv("DARK_SKY_KEY")
         get_style = 'warm'

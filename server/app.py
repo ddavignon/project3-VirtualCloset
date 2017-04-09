@@ -81,7 +81,7 @@ def yes_intent():
 
 @ask.intent("NoIntent")
 def no_intent():
-    message = "Have good then."
+    message = "Have a good day then Big Daddy Richard."
     return statement(message)
 
 @app.route('/')
