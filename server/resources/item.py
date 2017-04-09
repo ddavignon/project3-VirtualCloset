@@ -206,7 +206,6 @@ def sendMessage(url,number,carrier):
 
     # Create the root message and fill in the from, to, and subject headers
     msgRoot = MIMEMultipart('related')
-    msgRoot['Subject'] = 'Virtual Closet'
     msgRoot['From'] = strFrom
     msgRoot['To'] = strTo
     msgRoot.preamble = 'This is a multi-part message in MIME format.'
