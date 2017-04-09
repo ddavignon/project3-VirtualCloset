@@ -83,7 +83,6 @@ class LoginForm extends Component {
             this.props.registerUser({ email, password, phone_number, carrier });
           }
         }
-
     }
 
     validateEmail(email) {
