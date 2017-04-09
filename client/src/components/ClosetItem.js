@@ -23,19 +23,14 @@ class ClosetItem extends Component {
     }
 
     setClothesIndexUrl(type_clothing, url_path) {
-        
-        console.log(type_clothing, url_path);
-
         switch (type_clothing) {
             case 'shirt':
-                console.log('shirts!!!!!');
                 this.props.clothingItemUpdate({ prop: 'shirtUrl', value: url_path });
                 break;
             case 'pants':
                 this.props.clothingItemUpdate({ prop: 'pantsUrl', value: url_path });
                 break;
             case 'shoes':
-                console.log('shoes!!!!!');
                 this.props.clothingItemUpdate({ prop: 'shoesUrl', value: url_path });
                 break;
             case 'accessories':
