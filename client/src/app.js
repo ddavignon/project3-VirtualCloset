@@ -1,26 +1,14 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import firebase from 'firebase';
 import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import Router from './Router';
 
-class App extends Component {
-    componentWillMount() {
-          // Initialize Firebase
-        const config = {
-            apiKey: 'AIzaSyDRztFHenjoHF-C5mBi0DLHEPQeFM9_ibE',
-            authDomain: 'virtualcloset-8b936.firebaseapp.com',
-            databaseURL: 'https://virtualcloset-8b936.firebaseio.com',
-            storageBucket: 'virtualcloset-8b936.appspot.com',
-            messagingSenderId: '143904369045'
-        };
-        firebase.initializeApp(config);
-    }
+const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));   
 
+class App extends Component {
     render() {
-        const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
         return (
             <Provider store={store}>
                 <Router />

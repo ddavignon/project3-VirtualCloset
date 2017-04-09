@@ -28,7 +28,7 @@ export default StyleSheet.create({
     },
     scrollview: {
         flex: 1,
-        paddingTop: 50
+        paddingTop: 15
     },
     title: {
         marginTop: 15,
@@ -48,7 +48,7 @@ export default StyleSheet.create({
         textAlign: 'center'
     },
     slider: {
-        marginBottom: 30
+        marginBottom: 10
     },
     sliderContainer: {
     }
