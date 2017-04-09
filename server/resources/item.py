@@ -166,14 +166,14 @@ class ItemList(Resource):
         
 class TextList(Resource):
      @jwt_required()
-     def get(self):
+     def post(self):
         urls=request.get_json()
         info =[closet.json() for closet in ClosetModel.query.filter_by(user_id=current_identity.id).all()]
         if info:
             return urls
-        carrier = carrier(info[0]["carrier"])
-        phone = info [0]["phone_number"].replace("-","")
-        print carrier
+            carrier = carrier(info[0]["carrier"])
+            phone = info [0]["phone_number"].replace("-","")
+            print carrier
         return 401
         
 def carrier(provider):
