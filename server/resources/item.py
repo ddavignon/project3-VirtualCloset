@@ -191,13 +191,13 @@ class TextList(Resource):
 def carrier(provider):
          provider = provider.lower()
          if "att" in provider:
-             return "number@mms.att.net"
+             return "@mms.att.net"
          elif "tmobile" in provider:
-             return "number@tmomail.net"
+             return "@tmomail.net"
          elif "sprint" in provider:
-             return "number@page.nextel.com"
+             return "@page.nextel.com"
          elif "verizon" in provider:
-             return "number@vtext.com"
+             return "@vtext.com"
              
 def sendMessage(url,number,carrier):
             # Define these once; use them twice!
