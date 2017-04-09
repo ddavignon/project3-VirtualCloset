@@ -1,6 +1,8 @@
 
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { clothingItemUpdate } from '../actions';
 import styles from '../styles/SliderEntry.style';
 
 class ClosetItem extends Component {
@@ -15,7 +17,39 @@ class ClosetItem extends Component {
 
     render() {
         console.log(this.props);
-        const { description, _id, style, url_path, even } = this.props;
+        const { 
+            description,
+            _id, 
+            style,
+            url_path,
+            even,
+            shirtUrl,
+            pantsUrl,
+            shoesUrl,
+            outerwearUrl,
+            accessoriesUrl
+
+        } = this.props;
+        
+        switch (style) {
+            case 'shirt':
+                this.props.clothingItemUpdate({ prop: shirtUrl, url_path });
+                break;
+            case 'pants':
+                this.props.clothingItemUpdate({ prop: pantsUrl, url_path });
+                break;
+            case 'shoes':
+                this.props.clothingItemUpdate({ prop: shoesUrl, url_path });
+                break;
+            case 'accessories':
+                this.props.clothingItemUpdate({ prop: outerwearUrl, url_path });
+                break;
+            case 'outerwear ':
+                this.props.clothingItemUpdate({ prop: accessoriesUrl, url_path });
+                break;
+            default:
+                console.log('no clothes!');
+        }
 
         const uppercaseTitle = description ? (
             <Text style={[styles.title, even ? styles.titleEven : {}]} numberOfLines={2}>{ description.toUpperCase() }</Text>
@@ -42,5 +76,22 @@ class ClosetItem extends Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    const {
+        shirtUrl,
+        pantsUrl,
+        shoesUrl,
+        outerwearUrl,
+        accessoriesUrl
+    } = state.clothingItemForm;
 
-export default ClosetItem;
+    return {
+        shirtUrl,
+        pantsUrl,
+        shoesUrl,
+        outerwearUrl,
+        accessoriesUrl
+    };
+};
+
+export default connect(mapStateToProps, { clothingItemUpdate })(ClosetItem);

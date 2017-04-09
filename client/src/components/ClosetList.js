@@ -47,6 +47,8 @@ class ClosetList extends Component {
             timeout: 20000,
             maximumAge: 1000
         });
+
+        console.log(this.state.latitudePosition, this.state.longitudePosition);
         axios.get(GET_CLOTHING_ITEMS, { 
             headers: {
                 'Authorization': 'JWT ' + this.props.token
@@ -197,6 +199,7 @@ class ClosetList extends Component {
                 showsHorizontalScrollIndicator={false}
                 snapOnAndroid
                 removeClippedSubviews={false}
+                onSnapToItem={value => console.log(value)}
             >
                 { this.getSlides(items) }
             </Carousel>
