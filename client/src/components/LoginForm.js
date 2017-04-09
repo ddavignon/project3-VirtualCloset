@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Picker } from 'react-native';
+import { Text, View, Picker, Platform, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import {
     loginTextFieldUpdate,
@@ -24,47 +24,6 @@ class LoginForm extends Component {
             //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
             this.setState({ locationPermission: response });
         });
-        navigator.geolocation.getCurrentPosition((position) => {
-         this.setState({
-                       latitudePosition: JSON.stringify(position.coords.latitude),
-                       longitudePosition: JSON.stringify(position.coords.longitude)
-                       });
-         },
-         (error) => {
-            console.log(error);
-          //    if(Platform.OS === 'android'){
-          //    async function requestCameraPermission() {
-          //    try {
-          //    const granted = await PermissionsAndroid.request(
-          //         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-          //         'title': 'Cool Fashion App needs location Permission',
-          //         'message': 'Cool Fashion App needs access to your location ' + 'so you can acces the weather.'
-          //         }
-          //         )
-          //    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          //    navigator.geolocation.getCurrentPosition( (position) => {
-          //         this.setState({
-          //                       latitudePosition:JSON.stringify(position['coords']['latitude']),
-          //                       longitudePosition:JSON.stringify(position['coords']['longitude'])
-          //                       });
-          //         },
-          //         (error) => alert(JSON.stringify(error)),{
-          //         enableHighAccuracy: true,
-          //         timeout: 20000,
-          //         maximumAge: 1000}
-          //         );
-          //    } else {
-          //    console.log("Location permission denied")
-          //    }
-          //    } catch (err) {
-          //    console.warn(err)
-          //    }
-          //  }
-         }, {
-         enableHighAccuracy: true,
-         timeout: 20000,
-         maximumAge: 1000 }
-         );
     }
 
     onSignUpButtonPress() {
@@ -87,6 +46,22 @@ class LoginForm extends Component {
             this.props.loginUser({ email, password });
         }
         this.setState({ showSignupFields: 'hide' });
+    }
+
+    getLocation() {
+      navigator.geolocation.getCurrentPosition((position) => {
+       this.setState({
+                     latitudePosition: JSON.stringify(position.coords.latitude),
+                     longitudePosition: JSON.stringify(position.coords.longitude)
+                     });
+       },
+       (error) => {
+          console.log(error);
+       }, {
+       enableHighAccuracy: true,
+       timeout: 20000,
+       maximumAge: 1000 }
+       );
     }
 
     validateEmail(email) {
@@ -145,6 +120,24 @@ class LoginForm extends Component {
         return null;
     }
 
+    async requestLocationPermission() {
+        try {
+             const granted = await PermissionsAndroid.request(
+             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+             'title': 'Cool Fashion App needs location Permission',
+             'message': 'Cool Fashion App needs access to your location so you can acces the weather.'
+             }
+             )
+             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                 this.getLocation();
+             } else {
+                 console.log('Location permission denied')
+             }
+        } catch (err) {
+             console.warn(err);
+        }
+     }
+
     renderButton() {
         if (this.props.loading) {
             return (
@@ -174,6 +167,14 @@ class LoginForm extends Component {
     }
 
     render() {
+      if (this.state.locationPermission === 'authorized') {
+        this.getLocation();
+      } else {
+        if (Platform.OS === 'android') {
+        this.requestLocationPermission();
+        }
+      }
+
         return (
             <View>
                 <Card>
@@ -189,7 +190,7 @@ class LoginForm extends Component {
                         <Input
                             secureTextEntry
                             label="Password"
-                            placeholder="password"
+                            placeholder="P@5sword"
                             onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'password', value })}
                             value={this.props.password}
                         />
