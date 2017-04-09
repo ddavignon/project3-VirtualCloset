@@ -168,11 +168,21 @@ class TextList(Resource):
      @jwt_required()
      def get(self):
         info =[closet.json() for closet in ClosetModel.query.filter_by(user_id=current_identity.id).all()]
-     
-        #phone_number=closet["phone_number"]
-        #print phone_number
         if info:
-            return info
+            return info ["phone_number"]
+        carrier = carrier(info["carrier"])
+        print carrier
         return 401
+        
+def carrier(provider):
+         provider = provider.lower()
+         if "att" in provider:
+             return "number@mms.att.net"
+         elif "tmobile" in provider:
+             return "number@tmomail.net"
+         elif "sprint" in provider:
+             return "number@page.nextel.com"
+         elif "verizon" in provider:
+             return "number@vtext.com"
          
          
