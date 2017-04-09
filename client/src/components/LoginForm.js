@@ -110,27 +110,6 @@ class LoginForm extends Component {
       return passwordRe.test(password);
     }
 
-    validationAlert(errorType) {
-        var alertMessage = '';
-        if (errorType === 'email') {
-            alertMessage = 'Email format: user@email.com';
-        } else if (errorType === 'password') {
-            alertMessage = 'Password must be more than 8 chars ' +
-            'and contain uppercase, lowercase, ' + 'digit, and special character.';
-        } else if (errorType === 'phone') {
-            alertMessage = 'Phone format: 123-123-1234';
-        }
-        if (this.state.validationCheck !== 3 && this.state.validationCheck !== 0) {
-            return (
-                Alert.alert(
-                    'Error',
-                    alertMessage,
-                )
-            );
-        }
-        return null;
-    }
-
     async requestLocationPermission() {
         try {
              const granted = await PermissionsAndroid.request(
