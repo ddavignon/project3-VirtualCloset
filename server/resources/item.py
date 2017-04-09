@@ -177,13 +177,14 @@ class ItemList(Resource):
 class TextList(Resource):
      @jwt_required()
      def post(self):
+        provider=""
         urls=request.get_json()
         info =[closet.json() for closet in ClosetModel.query.filter_by(user_id=current_identity.id).all()]
         if info:
-            carrier = carrier(info[0]["carrier"])
+            provider = carrier(info[0]["carrier"])
             phone = info [0]["phone_number"].replace("-","")
             for i in urls["urls"]:
-                sendMessage(i,phone,carrier)
+                sendMessage(i,phone,provider)
             return "Message has been sent"
         return 401
         
