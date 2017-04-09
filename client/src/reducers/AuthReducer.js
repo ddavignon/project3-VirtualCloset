@@ -9,7 +9,7 @@ const INITIAL_STATE = {
     email: '',
     password: '',
     phone_number: '',
-    carrier: '',
+    carrier: 'att',
     user: null,
     error: '',
     loading: false,
