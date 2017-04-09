@@ -169,10 +169,10 @@ class TextList(Resource):
      def get(self):
         closet = ClosetModel.find_by_uid(current_identity.id)
         closet= closet.json
-        phone_number=closet["phone_number"]
-        print phone_number
+        #phone_number=closet["phone_number"]
+        #print phone_number
         if closet:
-            return phone_number
+            return closet
         return 401
          
          
