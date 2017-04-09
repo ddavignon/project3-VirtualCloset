@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Platform } from 'react-native';
+import { Text, View, Picker } from 'react-native';
 import { connect } from 'react-redux';
 import {
     loginTextFieldUpdate,
@@ -117,14 +117,27 @@ class LoginForm extends Component {
                            value={this.props.phone_number}
                            />
                        </CardSection>
-                       <CardSection>
+                       {/*<CardSection>
                            <Input
                            label="Carrier"
                            placeholder="ATT"
                            onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'carrier', value })}
                            value={this.props.carrier}
                            />
-                       </CardSection>
+                       </CardSection>*/}
+                        <CardSection style={{ flexDirection: 'column' }}>
+                            <Text>Carrier</Text>
+                            <Picker
+                                style={{ flex: 1 }}
+                                selectedValue={this.props.carrier}
+                                onValueChange={value => this.props.loginTextFieldUpdate({ prop: 'carrier', value })}
+                            >
+                                <Picker label="ATT" value="att" />
+                                <Picker label="T-Mobile" value="tmobile" />
+                                <Picker label="Verizon" value="verizon" />
+                                <Picker label="Sprint" value="sprint" />
+                            </Picker>
+                        </CardSection>
                    </Card>
                    </View>
             );
