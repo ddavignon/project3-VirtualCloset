@@ -36,7 +36,7 @@ class ClosetItem extends Component {
             case 'accessories':
                 this.props.clothingItemUpdate({ prop: 'accessoriesUrl', value: url_path });
                 break;
-            case 'outerwear ':
+            case 'outerwear':
                 this.props.clothingItemUpdate({ prop: 'outerwearUrl', value: url_path });
                 break;
             default:

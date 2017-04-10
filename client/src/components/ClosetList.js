@@ -15,13 +15,13 @@ import {
 } from '../api/constants';
 import Carousel from 'react-native-snap-carousel';
 import ClosetItem from './ClosetItem';
-import { CardSection, Card, Button } from './common';
+import { CardSection, Spinner, Button } from './common';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
 
 class ClosetList extends Component {
     state = {
-        showText: true,
+        showItems: true,
         shirtItems: [],
         pantsItems: [],
         shoesItems: [],
@@ -34,10 +34,15 @@ class ClosetList extends Component {
     };
 
     componentWillMount() {
-        this.getWeatherClothes();
+        if (this.state.getAllClothes) {
+            this.getAllClothes();
+        } else {
+            this.getWeatherClothes();
+        }
     }
 
     getWeatherClothes() {
+        this.setState({ showItems: false });
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitudePosition: JSON.stringify(position.coords.latitude),
@@ -67,16 +72,20 @@ class ClosetList extends Component {
                 pantsItems: response.data.pants,
                 shoesItems: response.data.shoes,
                 accessoriesItems: response.data.accessories,
-                outerwearItems: response.data.outerwear 
-                });
-            })
+                outerwearItems: response.data.outerwear,
+                showItems: true  
+            });
+        })
         .catch((err) => {
             console.log(err);
+            this.setState({ showItems: true });
         });
-        this.setState({ getAllClothes: false });
+        this.setState({ getAllClothes: false, allClosetItems: [] });
     }
 
     getAllClothes() {
+        this.setState({ showItems: false });
+
         axios.get(GET_ALL_CLOTHING_ITEMS.concat(this.props.user), { 
             headers: {
                 'Authorization': 'JWT ' + this.props.token
@@ -105,7 +114,7 @@ class ClosetList extends Component {
                     case 'accessories':
                         accessories.push(item);
                         break;
-                    case 'outerwear ':
+                    case 'outerwear':
                         outerwear.push(item);
                         break;
                     default:
@@ -120,10 +129,12 @@ class ClosetList extends Component {
                 accessoriesItems: accessories,
                 outerwearItems: outerwear, 
                 allClosetItems: response.data.items,
+                showItems: true
             });
         })
         .catch((err) => {
             console.log(err);
+            this.setState({ showItems: true });
         });
         this.setState({ getAllClothes: true });
     }
@@ -197,6 +208,13 @@ class ClosetList extends Component {
     }
 
     renderItems(items) {
+        if (!this.state.showItems) {
+            return (
+                <CardSection>
+                    <Spinner size="large" />
+                </CardSection>
+            );
+        }
         return (
             <Carousel
                 sliderWidth={sliderWidth}
@@ -242,6 +260,7 @@ class ClosetList extends Component {
             scrollview,
             title,
         } = styles;
+
         return (
             <View style={container}>
                 <ScrollView

@@ -26,13 +26,13 @@ class LoginForm extends Component {
         validationCheck: 0,
 	};
 
-    componentWillMount() {
-        Permissions.getPermissionStatus('location', 'whenInUse')
-          .then(response => {
-            //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
-            this.setState({ locationPermission: response });
-        });
-    }
+    // componentWillMount() {
+    //     Permissions.getPermissionStatus('location', 'whenInUse')
+    //       .then(response => {
+    //         //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+    //         this.setState({ locationPermission: response });
+    //     });
+    // }
 
     onSignUpButtonPress() {
         const { email, password, phone_number, carrier } = this.props;
