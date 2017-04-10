@@ -1,7 +1,5 @@
-import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import RNFetchBlob from 'react-native-fetch-blob';
-import axios from 'axios';
 import {
     ADD_CLOTHING_ITEM,
     UPLOAD_ITEM_IMAGE
@@ -26,7 +24,6 @@ export const clothingItemUpdate = ({ prop, value }) => {
 
 export const clothingItemResults = ({ response, token }) => {
     return (dispatch) => {
-        console.log('Response = ', response, response.uri);
         const uri = response.uri;
         const data = response;
 
@@ -45,13 +42,9 @@ export const clothingItemResults = ({ response, token }) => {
                 { name: 'uri', filename: 'image.png', data: response.data }
                 ])
                 .then((res) => {
-                    // console.log(res.json());
-                    console.log(res);
                     const description = res.json().apparel[0].name;
                     // const style = res.json().styles[0].name;
                     // const color = res.json().color;
-
-                    console.log(res.json(), description);
                     clothingItemInfoSuccess(dispatch, description);
                 })
                 .catch((error) => {
