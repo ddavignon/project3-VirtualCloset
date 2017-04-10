@@ -17,9 +17,13 @@ class ClothingItemCreate extends Component {
     onButtonPress() {
         const { description, style, type_clothing, image_data, token } = this.props;
 
-        this.props.clothingItemCreate({
-            description, style, type_clothing, image_data, token
-        });
+        if (image_data) {
+            this.props.clothingItemCreate({
+                description, style, type_clothing, image_data, token
+            });
+        } else {
+            alert('Please select an image!');
+        }
     }
     _renderForm() {
       if (this.props.loading) {
