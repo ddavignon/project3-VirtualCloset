@@ -11,3 +11,6 @@ export const SEND_CLOTHING_ITEM_IMAGE_TEXT = BASE_URL.concat('/text');
 
 export const UPLOAD_ITEM_IMAGE = BASE_URL.concat('/virtual/api/v1.0/upload');
 
+export const AVATAR = BASE_URL.concat('/avatar');
+
+
