@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Text, View, Picker, Platform, PermissionsAndroid } from 'react-native';
+import { Text, View, Picker, Platform, PermissionsAndroid} from 'react-native';
 import { connect } from 'react-redux';
 import {
     loginTextFieldUpdate,
     loginUser,
     registerUser
 } from '../actions';
-import { Card, CardSection, Input, Button, Spinner } from './common';
+import {Voice} from './Voice';
+import { Card, CardSection, Input, Button, Spinner} from './common';
+
+
 //import { LoginButton, AccessToken } from 'react-native-fbsdk';
 const Permissions = require('react-native-permissions');
 
@@ -19,6 +22,7 @@ class LoginForm extends Component {
 	};
 
     componentWillMount() {
+
         Permissions.getPermissionStatus('location', 'whenInUse')
           .then(response => {
             //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
@@ -162,6 +166,9 @@ class LoginForm extends Component {
                         Sign Up
                     </Button>
                 </CardSection>
+                <CardSection>
+
+                </CardSection>
             </View>
         );
     }
@@ -223,6 +230,9 @@ class LoginForm extends Component {
                     }
                     onLogoutFinished={() => alert("logout.")}
                 />*/}
+                </Card>
+                <Card>
+                <Voice/>
                 </Card>
             </View>
         );

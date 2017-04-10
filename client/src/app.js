@@ -4,8 +4,9 @@ import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import Router from './Router';
+import { STTandroid, STTios } from 'react-native-speech-to-text';
 
-const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));   
+const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
 class App extends Component {
     render() {
