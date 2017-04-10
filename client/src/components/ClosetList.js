@@ -33,7 +33,11 @@ class ClosetList extends Component {
     };
 
     componentWillMount() {
-        this.getWeatherClothes();
+        if (this.state.getAllClothes) {
+            this.getAllClothes();
+        } else {
+            this.getWeatherClothes();
+        }
     }
 
     getWeatherClothes() {
@@ -104,7 +108,7 @@ class ClosetList extends Component {
                     case 'accessories':
                         accessories.push(item);
                         break;
-                    case 'outerwear ':
+                    case 'outerwear':
                         outerwear.push(item);
                         break;
                     default:
@@ -241,6 +245,7 @@ class ClosetList extends Component {
             scrollview,
             title,
         } = styles;
+
         return (
             <View style={container}>
                 <ScrollView

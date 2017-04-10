@@ -16,7 +16,6 @@ import {
 
 
 export const clothingItemUpdate = ({ prop, value }) => {
-    console.log(prop, value);
     return {
         type: CLOTHING_ITEM_UPDATE,
         payload: { prop, value }
@@ -25,7 +24,6 @@ export const clothingItemUpdate = ({ prop, value }) => {
 
 export const clothingItemResults = ({ response, token }) => {
     return (dispatch) => {
-        console.log('Response = ', response, response.uri);
         const uri = response.uri;
         const data = response;
 
@@ -44,13 +42,9 @@ export const clothingItemResults = ({ response, token }) => {
                 { name: 'uri', filename: 'image.png', data: response.data }
                 ])
                 .then((res) => {
-                    // console.log(res.json());
-                    console.log(res);
                     const description = res.json().apparel[0].name;
                     // const style = res.json().styles[0].name;
                     // const color = res.json().color;
-
-                    console.log(res.json(), description);
                     clothingItemInfoSuccess(dispatch, description);
                 })
                 .catch((error) => {
