@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Alert,
     View,
     ScrollView,
     Text,
@@ -269,8 +270,31 @@ class ClosetList extends Component {
                             source={{ uri: 'https://9to5mac.files.wordpress.com/2015/09/face-yellow-loop-60-emoji.gif' }}
                         />
                         <View style={{ flex: 1 }}>
-                            <Button onPress={this.sendTextOfClothes.bind(this)}>
-                                Send Clothes
+                            <Button
+                                onPress={() => {
+                                    // Works on both iOS and Android
+                                    Alert.alert(
+                                        'Nice Selection!',
+                                        'Would you like to send a message for later?',
+                                        [
+                                            {
+                                                text: 'Cancel',
+                                                onPress: () => { console.log('Cancel Pressed'); },
+                                                style: 'cancel' },
+                                            {
+                                                text: 'Send',
+                                                onPress: () => {
+                                                    this.sendTextOfClothes();
+                                                    console.log('OK Pressed');
+                                                }
+                                            },
+                                        ],
+                                        { cancelable: false }
+                                        );
+                                    }
+                                }
+                            >
+                                Confirm
                             </Button>
                         </View>
                     </View>
