@@ -11,7 +11,8 @@ import axios from 'axios';
 import {
     GET_CLOTHING_ITEMS,
     GET_ALL_CLOTHING_ITEMS,
-    SEND_CLOTHING_ITEM_IMAGE_TEXT
+    SEND_CLOTHING_ITEM_IMAGE_TEXT,
+    AVATAR
 } from '../api/constants';
 import Carousel from 'react-native-snap-carousel';
 import ClosetItem from './ClosetItem';
@@ -286,7 +287,7 @@ class ClosetList extends Component {
                         {this.renderButtons()}
                         <Image
                             style={{ width: 75, height: 75 }}
-                            source={{ uri: 'https://9to5mac.files.wordpress.com/2015/09/face-yellow-loop-60-emoji.gif' }}
+                            source={{ uri: AVATAR }}
                         />
                         <View style={{ flex: 1 }}>
                             <Button
