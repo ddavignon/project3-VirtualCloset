@@ -2,8 +2,9 @@
 import React, { Component } from 'react';
 import {View,Text,TouchableHighlight,Platform} from 'react-native';
 import { STTandroid, STTios } from 'react-native-speech-to-text';
+import Tts from 'react-native-tts';
 
-
+Tts.setDefaultLanguage('en-AU');
 
 
 
@@ -18,6 +19,9 @@ import { STTandroid, STTios } from 'react-native-speech-to-text';
           .then((result) => {
           this.setState({speechToText:result});
               console.log(result)
+              Tts.speak(result);
+
+
           })
           .catch((error) => {
             this.setState({voiceError:error})

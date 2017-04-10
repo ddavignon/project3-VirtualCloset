@@ -3,6 +3,7 @@ package com.virtual_closet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import net.no_mad.tts.TextToSpeechPackage;
 import com.speechtotext.SpeechToTextPackage;
 import com.joshblour.reactnativepermissions.ReactNativePermissionsPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new TextToSpeechPackage(),
             new SpeechToTextPackage(),
             new ReactNativePermissionsPackage(),
             new RNFetchBlobPackage(),
