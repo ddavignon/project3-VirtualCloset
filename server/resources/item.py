@@ -12,6 +12,7 @@ import requests
 import smtplib
 from PIL import Image
 from StringIO import StringIO
+import cStringIO
 
 
 from models.item import ItemModel
@@ -220,11 +221,20 @@ def sendMessage(url,number,carrier):
     msgText = MIMEText('<img src="cid:image1">', 'html')
     msgAlternative.attach(msgText)
     response = requests.get(url)
-    img = StringIO(response.content)
-    
-    print img
-    # This example assumes the image is in the current directory
-    msgImage = MIMEImage(img.getvalue())
+    size = 600, 600 #Can go higher it only took up 45kb
+    img = StringIO(response.content) 
+    newImg=cStringIO.StringIO()
+    #open with PILL now
+    im = Image.open(img)
+    #Resize Image
+    im=im.resize(size,Image.ANTIALIAS)
+    #Try to get best quality
+    quality_val = 90
+    im.save(newImg, "JPEG",quality=quality_val)
+   
+    # MIMEImage
+    msgImage = MIMEImage(newImg.getvalue())
+   
     
 
     # Define the image's ID as referenced above
