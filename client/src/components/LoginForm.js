@@ -166,9 +166,6 @@ class LoginForm extends Component {
                         Sign Up
                     </Button>
                 </CardSection>
-                <CardSection>
-
-                </CardSection>
             </View>
         );
     }
