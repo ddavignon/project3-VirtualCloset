@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, Picker, Platform, PermissionsAndroid } from 'react-native';
+import { Text,
+    View,
+    Picker,
+    Platform,
+    PermissionsAndroid,
+    Alert,
+    TouchableHighlight
+} from 'react-native';
 import { connect } from 'react-redux';
 import {
     loginTextFieldUpdate,
@@ -16,6 +23,7 @@ class LoginForm extends Component {
         longitudePosition: 'unknown',
         locationPermission: 'undetermined',
         showSignupFields: 'hide',
+        validationCheck: 0,
 	};
 
     componentWillMount() {
@@ -28,12 +36,39 @@ class LoginForm extends Component {
 
     onSignUpButtonPress() {
         const { email, password, phone_number, carrier } = this.props;
-
+        this.setState({ validationCheck: 0 });
+        var checkCount = 0;
         this.setState({ showSignupFields: 'show' });
         if (this.state.showSignupFields === 'show') {
-          if (this.validateEmail(email) &&
-              this.validatePassword(password) &&
-              this.validatePhone(phone_number)) {
+          if (this.validateEmail(email)) {
+              checkCount++;
+              this.setState({ validationCheck: checkCount });
+          } else {
+              Alert.alert(
+                  'Error',
+                  'Email format: user@email.com',
+              );
+          }
+          if (this.validatePassword(password)) {
+              checkCount++;
+              this.setState({ validationCheck: checkCount });
+          } else {
+              Alert.alert(
+                  'Error',
+                  'Password must be more than 8 chars ' +
+                  'and contain uppercase, lowercase, ' + 'digit, and special character.',
+              );
+          }
+          if (this.validatePhone(phone_number)) {
+              checkCount++;
+              this.setState({ validationCheck: checkCount });
+          } else {
+              Alert.alert(
+                  'Error',
+                  'Phone format: 123-123-1234',
+              );
+          }
+          if (this.state.validationCheck === 3) {
             this.props.registerUser({ email, password, phone_number, carrier });
           }
         }
@@ -83,13 +118,14 @@ class LoginForm extends Component {
         try {
              const granted = await PermissionsAndroid.request(
              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-                'title': 'Cool Fashion App needs location Permission',
-                'message': 'Cool Fashion App needs access to your location so you can acces the weather.'
-             });
+             'title': 'Cool Fashion App needs location Permission',
+             'message': 'Cool Fashion App needs access to your location so you can acces the weather.'
+             }
+             )
              if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                  this.getLocation();
              } else {
-                 console.log('Location permission denied');
+                 console.log('Location permission denied')
              }
         } catch (err) {
              console.warn(err);
@@ -196,7 +232,7 @@ class LoginForm extends Component {
                     </CardSection>
                 </Card>
                     <View>
-                    {this.renderSIgnupFields()}
+                        {this.renderSIgnupFields()}
                     </View>
                     <Text style={styles.errorTextStyle} >
                         {this.props.error}
@@ -233,7 +269,15 @@ const styles = {
         fontSize: 20,
         alignSelf: 'center',
         color: 'red'
-    }
+    },
+    wrapper: {
+        borderRadius: 5,
+        marginBottom: 5,
+    },
+    button: {
+        backgroundColor: '#eeeeee',
+        padding: 10,
+    },
 };
 
 const mapStateToProps = ({ auth }) => {
