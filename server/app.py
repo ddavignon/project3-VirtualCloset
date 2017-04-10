@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 
 from flask_ask import Ask,statement,question,session
 
-from flask import Flask, request, jsonify,render_template
+from flask import Flask, request, jsonify,render_template,send_file
 from flask_restful import Api
 from flask_jwt import JWT
 
@@ -88,9 +88,9 @@ def no_intent():
 def default():
   return "Success"
   
-@app.route('/webHead')
+@app.route('/avatar')
 def webHead():
-  return render_template('avatar_webGL/index.html')
+  return send_file('static/Avatar.gif', mimetype='image/gif')
 
   
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])
