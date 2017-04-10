@@ -1,7 +1,5 @@
-import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import RNFetchBlob from 'react-native-fetch-blob';
-import axios from 'axios';
 import {
     ADD_CLOTHING_ITEM,
     UPLOAD_ITEM_IMAGE
@@ -18,6 +16,7 @@ import {
 
 
 export const clothingItemUpdate = ({ prop, value }) => {
+    console.log(prop, value);
     return {
         type: CLOTHING_ITEM_UPDATE,
         payload: { prop, value }

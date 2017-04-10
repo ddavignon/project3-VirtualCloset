@@ -9,7 +9,8 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import {
     GET_CLOTHING_ITEMS,
-    GET_ALL_CLOTHING_ITEMS
+    GET_ALL_CLOTHING_ITEMS,
+    SEND_CLOTHING_ITEM_IMAGE_TEXT
 } from '../api/constants';
 import Carousel from 'react-native-snap-carousel';
 import ClosetItem from './ClosetItem';
@@ -47,6 +48,8 @@ class ClosetList extends Component {
             timeout: 20000,
             maximumAge: 1000
         });
+
+        console.log(this.state.latitudePosition, this.state.longitudePosition);
         axios.get(GET_CLOTHING_ITEMS, { 
             headers: {
                 'Authorization': 'JWT ' + this.props.token
@@ -139,49 +142,58 @@ class ClosetList extends Component {
         });
     }
 
-    /*// no momentum scal opacity
-    get example1() {
-        return (
-            <Carousel
-              sliderWidth={sliderWidth}
-              itemWidth={itemWidth}
-              firstItem={1}
-              inactiveSlideScale={0.94}
-              inactiveSlideOpacity={0.6}
-              enableMomentum={false}
-              containerCustomStyle={styles.slider}
-              contentContainerCustomStyle={styles.sliderContainer}
-              showsHorizontalScrollIndicator={false}
-              snapOnAndroid={true}
-              removeClippedSubviews={false}
-            >
-                { this.getSlides(ENTRIES1) }
-            </Carousel>
-        );
-    }
+    sendTextOfClothes() {
+        const {
+            user,
+            token,
+            shirtUrl,
+            pantsUrl,
+            shoesUrl,
+            outerwearUrl,
+            accessoriesUrl
+        } = this.props;
 
-    // momenteum / autoplay
-    get example2(items) {
-        return (
-            <Carousel
-              sliderWidth={sliderWidth}
-              itemWidth={itemWidth}
-              inactiveSlideScale={1}
-              inactiveSlideOpacity={1}
-              enableMomentum={true}
-              autoplay={true}
-              autoplayDelay={500}
-              autoplayInterval={2500}
-              containerCustomStyle={styles.slider}
-              contentContainerCustomStyle={styles.sliderContainer}
-              showsHorizontalScrollIndicator={false}
-              snapOnAndroid={true}
-              removeClippedSubviews={false}
-              >
-                  { this.getSlides(items) }
-              </Carousel>
-        );
-    }*/
+        const urls = [];
+
+        if (shirtUrl) {
+            urls.push(shirtUrl);
+        } 
+        if (pantsUrl) {
+            urls.push(pantsUrl);
+        }
+        if (shoesUrl) {
+            urls.push(shoesUrl);
+        }
+        if (outerwearUrl) {
+            urls.push(outerwearUrl);
+        }
+        if (accessoriesUrl) {
+            urls.push(accessoriesUrl);
+        }
+
+        fetch(SEND_CLOTHING_ITEM_IMAGE_TEXT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'JWT ' + token
+            },
+            body: JSON.stringify({
+                urls
+            })
+        })
+        .then(response => console.log(response))
+        .catch(err => console.log('error', err));
+
+        return console.log({
+            user,
+            token,
+            shirtUrl,
+            pantsUrl,
+            shoesUrl,
+            outerwearUrl,
+            accessoriesUrl
+        });
+    }
 
     renderItems(items) {
         return (
@@ -197,6 +209,7 @@ class ClosetList extends Component {
                 showsHorizontalScrollIndicator={false}
                 snapOnAndroid
                 removeClippedSubviews={false}
+                onSnapToItem={value => console.log(value)}
             >
                 { this.getSlides(items) }
             </Carousel>
@@ -256,8 +269,8 @@ class ClosetList extends Component {
                             source={{ uri: 'https://9to5mac.files.wordpress.com/2015/09/face-yellow-loop-60-emoji.gif' }}
                         />
                         <View style={{ flex: 1 }}>
-                            <Button>
-                                Send Clothes! (Not working)
+                            <Button onPress={this.sendTextOfClothes.bind(this)}>
+                                Send Clothes
                             </Button>
                         </View>
                     </View>
@@ -277,9 +290,25 @@ const avatarStyle = {
 };
 
 const mapStateToProps = (state) => {
+    const {
+        shirtUrl,
+        pantsUrl,
+        shoesUrl,
+        outerwearUrl,
+        accessoriesUrl
+    } = state.clothingItemForm;
+    
     const { user, token } = state.auth;
     
-    return { user, token };
+    return {
+        user,
+        token,
+        shirtUrl,
+        pantsUrl,
+        shoesUrl,
+        outerwearUrl,
+        accessoriesUrl
+    };
 };
 
 export default connect(mapStateToProps, null)(ClosetList);

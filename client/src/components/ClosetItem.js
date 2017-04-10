@@ -1,6 +1,8 @@
 
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { clothingItemUpdate } from '../actions';
 import styles from '../styles/SliderEntry.style';
 
 class ClosetItem extends Component {
@@ -10,15 +12,54 @@ class ClosetItem extends Component {
         _id: PropTypes.number,
         style: PropTypes.string,
         url_path: PropTypes.string,
-        even: PropTypes.bool
+        even: PropTypes.bool,
+        type_clothing: PropTypes.string
     };
 
-    render() {
-        console.log(this.props);
-        const { description, _id, style, url_path, even } = this.props;
+    componentWillMount() {
+        const { url_path, type_clothing } = this.props;
+        
+        this.setClothesIndexUrl(type_clothing, url_path);
+    }
 
+    setClothesIndexUrl(type_clothing, url_path) {
+        switch (type_clothing) {
+            case 'shirt':
+                this.props.clothingItemUpdate({ prop: 'shirtUrl', value: url_path });
+                break;
+            case 'pants':
+                this.props.clothingItemUpdate({ prop: 'pantsUrl', value: url_path });
+                break;
+            case 'shoes':
+                this.props.clothingItemUpdate({ prop: 'shoesUrl', value: url_path });
+                break;
+            case 'accessories':
+                this.props.clothingItemUpdate({ prop: 'accessoriesUrl', value: url_path });
+                break;
+            case 'outerwear ':
+                this.props.clothingItemUpdate({ prop: 'outerwearUrl', value: url_path });
+                break;
+            default:
+                console.log('type clothing not found');
+        }
+
+        return console.log('Set clothing item.');
+    }
+
+    render() {
+        const { 
+            description,
+            _id, 
+            style,
+            url_path,
+            even
+        } = this.props;
+    
         const uppercaseTitle = description ? (
-            <Text style={[styles.title, even ? styles.titleEven : {}]} numberOfLines={2}>{ description.toUpperCase() }</Text>
+            <Text
+                style={[styles.title, even ? styles.titleEven : {}]}
+                numberOfLines={2}>{ description.toUpperCase() }
+            </Text>
         ) : false;
 
         return (
@@ -43,4 +84,4 @@ class ClosetItem extends Component {
     }
 }
 
-export default ClosetItem;
+export default connect(null, { clothingItemUpdate })(ClosetItem);
