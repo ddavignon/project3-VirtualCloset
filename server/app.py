@@ -5,11 +5,12 @@ from clarifai.rest import Image as ClImage
 
 from werkzeug.utils import secure_filename
 
-from flask_ask import Ask,statement,question,session
+from flask_ask import Ask,statement,question,session,version
 
 from flask import Flask, request, jsonify,render_template,send_file
 from flask_restful import Api
-from flask_jwt import JWT
+from flask_jwt import JWT,jwt_required, current_identity
+
 
 from security import authenticate, identity
 from resources.user import UserRegister
@@ -22,6 +23,8 @@ from email.MIMEImage import MIMEImage
 from PIL import Image
 import requests
 from StringIO import StringIO
+import logging
+
 
 app = Flask(__name__)
 
@@ -33,6 +36,7 @@ app.secret_key = 'SuperSecretPasskey'
 api = Api(app)
 
 ask = Ask(app,"/clothing_text_message")
+log = logging.getLogger()
 
 @app.before_first_request
 def create_tables():
@@ -72,16 +76,18 @@ def possibleApparel(appCont,name):
 @ask.launch
 def start_skill():
     welcome_message= "Would you like a recommendation?"
+    logging.getLogger('flask_ask').setLevel(logging.DEBUG)
     return question(welcome_message)
 
 @ask.intent("YesIntent")
 def yes_intent():
+    log.info("Request ID: {}".format(request))
     message= "I found this in your closet."
     return statement(message)
 
 @ask.intent("NoIntent")
 def no_intent():
-    message = "Have a good then."
+    message = "Have a good day then."
     return statement(message)
 
 @app.route('/')
