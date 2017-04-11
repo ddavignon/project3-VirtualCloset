@@ -1,7 +1,7 @@
 # Virtual Closet Application
-###Spring 2017 - CST438 Software Engineering 
+### Spring 2017 - CST438 Software Engineering 
 
-
+## Handin 2
 
 1. __What does your app do?__
 
