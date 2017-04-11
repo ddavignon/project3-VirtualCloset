@@ -227,7 +227,7 @@ def sendMessage(url,number,carrier):
     #open with PILL now
     im = Image.open(img)
     #Resize Image
-    im=im.resize(size,Image.ANTIALIAS)
+    im=im.attachment(size,Image.ANTIALIAS)
     #Try to get best quality
     quality_val = 100
     im.save(newImg, "JPEG",quality=quality_val)
