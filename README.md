@@ -5,10 +5,10 @@
 
 1. __What does your app do?__
 
-> The Virtual Closet application allows users to upload images of clothes to be recommended at a later time based on weather conditions.
+	The Virtual Closet application allows users to upload images of clothes to be recommended at a later time based on weather conditions.
 
 
-> Android mobile app, built with React Native and a Flask REST API hosted on Heroku
+	Android mobile app, built with React Native and a Flask REST API hosted on Heroku
 
 
 2. __Who worked on it?__
