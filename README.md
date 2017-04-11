@@ -1,55 +1,71 @@
 # Virtual Closet Application
-### Spring 2017 - CST438 Software Engineering 
-
-**What does your app do?**
-
-> The Virtual Closet application allows users to upload images of clothes to be recommended at a later time based on style and weather conditions.
-
-**Who worked on it?**
-> Brandan Lockwood
-
-> Daniel Wilson
-
-> Dustin D’Avignon
-
-> Brandon Woodard
-
-> Luigi D’Antonio
-
-**What were you able to complete for this handin?**
-
-> Basic API, general Mobile Application flow with test api, avatar design.
-
-**What are known problems, if any, with your project?**
-
-> Avatar is not implimented into mobile app yet, not all connectivity between mobile app and api are connected, closet is one shared closet at this time, update item is not working, delete is not working
-
-**How would you improve it if you had more time?**
-
-> Get the basic CRUD functionality working with the backend api so user can add / get recommended clothes with third-party recommendations, add avatar in view
-
-## 
-
-run `git clone`
-
-from client folder `npm install` to install dependencies
-
-to run android, an emulator must be open
-it is assumed you have react native tools installed, please see https://facebook.github.io/react-native/docs/getting-started.html for  react native configuration details
-
-on mac, create `local.properties` and input ```sdk.dir = /Users/[YOUR_USERNAME]/Library/Android/sdk```
-
-not sure about windows setup...
+###Spring 2017 - CST438 Software Engineering 
 
 
-`react-native run-android`
 
-or for iOS
+1. __What does your app do?__
 
-`react-native run-ios`
+> The Virtual Closet application allows users to upload images of clothes to be recommended at a later time based on weather conditions.
 
-server must be configured for your local environment
 
-## TO DO
+> Android mobile app, built with React Native and a Flask REST API hosted on Heroku
 
-Step 4 of https://github.com/marcshilling/react-native-image-picker for iOS config (for video, not necessary)
+
+2. __Who worked on it?__
+
+	- Brandan Lockwood
+
+	- Daniel Wilson
+
+	- Dustin D’Avignon
+
+	- Brandon Woodard
+
+	- Luigi D’Antonio
+
+3. __What were you able to complete for this handin?__
+
+	- Authentication
+
+	- user can add items to own closet
+	
+	- item description is found for user
+
+	- user is able to get recommended clothes based on weather for location
+
+	- user can choose between all clothes or clothes for weather
+
+	- user can upload items to receive text of chosen outfit
+
+	- carousel of clothing items added
+
+	- avatar is in view
+	
+	- alpha release on play store
+	
+
+4. __What are known problems, if any, with your project?__
+
+	- authentication expires too soon
+
+	- appearance needs styling
+
+	- location is buggy
+
+	- not able to update or delete items
+
+5. __How would you improve it if you had more time?__
+
+	- add delete item
+
+	- fix auth expiration issue
+
+	- dial in location
+
+	- adjust appearance
+
+	- add some functionality to avatar 
+	
+	- integrate Alexa skill
+	
+	- add testing to mobile
