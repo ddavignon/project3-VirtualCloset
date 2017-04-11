@@ -1,5 +1,5 @@
 # Virtual Closet Application
-###Spring 2017 - CST438 Software Engineering 
+### Spring 2017 - CST438 Software Engineering 
 
 
 
