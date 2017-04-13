@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import { Text,
     View,
     Picker,
@@ -7,13 +8,17 @@ import { Text,
     Alert,
     TouchableHighlight
 } from 'react-native';
+
 import { connect } from 'react-redux';
 import {
     loginTextFieldUpdate,
     loginUser,
     registerUser
 } from '../actions';
-import { Card, CardSection, Input, Button, Spinner } from './common';
+import {Voice} from './Voice';
+import { Card, CardSection, Input, Button, Spinner} from './common';
+
+
 //import { LoginButton, AccessToken } from 'react-native-fbsdk';
 const Permissions = require('react-native-permissions');
 
@@ -25,6 +30,7 @@ class LoginForm extends Component {
         showSignupFields: 'hide',
         validationCheck: 0,
 	};
+
 
     // componentWillMount() {
     //     Permissions.getPermissionStatus('location', 'whenInUse')
@@ -258,6 +264,9 @@ class LoginForm extends Component {
                     }
                     onLogoutFinished={() => alert("logout.")}
                 />*/}
+                </Card>
+                <Card>
+                <Voice/>
                 </Card>
             </View>
         );
