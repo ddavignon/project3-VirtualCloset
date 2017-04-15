@@ -15,7 +15,6 @@ import {
     loginUser,
     registerUser
 } from '../actions';
-import {Voice} from './Voice';
 import { Card, CardSection, Input, Button, Spinner} from './common';
 
 
@@ -266,7 +265,6 @@ class LoginForm extends Component {
                 />*/}
                 </Card>
                 <Card>
-                <Voice/>
                 </Card>
             </View>
         );

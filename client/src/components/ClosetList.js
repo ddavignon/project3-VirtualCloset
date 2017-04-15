@@ -4,10 +4,15 @@ import {
     View,
     ScrollView,
     Text,
-    Image
+    Image,
+    Platform,
+    TouchableHighlight
 } from 'react-native';
 import { connect } from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
+import { STTandroid, STTios } from 'react-native-speech-to-text';
+import Tts from 'react-native-tts';
+
 import axios from 'axios';
 import {
     GET_CLOTHING_ITEMS,
@@ -19,6 +24,8 @@ import ClosetItem from './ClosetItem';
 import { CardSection, Spinner, Button } from './common';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
+
+Tts.setDefaultLanguage('en-AU');
 
 class ClosetList extends Component {
     state = {
@@ -32,6 +39,8 @@ class ClosetList extends Component {
         getAllClothes: false,
         latitudePosition: '37.4829525',
         longitudePosition: '-122.1480473',
+        speechToText: '',
+        voiceError: ''
     };
 
     componentWillMount() {
@@ -148,6 +157,26 @@ class ClosetList extends Component {
                 />
             );
         });
+    }
+
+    handleAvatarPress() {
+      console.log('Pressed!');
+      if (Platform.OS === 'android') {
+        STTandroid.showGoogleInputDialog()
+          .then((result) => {
+            this.setState({
+              speechToText: result
+            });
+            console.log(result);
+            Tts.speak(result);
+          })
+          .catch((error) => {
+            this.setState({
+              voiceError: error
+            });
+            console.log(error);
+          });
+        }
     }
 
     sendTextOfClothes() {
@@ -277,13 +306,22 @@ class ClosetList extends Component {
                     <Text style={title}>All Items</Text>
                     {this.renderItems(this.state.allClosetItems)}
                 </ScrollView>
+                <Text>
+                {this.state.speechToText}
+                {this.state.voiceError}
+                </Text>
                 <CardSection>
                     <View style={avatarStyle.containerStyle}>
                         {this.renderButtons()}
-                        <Image
-                            style={{ width: 75, height: 75 }}
-                            source={{ uri: AVATAR }}
-                        />
+                        <TouchableHighlight
+                          onPress={() => this.handleAvatarPress()}
+                        >
+                          <Image
+                              onPress={() => this.handleAvatarPress()}
+                              style={{ width: 75, height: 75 }}
+                              source={{ uri: AVATAR }}
+                          />
+                        </TouchableHighlight>
                         <View style={{ flex: 1 }}>
                             <Button
                                 onPress={() => {
