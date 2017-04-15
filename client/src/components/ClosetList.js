@@ -6,6 +6,7 @@ import {
     Text,
     Image,
     Platform,
+    PermissionsAndroid,
     TouchableHighlight
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -26,6 +27,8 @@ import { CardSection, Spinner, Button } from './common';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
 
+const Permissions = require('react-native-permissions');
+
 Tts.setDefaultLanguage('en-AU');
 
 class ClosetList extends Component {
@@ -42,7 +45,8 @@ class ClosetList extends Component {
         longitudePosition: '-122.1480473',
         speechToText: '',
         voiceError: '',
-        weatherTemp: ''
+        weatherTemp: '',
+        locationPermission: 'undetermined',
     };
 
     componentWillMount() {
@@ -53,17 +57,34 @@ class ClosetList extends Component {
         }
     }
 
-    getWeatherClothes() {
-        this.setState({ showItems: false });
+    getLocationCoords() {
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitudePosition: JSON.stringify(position.coords.latitude),
                 longitudePosition: JSON.stringify(position.coords.longitude)
             });
         },
-        (error) => alert(JSON.stringify(error)),
-        { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
+            (error) => {
+            console.log(error);
+        }, {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 1000 }
         );
+    }
+
+    getPermissionAndroid() {
+        Permissions.getPermissionStatus('location', 'whenInUse')
+          .then(response => {
+            //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+            this.setState({ locationPermission: response });
+        });
+    }
+
+    getWeatherClothes() {
+        this.setState({ showItems: false });
+
+        this.getLocationCoords();
 
         console.log(this.state.latitudePosition, this.state.longitudePosition);
         axios.get(GET_CLOTHING_ITEMS, {
@@ -182,16 +203,8 @@ class ClosetList extends Component {
                 this.setState({
                   showItems: false,
                 });
-                
-                navigator.geolocation.getCurrentPosition((position) => {
-                    this.setState({
-                        latitudePosition: JSON.stringify(position.coords.latitude),
-                        longitudePosition: JSON.stringify(position.coords.longitude)
-                    });
-                },
-                (error) => alert(JSON.stringify(error)),
-                { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
-                );
+
+                this.getLocationCoords();
 
                 console.log(this.state.latitudePosition, this.state.longitudePosition);
                 axios.get(GET_RECOMMENDED_ITEMS, {
@@ -305,6 +318,24 @@ class ClosetList extends Component {
         });
     }
 
+    async requestLocationPermission() {
+        try {
+             const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+                'title': 'Cool Fashion App needs location Permission',
+                'message': 'Cool Fashion App needs access to your location so you can acces the weather.'
+                }
+             )
+             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                 this.getLocation();
+             } else {
+                 console.log('Location permission denied')
+             }
+        } catch (err) {
+             console.warn(err);
+        }
+     }
+
     renderItems(items) {
         if (!this.state.showItems) {
             return (
@@ -358,6 +389,10 @@ class ClosetList extends Component {
             scrollview,
             title,
         } = styles;
+
+        if (Platform.OS === 'android' && this.state.locationPermission !== 'authorized') {
+            this.requestLocationPermission();
+        }
 
         return (
             <View style={container}>

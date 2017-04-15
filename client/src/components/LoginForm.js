@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 
 import { Text,
+    ScrollView,
     View,
     Picker,
-    Platform,
-    PermissionsAndroid,
     Alert,
-    TouchableHighlight
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -15,35 +13,24 @@ import {
     loginUser,
     registerUser
 } from '../actions';
-import { Card, CardSection, Input, Button, Spinner} from './common';
+import { Card, CardSection, Input, Button, Spinner } from './common';
 
-
-//import { LoginButton, AccessToken } from 'react-native-fbsdk';
-const Permissions = require('react-native-permissions');
 
 class LoginForm extends Component {
 	state = {
-        latitudePosition: 'unknown',
-        longitudePosition: 'unknown',
-        locationPermission: 'undetermined',
         showSignupFields: 'hide',
         validationCheck: 0,
 	};
 
-
-    // componentWillMount() {
-    //     Permissions.getPermissionStatus('location', 'whenInUse')
-    //       .then(response => {
-    //         //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
-    //         this.setState({ locationPermission: response });
-    //     });
-    // }
-
     onSignUpButtonPress() {
         const { email, password, phone_number, carrier } = this.props;
-        this.setState({ validationCheck: 0 });
-        var checkCount = 0;
-        this.setState({ showSignupFields: 'show' });
+
+        let checkCount = 0;
+
+        this.setState({
+            showSignupFields: 'show',
+            validationCheck: 0, 
+        });
         if (this.state.showSignupFields === 'show') {
           if (this.validateEmail(email)) {
               checkCount++;
@@ -88,22 +75,6 @@ class LoginForm extends Component {
         this.setState({ showSignupFields: 'hide' });
     }
 
-    getLocation() {
-      navigator.geolocation.getCurrentPosition((position) => {
-       this.setState({
-                     latitudePosition: JSON.stringify(position.coords.latitude),
-                     longitudePosition: JSON.stringify(position.coords.longitude)
-                     });
-       },
-       (error) => {
-          console.log(error);
-       }, {
-       enableHighAccuracy: true,
-       timeout: 20000,
-       maximumAge: 1000 }
-       );
-    }
-
     validateEmail(email) {
       const emailRe = /([\w.\-_]+)?\w+@[\w-_]+(\.\w+){1,}/igm;
       return emailRe.test(email);
@@ -119,24 +90,6 @@ class LoginForm extends Component {
       return passwordRe.test(password);
     }
 
-    async requestLocationPermission() {
-        try {
-             const granted = await PermissionsAndroid.request(
-             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-             'title': 'Cool Fashion App needs location Permission',
-             'message': 'Cool Fashion App needs access to your location so you can acces the weather.'
-             }
-             )
-             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                 this.getLocation();
-             } else {
-                 console.log('Location permission denied')
-             }
-        } catch (err) {
-             console.warn(err);
-        }
-     }
-
     renderSIgnupFields() {
         if (this.state.showSignupFields === 'show') {
             return (
@@ -150,14 +103,6 @@ class LoginForm extends Component {
                            value={this.props.phone_number}
                            />
                        </CardSection>
-                       {/*<CardSection>
-                           <Input
-                           label="Carrier"
-                           placeholder="ATT"
-                           onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'carrier', value })}
-                           value={this.props.carrier}
-                           />
-                       </CardSection>*/}
                         <CardSection style={{ flexDirection: 'column' }}>
                             <Text>Carrier</Text>
                             <Picker
@@ -207,16 +152,8 @@ class LoginForm extends Component {
     }
 
     render() {
-      if (this.state.locationPermission === 'authorized') {
-        this.getLocation();
-      } else {
-        if (Platform.OS === 'android') {
-        this.requestLocationPermission();
-        }
-      }
-
         return (
-            <View>
+            <ScrollView>
                 <Card>
                     <CardSection>
                         <Input
@@ -236,37 +173,16 @@ class LoginForm extends Component {
                         />
                     </CardSection>
                 </Card>
-                    <View>
-                        {this.renderSIgnupFields()}
-                    </View>
-                    <Text style={styles.errorTextStyle} >
-                        {this.props.error}
-                    </Text>
+                <View>
+                    {this.renderSIgnupFields()}
+                </View>
+                <Text style={styles.errorTextStyle} >
+                    {this.props.error}
+                </Text>
                 <Card>
                     {this.renderButton()}
-                    {/*<LoginButton
-                    publishPermissions={["publish_actions"]}
-                    onLoginFinished={
-                        (error, result) => {
-                        if (error) {
-                            alert("login has error: " + result.error);
-                        } else if (result.isCancelled) {
-                            alert("login is cancelled.");
-                        } else {
-                            AccessToken.getCurrentAccessToken().then(
-                            (data) => {
-                                alert(data.accessToken.toString())
-                            }
-                            )
-                        }
-                        }
-                    }
-                    onLogoutFinished={() => alert("logout.")}
-                />*/}
                 </Card>
-                <Card>
-                </Card>
-            </View>
+            </ScrollView>
         );
     }
 }
