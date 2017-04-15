@@ -4,9 +4,10 @@ import {
     View,
     ScrollView,
     Text,
-    Image 
+    Image
 } from 'react-native';
 import { connect } from 'react-redux';
+import Carousel from 'react-native-snap-carousel';
 import axios from 'axios';
 import {
     GET_CLOTHING_ITEMS,
@@ -14,7 +15,6 @@ import {
     SEND_CLOTHING_ITEM_IMAGE_TEXT,
     AVATAR
 } from '../api/constants';
-import Carousel from 'react-native-snap-carousel';
 import ClosetItem from './ClosetItem';
 import { CardSection, Spinner, Button } from './common';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
@@ -49,15 +49,10 @@ class ClosetList extends Component {
                 latitudePosition: JSON.stringify(position.coords.latitude),
                 longitudePosition: JSON.stringify(position.coords.longitude)
             });
-        },
-        (error) => alert(JSON.stringify(error)), {
-            enableHighAccuracy: true,
-            timeout: 20000,
-            maximumAge: 1000
-        });
+        }, error => console.log(error));
 
         console.log(this.state.latitudePosition, this.state.longitudePosition);
-        axios.get(GET_CLOTHING_ITEMS, { 
+        axios.get(GET_CLOTHING_ITEMS, {
             headers: {
                 'Authorization': 'JWT ' + this.props.token
             },
@@ -68,13 +63,13 @@ class ClosetList extends Component {
         })
         .then((response) => {
             console.log(response);
-            this.setState({ 
+            this.setState({
                 shirtItems: response.data.shirts,
                 pantsItems: response.data.pants,
                 shoesItems: response.data.shoes,
                 accessoriesItems: response.data.accessories,
                 outerwearItems: response.data.outerwear,
-                showItems: true  
+                showItems: true
             });
         })
         .catch((err) => {
@@ -87,7 +82,7 @@ class ClosetList extends Component {
     getAllClothes() {
         this.setState({ showItems: false });
 
-        axios.get(GET_ALL_CLOTHING_ITEMS.concat(this.props.user), { 
+        axios.get(GET_ALL_CLOTHING_ITEMS.concat(this.props.user), {
             headers: {
                 'Authorization': 'JWT ' + this.props.token
             }
@@ -123,12 +118,12 @@ class ClosetList extends Component {
                 }
                 return null;
             });
-            this.setState({ 
+            this.setState({
                 shirtItems: shirts,
                 pantsItems: pants,
                 shoesItems: shoes,
                 accessoriesItems: accessories,
-                outerwearItems: outerwear, 
+                outerwearItems: outerwear,
                 allClosetItems: response.data.items,
                 showItems: true
             });
@@ -170,7 +165,7 @@ class ClosetList extends Component {
 
         if (shirtUrl) {
             urls.push(shirtUrl);
-        } 
+        }
         if (pantsUrl) {
             urls.push(pantsUrl);
         }
@@ -341,9 +336,9 @@ const mapStateToProps = (state) => {
         outerwearUrl,
         accessoriesUrl
     } = state.clothingItemForm;
-    
+
     const { user, token } = state.auth;
-    
+
     return {
         user,
         token,
