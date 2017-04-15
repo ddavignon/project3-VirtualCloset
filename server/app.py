@@ -16,6 +16,7 @@ from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemList,TextList
 from resources.closet import Closet, ClosetList
+from resources.AvatarAI import avatar
 
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
@@ -50,6 +51,7 @@ api.add_resource(ClosetList, '/closets')
 api.add_resource(ItemList, '/items')
 api.add_resource(UserRegister, '/register')
 api.add_resource(TextList,'/text')
+api.add_resource(avatar,'/recommend')
 #####################################################################################
 # MIGRATIONS BELOW
 #####################################################################################
@@ -90,6 +92,13 @@ def no_intent():
     message = "Have a good day then."
     return statement(message)
 
+@app.route('/login')
+def login():
+    return render_template('index.html')
+
+@app.route('/recommendation')
+def recommend():
+    return render_template('recommendations.html')
 @app.route('/')
 def default():
   return "Success"
