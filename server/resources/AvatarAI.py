@@ -11,7 +11,7 @@ from models.closet import ClosetModel
 
 class avatar(Resource):
     @jwt_required()
-    def get(self):
+    def post(self):
         today = None
         # weatehr is assumed to be warm as of now if any errors
         dark_sky_key = os.getenv("DARK_SKY_KEY")
@@ -30,7 +30,7 @@ class avatar(Resource):
         closet = ClosetModel.find_by_uid(current_identity.id).json()
         print get_style
         return {
-            'gif': send_file('static/Avatar.gif', mimetype='image/gif'),
+            
             'weather':today,
             'shirts': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='shirt').filter_by(closet_id=closet['_id']).all()],
             'pants': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='pants').filter_by(closet_id=closet['_id']).all()],
