@@ -172,47 +172,61 @@ class ClosetList extends Component {
             // Tts.speak(result);
 
             this.setState({
-              showItems: false,
               speechToText: result
             });
 
-            navigator.geolocation.getCurrentPosition((position) => {
+            if (this.state.speechToText === 'recommend') {
                 this.setState({
-                    latitudePosition: JSON.stringify(position.coords.latitude),
-                    longitudePosition: JSON.stringify(position.coords.longitude)
+                  showItems: false,
                 });
-            }, error => console.log(error));
+                navigator.geolocation.getCurrentPosition((position) => {
+                    this.setState({
+                        latitudePosition: JSON.stringify(position.coords.latitude),
+                        longitudePosition: JSON.stringify(position.coords.longitude)
+                    });
+                }, error => console.log(error));
 
-            console.log(this.state.latitudePosition, this.state.longitudePosition);
-            axios.get(GET_RECOMMENDED_ITEMS, {
-                headers: {
-                    'Authorization': 'JWT ' + this.props.token
-                },
-                params: {
-                    command: this.state.speechToText,
-                    lat: this.state.latitudePosition,
-                    lng: this.state.longitudePosition
-                }
-            })
-            .then((response) => {
-                console.log(response);
-                this.setState({
-                    speechToText: response.data.text,
-                    shirtItems: response.data.shirts,
-                    pantsItems: response.data.pants,
-                    shoesItems: response.data.shoes,
-                    accessoriesItems: response.data.accessories,
-                    outerwearItems: response.data.outerwear,
-                    weatherTemp: response.data.weather,
-                    showItems: true
+                console.log(this.state.latitudePosition, this.state.longitudePosition);
+                axios.get(GET_RECOMMENDED_ITEMS, {
+                    headers: {
+                        'Authorization': 'JWT ' + this.props.token
+                    },
+                    params: {
+                        command: this.state.speechToText,
+                        lat: this.state.latitudePosition,
+                        lng: this.state.longitudePosition
+                    }
+                })
+                .then((response) => {
+                    console.log(response);
+                    this.setState({
+                        speechToText: response.data.text,
+                        shirtItems: response.data.shirts,
+                        pantsItems: response.data.pants,
+                        shoesItems: response.data.shoes,
+                        accessoriesItems: response.data.accessories,
+                        outerwearItems: response.data.outerwear,
+                        weatherTemp: response.data.weather,
+                        showItems: true
+                    });
+                    Tts.speak(this.state.speechToText);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.setState({ showItems: true });
                 });
-                Tts.speak(this.state.speechToText);
-            })
-            .catch((err) => {
-                console.log(err);
-                this.setState({ showItems: true });
-            });
-            this.setState({ getAllClothes: false, allClosetItems: [] });
+                this.setState({ getAllClothes: false, allClosetItems: [] });
+            }
+
+            if (this.state.speechToText === 'get all clothes') {
+              this.getAllClothes();
+              this.setState({ speechToText: 'Here are all of your clothes!' });
+              Tts.speak(this.state.speechToText);
+            }
+
+            if (this.state.speechToText === 'send text') {
+              this.sendTextOfClothes();
+            }
           })
           .catch((error) => {
             this.setState({
@@ -262,8 +276,16 @@ class ClosetList extends Component {
                 urls
             })
         })
-        .then(response => console.log(response))
-        .catch(err => console.log('error', err));
+        .then(response => {
+          console.log(response);
+          this.setState({ speechToText: 'clothes sent' });
+          Tts.speak(this.state.speechToText);
+        })
+        .catch(err => {
+          console.log('error', err);
+          this.setState({ speechToText: 'something went wrong' });
+          Tts.speak(this.state.speechToText);
+        });
 
         return console.log({
             user,
@@ -337,6 +359,10 @@ class ClosetList extends Component {
                   indicatorStyle={'white'}
                   scrollEventThrottle={200}
                 >
+                    <Text>
+                      {this.state.speechToText}
+                      {this.state.voiceError}
+                    </Text>
                     <Text style={title}>Shirts</Text>
                     {this.renderItems(this.state.shirtItems)}
                     <Text style={title}>Pants</Text>
@@ -350,10 +376,6 @@ class ClosetList extends Component {
                     <Text style={title}>All Items</Text>
                     {this.renderItems(this.state.allClosetItems)}
                 </ScrollView>
-                <Text>
-                {this.state.speechToText}
-                {this.state.voiceError}
-                </Text>
                 <CardSection>
                     <View style={avatarStyle.containerStyle}>
                         {this.renderButtons()}
