@@ -40,6 +40,6 @@ class avatar(Resource):
         }
     @jwt_required()
     def get(self):
-        return send_file('static/Avatar.gif', mimetype='image/gif')
+        return send_file('static/avatarAnimate.gif', mimetype='image/gif')
 
         
