@@ -182,6 +182,7 @@ class ClosetList extends Component {
                 this.setState({
                   showItems: false,
                 });
+                
                 navigator.geolocation.getCurrentPosition((position) => {
                     this.setState({
                         latitudePosition: JSON.stringify(position.coords.latitude),
