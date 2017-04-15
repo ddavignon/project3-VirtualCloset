@@ -17,6 +17,7 @@ import axios from 'axios';
 import {
     GET_CLOTHING_ITEMS,
     GET_ALL_CLOTHING_ITEMS,
+    GET_RECOMMENDED_ITEMS ,
     SEND_CLOTHING_ITEM_IMAGE_TEXT,
     AVATAR
 } from '../api/constants';
@@ -36,11 +37,12 @@ class ClosetList extends Component {
         accessoriesItems: [],
         outerwearItems: [],
         allClosetItems: [],
-        getAllClothes: false,
+        getAllClothes: true,
         latitudePosition: '37.4829525',
         longitudePosition: '-122.1480473',
         speechToText: '',
-        voiceError: ''
+        voiceError: '',
+        weatherTemp: ''
     };
 
     componentWillMount() {
@@ -78,6 +80,7 @@ class ClosetList extends Component {
                 shoesItems: response.data.shoes,
                 accessoriesItems: response.data.accessories,
                 outerwearItems: response.data.outerwear,
+                weatherTemp: response.data.weather,
                 showItems: true
             });
         })
@@ -164,11 +167,52 @@ class ClosetList extends Component {
       if (Platform.OS === 'android') {
         STTandroid.showGoogleInputDialog()
           .then((result) => {
+
+            // console.log(result);
+            // Tts.speak(result);
+
             this.setState({
+              showItems: false,
               speechToText: result
             });
-            console.log(result);
-            Tts.speak(result);
+
+            navigator.geolocation.getCurrentPosition((position) => {
+                this.setState({
+                    latitudePosition: JSON.stringify(position.coords.latitude),
+                    longitudePosition: JSON.stringify(position.coords.longitude)
+                });
+            }, error => console.log(error));
+
+            console.log(this.state.latitudePosition, this.state.longitudePosition);
+            axios.get(GET_RECOMMENDED_ITEMS, {
+                headers: {
+                    'Authorization': 'JWT ' + this.props.token
+                },
+                params: {
+                    command: this.state.speechToText,
+                    lat: this.state.latitudePosition,
+                    lng: this.state.longitudePosition
+                }
+            })
+            .then((response) => {
+                console.log(response);
+                this.setState({
+                    speechToText: response.data.text,
+                    shirtItems: response.data.shirts,
+                    pantsItems: response.data.pants,
+                    shoesItems: response.data.shoes,
+                    accessoriesItems: response.data.accessories,
+                    outerwearItems: response.data.outerwear,
+                    weatherTemp: response.data.weather,
+                    showItems: true
+                });
+                Tts.speak(this.state.speechToText);
+            })
+            .catch((err) => {
+                console.log(err);
+                this.setState({ showItems: true });
+            });
+            this.setState({ getAllClothes: false, allClosetItems: [] });
           })
           .catch((error) => {
             this.setState({
