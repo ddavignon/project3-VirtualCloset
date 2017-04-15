@@ -30,7 +30,6 @@ class avatar(Resource):
         closet = ClosetModel.find_by_uid(current_identity.id).json()
         print get_style
         return {
-            
             'weather':today,
             'shirts': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='shirt').filter_by(closet_id=closet['_id']).all()],
             'pants': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='pants').filter_by(closet_id=closet['_id']).all()],
@@ -39,6 +38,8 @@ class avatar(Resource):
             'outerwear': [item.json() for item in ItemModel.query.filter_by(style=get_style).filter_by(type_clothing='outerwear').filter_by(closet_id=closet['_id']).all()],
             'text': 'Here is what I found'
         }
-        
+    @jwt_required()
+    def get(self):
+        return send_file('static/Avatar.gif', mimetype='image/gif')
 
         
