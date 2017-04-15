@@ -60,7 +60,10 @@ class ClosetList extends Component {
                 latitudePosition: JSON.stringify(position.coords.latitude),
                 longitudePosition: JSON.stringify(position.coords.longitude)
             });
-        }, error => console.log(error));
+        },
+        (error) => alert(JSON.stringify(error)),
+        { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
+        );
 
         console.log(this.state.latitudePosition, this.state.longitudePosition);
         axios.get(GET_CLOTHING_ITEMS, {
@@ -184,7 +187,10 @@ class ClosetList extends Component {
                         latitudePosition: JSON.stringify(position.coords.latitude),
                         longitudePosition: JSON.stringify(position.coords.longitude)
                     });
-                }, error => console.log(error));
+                },
+                (error) => alert(JSON.stringify(error)),
+                { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
+                );
 
                 console.log(this.state.latitudePosition, this.state.longitudePosition);
                 axios.get(GET_RECOMMENDED_ITEMS, {
