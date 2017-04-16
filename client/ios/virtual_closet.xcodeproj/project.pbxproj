@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -34,12 +35,12 @@
 		2DCD954D1E0B4F2C00145EB5 /* virtual_closetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* virtual_closetTests.m */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		8CB94BF0A61441E9A95A64A1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9BF650AC48644E6859E0F4C /* libRCTActionSheet.a */; };
 		DABD529A1E7A0D4500D999FE /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DABD52941E7A0D3800D999FE /* libRNImagePicker.a */; };
 		DABD529B1E7A0D4B00D999FE /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DABD52991E7A0D3800D999FE /* libRNFetchBlob.a */; };
 		F451368B1E7F5A5A00B0F085 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB61A68108700A75B9A /* Info.plist */; };
 		F451368C1E7F5A5C00B0F085 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB61A68108700A75B9A /* Info.plist */; };
 		F4C6FBF71E8B70CB001C5683 /* libReactNativePermissions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C6FBF41E8B7056001C5683 /* libReactNativePermissions.a */; };
-		8CB94BF0A61441E9A95A64A1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9BF650AC48644E6859E0F4C /* libRCTActionSheet.a */; };
 		F6D9D31BE73D40A6B1B834B6 /* libTextToSpeech.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 278A76081BCE4559A48F5D2F /* libTextToSpeech.a */; };
 /* End PBXBuildFile section */
 
@@ -233,6 +234,41 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		DA664FC81EA3EDDD0028E653 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C68080B477854AEE8BD79462 /* speechToText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 13B07F961A680F5B00A75B9A;
+			remoteInfo = speechToText;
+		};
+		DA664FCA1EA3EDDD0028E653 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C68080B477854AEE8BD79462 /* speechToText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 00E356EE1AD99517003FC87E;
+			remoteInfo = speechToTextTests;
+		};
+		DA664FCC1EA3EDDD0028E653 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C68080B477854AEE8BD79462 /* speechToText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2D02E47B1E0B4A5D006451C7;
+			remoteInfo = "speechToText-tvOS";
+		};
+		DA664FCE1EA3EDDD0028E653 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C68080B477854AEE8BD79462 /* speechToText.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2D02E4901E0B4A5D006451C7;
+			remoteInfo = "speechToText-tvOSTests";
+		};
+		DA664FD11EA3EDDD0028E653 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C8E5D84062D7410FB56E800C /* TextToSpeech.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3A6FB2081D99E12200593599;
+			remoteInfo = TextToSpeech;
+		};
 		DABD52931E7A0D3800D999FE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD045D2D766343789864F45D /* RNImagePicker.xcodeproj */;
@@ -276,18 +312,18 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = virtual_closet/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = virtual_closet/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		278A76081BCE4559A48F5D2F /* libTextToSpeech.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libTextToSpeech.a; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* virtual_closet-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "virtual_closet-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* virtual_closet-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "virtual_closet-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		A9BF650AC48644E6859E0F4C /* libRCTActionSheet.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTActionSheet.a; sourceTree = "<group>"; };
 		BBB86F533152498F82A183C5 /* ReactNativePermissions.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativePermissions.xcodeproj; path = "../node_modules/react-native-permissions/ReactNativePermissions.xcodeproj"; sourceTree = "<group>"; };
+		C68080B477854AEE8BD79462 /* speechToText.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = speechToText.xcodeproj; path = "../node_modules/react-native-speech-to-text/ios/speechToText.xcodeproj"; sourceTree = "<group>"; };
 		C774AABC6FE84DD7A0200BDD /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
+		C8E5D84062D7410FB56E800C /* TextToSpeech.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = TextToSpeech.xcodeproj; path = "../node_modules/react-native-tts/ios/TextToSpeech.xcodeproj"; sourceTree = "<group>"; };
 		DD045D2D766343789864F45D /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
-		C68080B477854AEE8BD79462 /* speechToText.xcodeproj */ = {isa = PBXFileReference; name = "speechToText.xcodeproj"; path = "../node_modules/react-native-speech-to-text/ios/speechToText.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		A9BF650AC48644E6859E0F4C /* libRCTActionSheet.a */ = {isa = PBXFileReference; name = "libRCTActionSheet.a"; path = "libRCTActionSheet.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		C8E5D84062D7410FB56E800C /* TextToSpeech.xcodeproj */ = {isa = PBXFileReference; name = "TextToSpeech.xcodeproj"; path = "../node_modules/react-native-tts/ios/TextToSpeech.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		278A76081BCE4559A48F5D2F /* libTextToSpeech.a */ = {isa = PBXFileReference; name = "libTextToSpeech.a"; path = "libTextToSpeech.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -526,6 +562,25 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		DA664FA41EA3EDDC0028E653 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DA664FD21EA3EDDD0028E653 /* libTextToSpeech.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DA664FA61EA3EDDD0028E653 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DA664FC91EA3EDDD0028E653 /* speechToText.app */,
+				DA664FCB1EA3EDDD0028E653 /* speechToTextTests.xctest */,
+				DA664FCD1EA3EDDD0028E653 /* speechToText-tvOS.app */,
+				DA664FCF1EA3EDDD0028E653 /* speechToText-tvOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		DABD52771E7A0D3800D999FE /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -724,6 +779,14 @@
 					ProductGroup = DABD52771E7A0D3800D999FE /* Products */;
 					ProjectRef = DD045D2D766343789864F45D /* RNImagePicker.xcodeproj */;
 				},
+				{
+					ProductGroup = DA664FA61EA3EDDD0028E653 /* Products */;
+					ProjectRef = C68080B477854AEE8BD79462 /* speechToText.xcodeproj */;
+				},
+				{
+					ProductGroup = DA664FA41EA3EDDC0028E653 /* Products */;
+					ProjectRef = C8E5D84062D7410FB56E800C /* TextToSpeech.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -911,6 +974,41 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		DA664FC91EA3EDDD0028E653 /* speechToText.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = speechToText.app;
+			remoteRef = DA664FC81EA3EDDD0028E653 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA664FCB1EA3EDDD0028E653 /* speechToTextTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = speechToTextTests.xctest;
+			remoteRef = DA664FCA1EA3EDDD0028E653 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA664FCD1EA3EDDD0028E653 /* speechToText-tvOS.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "speechToText-tvOS.app";
+			remoteRef = DA664FCC1EA3EDDD0028E653 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA664FCF1EA3EDDD0028E653 /* speechToText-tvOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "speechToText-tvOSTests.xctest";
+			remoteRef = DA664FCE1EA3EDDD0028E653 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA664FD21EA3EDDD0028E653 /* libTextToSpeech.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libTextToSpeech.a;
+			remoteRef = DA664FD11EA3EDDD0028E653 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		DABD52941E7A0D3800D999FE /* libRNImagePicker.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1076,8 +1174,8 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
-					"$(SRCROOT)\..\node_modules\react-native-speech-to-text\ios\speechToText",
-					"$(SRCROOT)\..\node_modules\react-native-tts\ios\TextToSpeech",
+					"$(SRCROOT)..\node_modules\neact-native-speech-to-textiosspeechToText",
+					"$(SRCROOT)..\node_modules\neact-native-ttsiosTextToSpeech",
 				);
 				INFOPLIST_FILE = virtual_closetTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1109,8 +1207,8 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
-					"$(SRCROOT)\..\node_modules\react-native-speech-to-text\ios\speechToText",
-					"$(SRCROOT)\..\node_modules\react-native-tts\ios\TextToSpeech",
+					"$(SRCROOT)..\node_modules\neact-native-speech-to-textiosspeechToText",
+					"$(SRCROOT)..\node_modules\neact-native-ttsiosTextToSpeech",
 				);
 				INFOPLIST_FILE = virtual_closetTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1143,8 +1241,8 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
-					"$(SRCROOT)\..\node_modules\react-native-speech-to-text\ios\speechToText",
-					"$(SRCROOT)\..\node_modules\react-native-tts\ios\TextToSpeech",
+					"$(SRCROOT)..\node_modules\neact-native-speech-to-textiosspeechToText",
+					"$(SRCROOT)..\node_modules\neact-native-ttsiosTextToSpeech",
 				);
 				INFOPLIST_FILE = virtual_closet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1168,8 +1266,8 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
-					"$(SRCROOT)\..\node_modules\react-native-speech-to-text\ios\speechToText",
-					"$(SRCROOT)\..\node_modules\react-native-tts\ios\TextToSpeech",
+					"$(SRCROOT)..\node_modules\neact-native-speech-to-textiosspeechToText",
+					"$(SRCROOT)..\node_modules\neact-native-ttsiosTextToSpeech",
 				);
 				INFOPLIST_FILE = virtual_closet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1200,8 +1298,8 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
-					"$(SRCROOT)\..\node_modules\react-native-speech-to-text\ios\speechToText",
-					"$(SRCROOT)\..\node_modules\react-native-tts\ios\TextToSpeech",
+					"$(SRCROOT)..\node_modules\neact-native-speech-to-textiosspeechToText",
+					"$(SRCROOT)..\node_modules\neact-native-ttsiosTextToSpeech",
 				);
 				INFOPLIST_FILE = "virtual_closet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1242,8 +1340,8 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-permissions/**",
-					"$(SRCROOT)\..\node_modules\react-native-speech-to-text\ios\speechToText",
-					"$(SRCROOT)\..\node_modules\react-native-tts\ios\TextToSpeech",
+					"$(SRCROOT)..\node_modules\neact-native-speech-to-textiosspeechToText",
+					"$(SRCROOT)..\node_modules\neact-native-ttsiosTextToSpeech",
 				);
 				INFOPLIST_FILE = "virtual_closet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

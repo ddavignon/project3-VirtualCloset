@@ -327,9 +327,9 @@ class ClosetList extends Component {
                 }
              )
              if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                 this.getLocation();
+                 this.getLocationCoords();
              } else {
-                 console.log('Location permission denied')
+                 console.log('Location permission denied');
              }
         } catch (err) {
              console.warn(err);
