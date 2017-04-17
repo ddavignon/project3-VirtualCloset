@@ -19,6 +19,6 @@ class recommendClothes(Resource):
             item =random.choice(random.choice(items))
             return render_template('recommendations.html',search=item["description"])
             
-        return return render_template('recommendations.html',search='shirt')
+        return render_template('recommendations.html',search='shirt')
        
     
