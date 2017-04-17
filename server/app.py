@@ -43,7 +43,7 @@ log = logging.getLogger()
 def create_tables():
     db.create_all()
 
-jwt = JWT(app, authenticate, identity)
+jwt = JWT(app, authenticate, identity,JWT_EXPIRATION_DELTA=86400)
 
 api.add_resource(Closet, '/closet/<string:name>')
 api.add_resource(Item, '/item/<string:name>')
