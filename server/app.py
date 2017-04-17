@@ -25,13 +25,13 @@ from PIL import Image
 import requests
 from StringIO import StringIO
 import logging
-
+import datetime
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.config['JWT_EXPIRATION_DELTA']=datetime.timedelta(days=10)
 appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
 app.secret_key = 'SuperSecretPasskey'
 api = Api(app)
@@ -43,7 +43,8 @@ log = logging.getLogger()
 def create_tables():
     db.create_all()
 
-jwt = JWT(app, authenticate, identity,JWT_EXPIRATION_DELTA=86400)
+jwt = JWT(app, authenticate, identity,)
+
 
 api.add_resource(Closet, '/closet/<string:name>')
 api.add_resource(Item, '/item/<string:name>')
