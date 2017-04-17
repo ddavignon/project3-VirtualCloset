@@ -100,9 +100,13 @@ def no_intent():
 def login():
     return render_template('index.html')
 
-@app.route('/recommendation')
+@app.route('/recommendation',methods=['GET'])
 def recommend():
-    return render_template('recommendations.html')
+    des = request.args.get('descripition')
+    if des is None:
+        return render_template('recommendations.html',search="shirts")
+    des =str(des)
+    return render_template('recommendations.html',search=des)
 @app.route('/')
 def default():
   return "Success"
