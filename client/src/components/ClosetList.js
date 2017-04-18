@@ -252,7 +252,12 @@ class ClosetList extends Component {
             }
 
             if (this.state.speechToText === 'get recommendations') {
-                Linking.openURL(RECOMMENDATIONS);
+                if (this.state.allClosetItems.length > 0) {
+                    const itemRecommendation = this.state.allClosetItems[this.getRandomItem(0, this.state.allClosetItems.length)];
+                    Linking.openURL(RECOMMENDATIONS.concat(`?descripition=${itemRecommendation.description}`));
+                } else {
+                    Linking.openURL(RECOMMENDATIONS);
+                }
             }
           })
           .catch((error) => {
@@ -262,6 +267,10 @@ class ClosetList extends Component {
             console.log(error);
           });
         }
+    }
+
+    getRandomItem(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
     }
 
     sendTextOfClothes() {
