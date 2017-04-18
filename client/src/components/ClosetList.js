@@ -1,56 +1,93 @@
 import React, { Component } from 'react';
 import {
+    Alert,
     View,
     ScrollView,
     Text,
-    Image 
+    Image,
+    Platform,
+    PermissionsAndroid,
+    TouchableHighlight
 } from 'react-native';
 import { connect } from 'react-redux';
+import Carousel from 'react-native-snap-carousel';
+import { STTandroid, STTios } from 'react-native-speech-to-text';
+import Tts from 'react-native-tts';
+
 import axios from 'axios';
 import {
     GET_CLOTHING_ITEMS,
     GET_ALL_CLOTHING_ITEMS,
-    SEND_CLOTHING_ITEM_IMAGE_TEXT
+    GET_RECOMMENDED_ITEMS ,
+    SEND_CLOTHING_ITEM_IMAGE_TEXT,
+    AVATAR
 } from '../api/constants';
-import Carousel from 'react-native-snap-carousel';
 import ClosetItem from './ClosetItem';
-import { CardSection, Card, Button } from './common';
+import { CardSection, Spinner, Button } from './common';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
 
+const Permissions = require('react-native-permissions');
+
+Tts.setDefaultLanguage('en-AU');
+
 class ClosetList extends Component {
     state = {
-        showText: true,
+        showItems: true,
         shirtItems: [],
         pantsItems: [],
         shoesItems: [],
         accessoriesItems: [],
         outerwearItems: [],
         allClosetItems: [],
-        getAllClothes: false,
+        getAllClothes: true,
         latitudePosition: '37.4829525',
         longitudePosition: '-122.1480473',
+        speechToText: '',
+        voiceError: '',
+        weatherTemp: '',
+        locationPermission: 'undetermined',
     };
 
     componentWillMount() {
-        this.getWeatherClothes();
+        if (this.state.getAllClothes) {
+            this.getAllClothes();
+        } else {
+            this.getWeatherClothes();
+        }
     }
 
-    getWeatherClothes() {
+    getLocationCoords() {
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 latitudePosition: JSON.stringify(position.coords.latitude),
                 longitudePosition: JSON.stringify(position.coords.longitude)
             });
         },
-        (error) => alert(JSON.stringify(error)), {
+            (error) => {
+            console.log(error);
+        }, {
             enableHighAccuracy: true,
             timeout: 20000,
-            maximumAge: 1000
+            maximumAge: 1000 }
+        );
+    }
+
+    getPermissionAndroid() {
+        Permissions.getPermissionStatus('location', 'whenInUse')
+          .then(response => {
+            //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+            this.setState({ locationPermission: response });
         });
+    }
+
+    getWeatherClothes() {
+        this.setState({ showItems: false });
+
+        this.getLocationCoords();
 
         console.log(this.state.latitudePosition, this.state.longitudePosition);
-        axios.get(GET_CLOTHING_ITEMS, { 
+        axios.get(GET_CLOTHING_ITEMS, {
             headers: {
                 'Authorization': 'JWT ' + this.props.token
             },
@@ -61,22 +98,27 @@ class ClosetList extends Component {
         })
         .then((response) => {
             console.log(response);
-            this.setState({ 
+            this.setState({
                 shirtItems: response.data.shirts,
                 pantsItems: response.data.pants,
                 shoesItems: response.data.shoes,
                 accessoriesItems: response.data.accessories,
-                outerwearItems: response.data.outerwear 
-                });
-            })
+                outerwearItems: response.data.outerwear,
+                weatherTemp: response.data.weather,
+                showItems: true
+            });
+        })
         .catch((err) => {
             console.log(err);
+            this.setState({ showItems: true });
         });
-        this.setState({ getAllClothes: false });
+        this.setState({ getAllClothes: false, allClosetItems: [] });
     }
 
     getAllClothes() {
-        axios.get(GET_ALL_CLOTHING_ITEMS.concat(this.props.user), { 
+        this.setState({ showItems: false });
+
+        axios.get(GET_ALL_CLOTHING_ITEMS.concat(this.props.user), {
             headers: {
                 'Authorization': 'JWT ' + this.props.token
             }
@@ -104,7 +146,7 @@ class ClosetList extends Component {
                     case 'accessories':
                         accessories.push(item);
                         break;
-                    case 'outerwear ':
+                    case 'outerwear':
                         outerwear.push(item);
                         break;
                     default:
@@ -112,17 +154,19 @@ class ClosetList extends Component {
                 }
                 return null;
             });
-            this.setState({ 
+            this.setState({
                 shirtItems: shirts,
                 pantsItems: pants,
                 shoesItems: shoes,
                 accessoriesItems: accessories,
-                outerwearItems: outerwear, 
+                outerwearItems: outerwear,
                 allClosetItems: response.data.items,
+                showItems: true
             });
         })
         .catch((err) => {
             console.log(err);
+            this.setState({ showItems: true });
         });
         this.setState({ getAllClothes: true });
     }
@@ -142,6 +186,77 @@ class ClosetList extends Component {
         });
     }
 
+    handleAvatarPress() {
+      console.log('Pressed!');
+      if (Platform.OS === 'android') {
+        STTandroid.showGoogleInputDialog()
+          .then((result) => {
+
+            // console.log(result);
+            // Tts.speak(result);
+
+            this.setState({
+              speechToText: result
+            });
+
+            if (this.state.speechToText === 'recommend') {
+                this.setState({
+                  showItems: false,
+                });
+
+                this.getLocationCoords();
+
+                console.log(this.state.latitudePosition, this.state.longitudePosition);
+                axios.get(GET_RECOMMENDED_ITEMS, {
+                    headers: {
+                        'Authorization': 'JWT ' + this.props.token
+                    },
+                    params: {
+                        command: this.state.speechToText,
+                        lat: this.state.latitudePosition,
+                        lng: this.state.longitudePosition
+                    }
+                })
+                .then((response) => {
+                    console.log(response);
+                    this.setState({
+                        speechToText: response.data.text,
+                        shirtItems: response.data.shirts,
+                        pantsItems: response.data.pants,
+                        shoesItems: response.data.shoes,
+                        accessoriesItems: response.data.accessories,
+                        outerwearItems: response.data.outerwear,
+                        weatherTemp: response.data.weather,
+                        showItems: true
+                    });
+                    Tts.speak(this.state.speechToText);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.setState({ showItems: true });
+                });
+                this.setState({ getAllClothes: false, allClosetItems: [] });
+            }
+
+            if (this.state.speechToText === 'get all clothes') {
+              this.getAllClothes();
+              this.setState({ speechToText: 'Here are all of your clothes!' });
+              Tts.speak(this.state.speechToText);
+            }
+
+            if (this.state.speechToText === 'send text') {
+              this.sendTextOfClothes();
+            }
+          })
+          .catch((error) => {
+            this.setState({
+              voiceError: error
+            });
+            console.log(error);
+          });
+        }
+    }
+
     sendTextOfClothes() {
         const {
             user,
@@ -157,7 +272,7 @@ class ClosetList extends Component {
 
         if (shirtUrl) {
             urls.push(shirtUrl);
-        } 
+        }
         if (pantsUrl) {
             urls.push(pantsUrl);
         }
@@ -181,8 +296,16 @@ class ClosetList extends Component {
                 urls
             })
         })
-        .then(response => console.log(response))
-        .catch(err => console.log('error', err));
+        .then(response => {
+          console.log(response);
+          this.setState({ speechToText: 'clothes sent' });
+          Tts.speak(this.state.speechToText);
+        })
+        .catch(err => {
+          console.log('error', err);
+          this.setState({ speechToText: 'something went wrong' });
+          Tts.speak(this.state.speechToText);
+        });
 
         return console.log({
             user,
@@ -195,7 +318,32 @@ class ClosetList extends Component {
         });
     }
 
+    async requestLocationPermission() {
+        try {
+             const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+                'title': 'Cool Fashion App needs location Permission',
+                'message': 'Cool Fashion App needs access to your location so you can acces the weather.'
+                }
+             )
+             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                 this.getLocationCoords();
+             } else {
+                 console.log('Location permission denied');
+             }
+        } catch (err) {
+             console.warn(err);
+        }
+     }
+
     renderItems(items) {
+        if (!this.state.showItems) {
+            return (
+                <CardSection>
+                    <Spinner size="large" />
+                </CardSection>
+            );
+        }
         return (
             <Carousel
                 sliderWidth={sliderWidth}
@@ -241,6 +389,11 @@ class ClosetList extends Component {
             scrollview,
             title,
         } = styles;
+
+        if (Platform.OS === 'android' && this.state.locationPermission !== 'authorized') {
+            this.requestLocationPermission();
+        }
+
         return (
             <View style={container}>
                 <ScrollView
@@ -248,6 +401,10 @@ class ClosetList extends Component {
                   indicatorStyle={'white'}
                   scrollEventThrottle={200}
                 >
+                    <Text>
+                      {this.state.speechToText}
+                      {this.state.voiceError}
+                    </Text>
                     <Text style={title}>Shirts</Text>
                     {this.renderItems(this.state.shirtItems)}
                     <Text style={title}>Pants</Text>
@@ -264,13 +421,41 @@ class ClosetList extends Component {
                 <CardSection>
                     <View style={avatarStyle.containerStyle}>
                         {this.renderButtons()}
-                        <Image
-                            style={{ width: 75, height: 75 }}
-                            source={{ uri: 'https://9to5mac.files.wordpress.com/2015/09/face-yellow-loop-60-emoji.gif' }}
-                        />
+                        <TouchableHighlight
+                          onPress={() => this.handleAvatarPress()}
+                        >
+                          <Image
+                              onPress={() => this.handleAvatarPress()}
+                              style={{ width: 75, height: 75 }}
+                              source={{ uri: AVATAR }}
+                          />
+                        </TouchableHighlight>
                         <View style={{ flex: 1 }}>
-                            <Button onPress={this.sendTextOfClothes.bind(this)}>
-                                Send Clothes
+                            <Button
+                                onPress={() => {
+                                    // Works on both iOS and Android
+                                    Alert.alert(
+                                        'Nice Selection!',
+                                        'Would you like to send a message for later?',
+                                        [
+                                            {
+                                                text: 'Cancel',
+                                                onPress: () => { console.log('Cancel Pressed'); },
+                                                style: 'cancel' },
+                                            {
+                                                text: 'Send',
+                                                onPress: () => {
+                                                    this.sendTextOfClothes();
+                                                    console.log('OK Pressed');
+                                                }
+                                            },
+                                        ],
+                                        { cancelable: false }
+                                        );
+                                    }
+                                }
+                            >
+                                Confirm
                             </Button>
                         </View>
                     </View>
@@ -297,9 +482,9 @@ const mapStateToProps = (state) => {
         outerwearUrl,
         accessoriesUrl
     } = state.clothingItemForm;
-    
+
     const { user, token } = state.auth;
-    
+
     return {
         user,
         token,

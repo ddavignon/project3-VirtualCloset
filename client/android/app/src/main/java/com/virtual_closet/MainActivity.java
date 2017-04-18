@@ -2,6 +2,7 @@ package com.virtual_closet;
 
 import com.facebook.react.ReactActivity;
 
+
 public class MainActivity extends ReactActivity {
 
     /**

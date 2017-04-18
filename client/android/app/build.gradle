@@ -80,7 +80,11 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+//def enableProguardInReleaseBuilds = false
+//def keystorePropertiesFile = rootProject.file("keystore.properties")
+//def keystoreProperties = new Properties()
+//keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 
 android {
     compileSdkVersion 23
@@ -90,12 +94,22 @@ android {
         applicationId "com.virtual_closet"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
     }
+
+//    signingConfigs {
+//        release {
+//            keyAlias keystoreProperties['keyAlias']
+//            keyPassword keystoreProperties['keyPassword']
+//            storeFile file(keystoreProperties['storeFile'])
+//            storePassword keystoreProperties['storePassword']
+//        }
+//    }
+
     splits {
         abi {
             reset()
@@ -104,12 +118,13 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
-    buildTypes {
-        release {
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-        }
-    }
+//    buildTypes {
+//        release {
+//            minifyEnabled enableProguardInReleaseBuilds
+//            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+//            signingConfig signingConfigs.release
+//        }
+//    }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -129,6 +144,8 @@ dependencies {
     compile project(':react-native-permissions')
     compile project(':react-native-fetch-blob')
     compile project(':react-native-image-picker')
+    compile project(':react-native-speech-to-text')
+    compile project(':react-native-tts')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:support-v4:23.0.0"
     compile "com.android.support:appcompat-v7:23.4.0"
