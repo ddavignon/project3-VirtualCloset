@@ -221,7 +221,7 @@ def sendMessage(url,number,carrier):
     msgText = MIMEText('<img src="cid:image1">', 'html')
     msgAlternative.attach(msgText)
     response = requests.get(url)
-    size = 600, 600 #Can go higher it only took up 45kb
+    size = 900, 900 #Can go higher it only took up 45kb
     img = StringIO(response.content) 
     newImg=cStringIO.StringIO()
     #open with PILL now
@@ -229,7 +229,7 @@ def sendMessage(url,number,carrier):
     #Resize Image
     im=im.resize(size,Image.ANTIALIAS)
     #Try to get best quality
-    quality_val = 90
+    quality_val = 100
     im.save(newImg, "JPEG",quality=quality_val)
    
     # MIMEImage
