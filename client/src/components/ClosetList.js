@@ -455,7 +455,7 @@ class ClosetList extends Component {
                                     }
                                 }
                             >
-                                { '\nConfirm' }
+                                { 'Confirm' }
                             </Button>
                         </View>
                     </View>
