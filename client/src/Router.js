@@ -46,7 +46,8 @@ const RouterComponent = () => {
 
 const styles = {
     viewStyle: {
-        backgroundColor: '#00BCD4', // 'rgb(0,188,212)',
+        //backgroundColor: '#00BCD4', // 'rgb(0,188,212)',
+        backgroundColor: '#55B585',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
     },

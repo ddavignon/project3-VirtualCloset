@@ -369,7 +369,7 @@ class ClosetList extends Component {
             return (
                 <View style={{ flex: 1 }}>
                     <Button onPress={this.getWeatherClothes.bind(this)}>
-                        Get Clothes for Weather!
+                        { 'Get Clothes for \n      Weather!' }
                     </Button>
                 </View>
             );
@@ -455,7 +455,7 @@ class ClosetList extends Component {
                                     }
                                 }
                             >
-                                Confirm
+                                { '\nConfirm' }
                             </Button>
                         </View>
                     </View>
@@ -471,7 +471,7 @@ const avatarStyle = {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center'
-    }
+    },
 };
 
 const mapStateToProps = (state) => {

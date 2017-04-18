@@ -4,7 +4,8 @@ export const colors = {
     black: '#1a1917',
     gray: '#888888',
     background1: 'rgb(224, 224, 224)',
-    backround2: 'rgb(224, 224, 224)'
+    backround2: 'rgb(224, 224, 224)',
+    backgroundLightBlue: '#8ED3DE',
     // background1: 'hsl(15, 55%, 50%)',
     // background2: 'hsl(230, 30%, 45%)'
 };
@@ -12,7 +13,7 @@ export const colors = {
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background1
+        backgroundColor: colors.backgroundLightBlue
     },
     colorsContainer: {
         ...StyleSheet.absoluteFillObject,

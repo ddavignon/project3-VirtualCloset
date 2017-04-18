@@ -29,7 +29,7 @@ class LoginForm extends Component {
 
         this.setState({
             showSignupFields: 'show',
-            validationCheck: 0, 
+            validationCheck: 0,
         });
         if (this.state.showSignupFields === 'show') {
           if (this.validateEmail(email)) {
@@ -104,7 +104,7 @@ class LoginForm extends Component {
                            />
                        </CardSection>
                         <CardSection style={{ flexDirection: 'column' }}>
-                            <Text>Carrier</Text>
+                            <Text style={styles.pickerTextStyle} >Carrier</Text>
                             <Picker
                                 style={{ flex: 1 }}
                                 selectedValue={this.props.carrier}
@@ -153,10 +153,17 @@ class LoginForm extends Component {
 
     render() {
         return (
-            <ScrollView>
+            <ScrollView style={styles.mainScrollView} >
                 <Card>
+                <Text style={styles.welcomeTextStyle}>
+                    Welcome   to
+                </Text>
+                <Text style={styles.appNameTextStyle}>
+                    Virtual   Closet
+                </Text>
                     <CardSection>
                         <Input
+                            style={styles.input}
                             label="Email"
                             placeholder="email@email.com"
                             onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'email', value })}
@@ -197,9 +204,26 @@ const styles = {
         borderRadius: 5,
         marginBottom: 5,
     },
-    button: {
-        backgroundColor: '#eeeeee',
-        padding: 10,
+    pickerTextStyle: {
+        fontSize: 18,
+        paddingRight: 70,
+    },
+    welcomeTextStyle: {
+        fontSize: 40,
+        alignSelf: 'center',
+        paddingTop: 15,
+
+    },
+    appNameTextStyle: {
+        color: '#4D4F4F',
+        fontFamily: 'Roboto',
+        fontSize: 50,
+        alignSelf: 'center',
+        paddingBottom: 25,
+        fontWeight: '600',
+    },
+    mainScrollView: {
+        backgroundColor: '#8ED3DE',
     },
 };
 
