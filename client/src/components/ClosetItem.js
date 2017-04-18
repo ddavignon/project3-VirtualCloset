@@ -16,12 +16,6 @@ class ClosetItem extends Component {
         type_clothing: PropTypes.string
     };
 
-    componentWillMount() {
-        const { url_path, type_clothing } = this.props;
-        
-        this.setClothesIndexUrl(type_clothing, url_path);
-    }
-
     setClothesIndexUrl(type_clothing, url_path) {
         switch (type_clothing) {
             case 'shirt':
@@ -52,6 +46,7 @@ class ClosetItem extends Component {
             _id, 
             style,
             url_path,
+            type_clothing,
             even
         } = this.props;
     
@@ -66,8 +61,8 @@ class ClosetItem extends Component {
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.slideInnerContainer}
-              onPress={() => { alert(`You've clicked '${_id}'`); }}
-              >
+              onPress={() => this.setClothesIndexUrl(type_clothing, url_path)}
+            >
                 <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
                     <Image
                       source={{ uri: url_path }}
