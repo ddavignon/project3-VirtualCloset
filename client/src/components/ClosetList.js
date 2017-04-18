@@ -180,6 +180,7 @@ class ClosetList extends Component {
                 <ClosetItem
                   key={`carousel-entry-${index}`}
                   even={(index + 1) % 2 === 0}
+                  index={index}
                   {...entry}
                 />
             );
@@ -286,36 +287,49 @@ class ClosetList extends Component {
             urls.push(accessoriesUrl);
         }
 
-        fetch(SEND_CLOTHING_ITEM_IMAGE_TEXT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'JWT ' + token
-            },
-            body: JSON.stringify({
-                urls
+        console.log('urls', urls);
+        if (urls.length > 0) {
+            console.log('urls', urls.length);
+            fetch(SEND_CLOTHING_ITEM_IMAGE_TEXT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'JWT ' + token
+                },
+                body: JSON.stringify({
+                    urls
+                })
             })
-        })
-        .then(response => {
-          console.log(response);
-          this.setState({ speechToText: 'clothes sent' });
-          Tts.speak(this.state.speechToText);
-        })
-        .catch(err => {
-          console.log('error', err);
-          this.setState({ speechToText: 'something went wrong' });
-          Tts.speak(this.state.speechToText);
-        });
+            .then(response => {
+                console.log(response);
+                this.setState({
+                    speechToText: 'clothes sent',
+                    shirtUrl,
+                    pantsUrl,
+                    shoesUrl,
+                    outerwearUrl,
+                    accessoriesUrl
+                });
+                Tts.speak(this.state.speechToText);
+            })
+            .catch(err => {
+                console.log('error', err);
+                this.setState({ speechToText: 'something went wrong' });
+                Tts.speak(this.state.speechToText);
+            });
 
-        return console.log({
-            user,
-            token,
-            shirtUrl,
-            pantsUrl,
-            shoesUrl,
-            outerwearUrl,
-            accessoriesUrl
-        });
+            return console.log({
+                user,
+                token,
+                shirtUrl,
+                pantsUrl,
+                shoesUrl,
+                outerwearUrl,
+                accessoriesUrl
+            });
+        }
+        Tts.speak('No items selected');
+        return console.log('No items selected');
     }
 
     async requestLocationPermission() {
