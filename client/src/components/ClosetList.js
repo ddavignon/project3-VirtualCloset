@@ -180,6 +180,7 @@ class ClosetList extends Component {
                 <ClosetItem
                   key={`carousel-entry-${index}`}
                   even={(index + 1) % 2 === 0}
+                  index={index}
                   {...entry}
                 />
             );

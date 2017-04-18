@@ -47,8 +47,11 @@ class ClosetItem extends Component {
             style,
             url_path,
             type_clothing,
-            even
+            even,
+            index
         } = this.props;
+
+        console.log(index, description);
     
         const uppercaseTitle = description ? (
             <Text
@@ -62,7 +65,7 @@ class ClosetItem extends Component {
               activeOpacity={0.7}
               style={styles.slideInnerContainer}
               onPress={() => this.setClothesIndexUrl(type_clothing, url_path)}
-            >
+              >
                 <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
                     <Image
                       source={{ uri: url_path }}
