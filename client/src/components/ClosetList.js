@@ -7,7 +7,8 @@ import {
     Image,
     Platform,
     PermissionsAndroid,
-    TouchableHighlight
+    TouchableHighlight,
+    Linking
 } from 'react-native';
 import { connect } from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
@@ -20,7 +21,8 @@ import {
     GET_ALL_CLOTHING_ITEMS,
     GET_RECOMMENDED_ITEMS ,
     SEND_CLOTHING_ITEM_IMAGE_TEXT,
-    AVATAR
+    AVATAR,
+    RECOMMENDATIONS
 } from '../api/constants';
 import ClosetItem from './ClosetItem';
 import { CardSection, Spinner, Button } from './common';
@@ -247,6 +249,10 @@ class ClosetList extends Component {
 
             if (this.state.speechToText === 'send text') {
               this.sendTextOfClothes();
+            }
+
+            if (this.state.speechToText === 'get recommendations') {
+                Linking.openURL(RECOMMENDATIONS);
             }
           })
           .catch((error) => {
