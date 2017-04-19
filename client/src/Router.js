@@ -13,6 +13,7 @@ const RouterComponent = () => {
                     key="login"
                     component={LoginForm}
                     title="Please Login"
+                    titleStyle={styles.textStyle}
                     navigationBarStyle={styles.viewStyle}
                 />
             </Scene>
@@ -24,6 +25,7 @@ const RouterComponent = () => {
                     key="closetList"
                     component={ClosetList}
                     title="My Closet"
+                    titleStyle={styles.textStyle}
                     initial
                     navigationBarStyle={styles.viewStyle}
                 />
@@ -31,12 +33,14 @@ const RouterComponent = () => {
                     key="clothingItemCreate"
                     component={ClothingItemCreate}
                     title="Upload Image"
+                    titleStyle={styles.textStyle}
                     navigationBarStyle={styles.viewStyle}
                 />
                 <Scene
                     key="clothingItemEdit"
                     component={ClothingItemEdit}
                     title="Edit Item"
+                    titleStyle={styles.textStyle}
                     navigationBarStyle={styles.viewStyle}
                 />
             </Scene>
@@ -47,13 +51,14 @@ const RouterComponent = () => {
 const styles = {
     viewStyle: {
         //backgroundColor: '#00BCD4', // 'rgb(0,188,212)',
-        backgroundColor: '#7BC7A5',
+        backgroundColor: '#333333',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
     },
     textStyle: {
         fontSize: 20,
-        color: '#FFF'
+        //color: '#FFF'
+        color: '#FFFFFF'
     }
 };
 

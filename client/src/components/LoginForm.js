@@ -223,7 +223,7 @@ const styles = {
         fontWeight: '600',
     },
     mainScrollView: {
-        backgroundColor: '#B9EBEA',
+        backgroundColor: '#FFFFFF',
     },
 };
 

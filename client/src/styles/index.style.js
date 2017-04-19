@@ -34,7 +34,8 @@ export default StyleSheet.create({
     title: {
         marginTop: 15,
         backgroundColor: 'transparent',
-        color: 'rgba(0, 0, 0, 0.9)',
+        //color: 'rgba(0, 0, 0, 0.9)',
+        color: '#FFFFFF',
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center'
