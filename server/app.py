@@ -5,16 +5,19 @@ from clarifai.rest import Image as ClImage
 
 from werkzeug.utils import secure_filename
 
-from flask_ask import Ask,statement,question,session
+from flask_ask import Ask,statement,question,session,version
 
 from flask import Flask, request, jsonify,render_template,send_file
 from flask_restful import Api
-from flask_jwt import JWT
+from flask_jwt import JWT,jwt_required, current_identity
+
 
 from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemList,TextList
 from resources.closet import Closet, ClosetList
+from resources.AvatarAI import avatar
+from resources.recommendation import recommendClothes
 
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
@@ -22,23 +25,27 @@ from email.MIMEImage import MIMEImage
 from PIL import Image
 import requests
 from StringIO import StringIO
+import logging
+import datetime
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.config['JWT_EXPIRATION_DELTA']=datetime.timedelta(days=10)
 appClar = ClarifaiApp(os.getenv("clarifai_client_id"),os.getenv("clarifai_client_secret"))
 app.secret_key = 'SuperSecretPasskey'
 api = Api(app)
 
 ask = Ask(app,"/clothing_text_message")
+log = logging.getLogger()
 
 @app.before_first_request
 def create_tables():
     db.create_all()
 
-jwt = JWT(app, authenticate, identity)
+jwt = JWT(app, authenticate, identity,)
+
 
 api.add_resource(Closet, '/closet/<string:name>')
 api.add_resource(Item, '/item/<string:name>')
@@ -46,6 +53,9 @@ api.add_resource(ClosetList, '/closets')
 api.add_resource(ItemList, '/items')
 api.add_resource(UserRegister, '/register')
 api.add_resource(TextList,'/text')
+api.add_resource(avatar,'/recommend')
+api.add_resource(recommendClothes,'/amazon')
+
 #####################################################################################
 # MIGRATIONS BELOW
 #####################################################################################
@@ -72,18 +82,31 @@ def possibleApparel(appCont,name):
 @ask.launch
 def start_skill():
     welcome_message= "Would you like a recommendation?"
+    logging.getLogger('flask_ask').setLevel(logging.DEBUG)
     return question(welcome_message)
 
 @ask.intent("YesIntent")
 def yes_intent():
+    log.info("Request ID: {}".format(request))
     message= "I found this in your closet."
     return statement(message)
 
 @ask.intent("NoIntent")
 def no_intent():
-    message = "Have a good then."
+    message = "Have a good day then."
     return statement(message)
 
+@app.route('/login')
+def login():
+    return render_template('index.html')
+
+@app.route('/recommendation',methods=['GET'])
+def recommend():
+    des = request.args.get('descripition')
+    if des is None:
+        return render_template('recommendations.html',search="shirts")
+    des =str(des)
+    return render_template('recommendations.html',search=des)
 @app.route('/')
 def default():
   return "Success"
