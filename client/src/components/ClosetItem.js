@@ -119,7 +119,7 @@ class ClosetItem extends Component {
     
         const uppercaseTitle = description ? (
             <Text
-                style={[styles.title, even ? styles.titleEven : {}]}
+                style={[styles.title, selectedItem ? styles.titleEven : {}]}
                 numberOfLines={2}
             >
                 { description.toUpperCase() }

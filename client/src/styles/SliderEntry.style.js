@@ -73,7 +73,7 @@ export default StyleSheet.create({
         borderBottomRightRadius: entryBorderRadius
     },
     textContainerEven: {
-        backgroundColor: 'white'
+        backgroundColor: '#333333'
     },
     title: {
         color: colors.black,
@@ -82,7 +82,7 @@ export default StyleSheet.create({
         letterSpacing: 0.5
     },
     titleEven: {
-        color: 'black'
+        color: 'white'
     },
     subtitle: {
         marginTop: 6,
@@ -91,6 +91,6 @@ export default StyleSheet.create({
         fontStyle: 'italic'
     },
     subtitleEven: {
-        color: colors.gray
+        color: 'white'
     }
 });
