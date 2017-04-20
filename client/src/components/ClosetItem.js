@@ -20,18 +20,6 @@ class ClosetItem extends Component {
         selectedItem: false
     }
 
-    componentWillMount() {
-        if (this.state.selectedItem) {
-            this.setState({ selectedItem: this.verifyItem.bind(this) });
-        }
-
-        console.log('willmount', this.state.selectedItem);
-    }
-
-    componentDidMount() {
-        console.log('didmount', this.state.selectedItem);
-    }
-    
     setClothesIndexUrl(type_clothing, url_path) {
         let itemSet = true;
         switch (type_clothing) {
@@ -57,40 +45,6 @@ class ClosetItem extends Component {
 
         console.log('Set clothing item.');
         return itemSet;
-    }
-
-    verifyItem() {
-        const {
-            shirtUrl,
-            pantsUrl,
-            shoesUrl,
-            outerwearUrl,
-            accessoriesUrl
-        } = this.props;
-
-        let found = false;
-
-        switch (this.state.url_path) {
-            case shirtUrl:
-                found = true;
-            break;
-            case pantsUrl:
-                found = true;
-            break;
-            case shoesUrl:
-                found = true;
-            break;
-            case outerwearUrl:
-                found = true;
-            break;
-            case accessoriesUrl:
-                found = true;
-            break;
-            default:
-                return found;
-        }
-
-        return found;
     }
 
     handleItemSelected(type_clothing, url_path) {
