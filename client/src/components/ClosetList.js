@@ -10,6 +10,7 @@ import {
     TouchableHighlight,
     Linking
 } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
 import { STTandroid, STTios } from 'react-native-speech-to-text';
@@ -52,11 +53,11 @@ class ClosetList extends Component {
     };
 
     componentWillMount() {
-        if (this.state.getAllClothes) {
-            this.getAllClothes();
-        } else {
-            this.getWeatherClothes();
-        }
+        // if (this.state.getAllClothes) {
+        //     this.getAllClothes();
+        // } else {
+        //     this.getWeatherClothes();
+        // }
     }
 
     getLocationCoords() {
@@ -394,19 +395,10 @@ class ClosetList extends Component {
     }
 
     renderButtons() {
-        if (this.state.getAllClothes) {
-            return (
-                <View style={{ flex: 1 }}>
-                    <Button onPress={this.getWeatherClothes.bind(this)}>
-                        { 'Get Clothes for \n      Weather!' }
-                    </Button>
-                </View>
-            );
-        }
         return (
-            <View style={{ flex: 1 }}>
-                <Button onPress={this.getAllClothes.bind(this)}>
-                    Get All Clothes
+            <View style={{ height: 60, flex: 1 }}>
+                <Button onPress={() => Actions.clothingItemCreate()}>
+                    Add an item
                 </Button>
             </View>
         );
@@ -449,44 +441,18 @@ class ClosetList extends Component {
                 </ScrollView>
                 <CardSection>
                     <View style={avatarStyle.containerStyle}>
-                        {this.renderButtons()}
                         <TouchableHighlight
                           onPress={() => this.handleAvatarPress()}
                         >
+                        <View style={avatarStyle.imageStyle}>
                           <Image
                               onPress={() => this.handleAvatarPress()}
-                              style={{ width: 75, height: 75 }}
                               source={{ uri: AVATAR }}
+                              style={avatarStyle.imageStyle}
                           />
+                          </View>
                         </TouchableHighlight>
-                        <View style={{ flex: 1 }}>
-                            <Button
-                                onPress={() => {
-                                    // Works on both iOS and Android
-                                    Alert.alert(
-                                        'Nice Selection!',
-                                        'Would you like to send a message for later?',
-                                        [
-                                            {
-                                                text: 'Cancel',
-                                                onPress: () => { console.log('Cancel Pressed'); },
-                                                style: 'cancel' },
-                                            {
-                                                text: 'Send',
-                                                onPress: () => {
-                                                    this.sendTextOfClothes();
-                                                    console.log('OK Pressed');
-                                                }
-                                            },
-                                        ],
-                                        { cancelable: false }
-                                        );
-                                    }
-                                }
-                            >
-                                { 'Confirm' }
-                            </Button>
-                        </View>
+                        {this.renderButtons()}
                     </View>
                 </CardSection>
             </View>
@@ -499,7 +465,13 @@ const avatarStyle = {
         height: 75,
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+    },
+    imageStyle: {
+        width: 80,
+        height: 80,
+        borderRadius: 30,
+        overflow: 'hidden'
     },
 };
 
