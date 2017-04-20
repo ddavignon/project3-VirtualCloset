@@ -5,6 +5,7 @@ import { Text,
     View,
     Picker,
     Alert,
+    Image,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -153,21 +154,21 @@ class LoginForm extends Component {
 
     render() {
         return (
+            <Image source={require('./images/model.jpg')} style={styles.imageContainer}>
             <ScrollView style={styles.mainScrollView} >
                 <Card>
-                <Text style={styles.welcomeTextStyle}>
-                    Welcome   to
-                </Text>
-                <Text style={styles.appNameTextStyle}>
-                    Virtual   Closet
-                </Text>
+
+                    <Text style={styles.blankTextStyle}>{ '   ' }</Text>
+                    <Text>{ '    ' }</Text>
+                    <Text>{ '    ' }</Text>
+
                     <CardSection>
                         <Input
-                            style={styles.input}
                             label="Email"
                             placeholder="email@email.com"
                             onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'email', value })}
                             value={this.props.email}
+                            style={styles.imageTextStyle}
                         />
                     </CardSection>
                     <CardSection>
@@ -190,6 +191,7 @@ class LoginForm extends Component {
                     {this.renderButton()}
                 </Card>
             </ScrollView>
+            </Image>
         );
     }
 }
@@ -208,22 +210,25 @@ const styles = {
         fontSize: 18,
         paddingRight: 70,
     },
-    welcomeTextStyle: {
-        fontSize: 40,
+
+    blankTextStyle: {
+        fontSize: 180,
         alignSelf: 'center',
         paddingTop: 15,
 
     },
-    appNameTextStyle: {
-        color: '#4D4F4F',
-        fontFamily: 'Roboto',
-        fontSize: 50,
-        alignSelf: 'center',
-        paddingBottom: 25,
-        fontWeight: '600',
+    imageTextStyle: {
+        color: 'black',
     },
     mainScrollView: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'rgba(0,0,0,0)',
+    },
+    imageContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        width: null,
+        height: null,
+        backgroundColor: 'rgba(0,0,0,0)',
     },
 };
 

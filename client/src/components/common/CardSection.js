@@ -14,7 +14,7 @@ const styles = {
         borderBottomWidth: 1,
         padding: 5,
         //backgroundColor: '#B9EBEA',
-        backgroundColor: 'rgba(0,0,0,0)', //transparent?
+        backgroundColor: 'rgba(255, 255, 255, 0.7)', //transparent?
         //backgroundColor: '#fff',
         justifyContent: 'flex-start',
         flexDirection: 'row',

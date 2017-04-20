@@ -35,7 +35,8 @@ export default StyleSheet.create({
         marginTop: 15,
         backgroundColor: 'transparent',
         //color: 'rgba(0, 0, 0, 0.9)',
-        color: '#FFFFFF',
+        //color: '#FFFFFF',
+        color: 'black',
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center'
