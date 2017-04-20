@@ -113,7 +113,7 @@ def default():
   
 @app.route('/avatar')
 def webHead():
-  return send_file('static/Avatar.gif', mimetype='image/gif')
+  return send_file('static/AvatarIdleFinal.gif.gif', mimetype='image/gif')
 
   
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])
