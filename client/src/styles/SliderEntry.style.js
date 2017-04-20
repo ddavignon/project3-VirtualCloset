@@ -31,7 +31,7 @@ export default StyleSheet.create({
         borderTopRightRadius: entryBorderRadius,
     },
     imageContainerEven: {
-        backgroundColor: colors.black
+        backgroundColor: colors.black,
     },
     image: {
         ...StyleSheet.absoluteFillObject,
@@ -62,7 +62,7 @@ export default StyleSheet.create({
         borderBottomRightRadius: entryBorderRadius
     },
     textContainerEven: {
-        backgroundColor: colors.black
+        backgroundColor: colors.red
     },
     title: {
         color: colors.black,
@@ -71,7 +71,7 @@ export default StyleSheet.create({
         letterSpacing: 0.5
     },
     titleEven: {
-        color: 'white'
+        color: 'black'
     },
     subtitle: {
         marginTop: 6,
