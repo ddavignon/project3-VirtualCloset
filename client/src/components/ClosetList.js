@@ -25,7 +25,7 @@ import {
     RECOMMENDATIONS
 } from '../api/constants';
 import ClosetItem from './ClosetItem';
-import { CardSection, Spinner, Button } from './common';
+import { CardSection, Card, Spinner, Button } from './common';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
 
@@ -416,8 +416,10 @@ class ClosetList extends Component {
         const {
             container,
             scrollview,
-            title,
+            title
         } = styles;
+
+        const { weatherContainerStyle, weatherLabelStyle } = weatherStyle;
 
         if (Platform.OS === 'android' && this.state.locationPermission !== 'authorized') {
             this.requestLocationPermission();
@@ -430,6 +432,14 @@ class ClosetList extends Component {
                   indicatorStyle={'white'}
                   scrollEventThrottle={200}
                 >
+                    {this.state.weatherTemp
+                        ? (<View style={weatherContainerStyle}>
+                                <Text style={weatherLabelStyle}>
+                                    {Math.floor(this.state.weatherTemp)}&deg;F
+                                </Text>
+                            </View>)
+                        : null
+                    }
                     <Text>
                       {this.state.speechToText}
                       {this.state.voiceError}
@@ -500,7 +510,24 @@ const avatarStyle = {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center'
+    }
+};
+
+const weatherStyle = {
+    weatherLabelStyle: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 36,
+        flex: 1,
+        justifyContent: 'center',
+        textAlign: 'right',
     },
+    weatherContainerStyle: {
+        height: 40,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+    }
 };
 
 const mapStateToProps = (state) => {
