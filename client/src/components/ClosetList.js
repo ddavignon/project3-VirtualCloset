@@ -7,7 +7,8 @@ import {
     Image,
     Platform,
     PermissionsAndroid,
-    TouchableHighlight
+    TouchableHighlight,
+    Linking
 } from 'react-native';
 import { connect } from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
@@ -20,7 +21,8 @@ import {
     GET_ALL_CLOTHING_ITEMS,
     GET_RECOMMENDED_ITEMS ,
     SEND_CLOTHING_ITEM_IMAGE_TEXT,
-    AVATAR
+    AVATAR,
+    RECOMMENDATIONS
 } from '../api/constants';
 import ClosetItem from './ClosetItem';
 import { CardSection, Spinner, Button } from './common';
@@ -248,6 +250,15 @@ class ClosetList extends Component {
             if (this.state.speechToText === 'send text') {
               this.sendTextOfClothes();
             }
+
+            if (this.state.speechToText === 'get recommendations') {
+                if (this.state.allClosetItems.length > 0) {
+                    const itemRecommendation = this.state.allClosetItems[this.getRandomItem(0, this.state.allClosetItems.length)];
+                    Linking.openURL(RECOMMENDATIONS.concat(`?descripition=${itemRecommendation.description}`));
+                } else {
+                    Linking.openURL(RECOMMENDATIONS);
+                }
+            }
           })
           .catch((error) => {
             this.setState({
@@ -256,6 +267,10 @@ class ClosetList extends Component {
             console.log(error);
           });
         }
+    }
+
+    getRandomItem(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
     }
 
     sendTextOfClothes() {
