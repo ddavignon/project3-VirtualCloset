@@ -17,16 +17,21 @@ class ClosetItem extends Component {
     };
 
     state = {
-        selectedItem: false,
-        itemVerified: false
+        selectedItem: false
     }
 
     componentWillMount() {
-        if (this.state.selectedItem && !this.state.itemVerified) {
-            this.setState({ selectedItem: this.state.itemVerified });
+        if (this.state.selectedItem) {
+            this.setState({ selectedItem: this.verifyItem.bind(this) });
         }
+
+        console.log('willmount', this.state.selectedItem);
     }
 
+    componentDidMount() {
+        console.log('didmount', this.state.selectedItem);
+    }
+    
     setClothesIndexUrl(type_clothing, url_path) {
         let itemSet = true;
         switch (type_clothing) {
@@ -50,19 +55,53 @@ class ClosetItem extends Component {
                 itemSet = false;
         }
 
-        if (itemSet) {
-            this.setState({ selectedItem: true });
+        console.log('Set clothing item.');
+        return itemSet;
+    }
+
+    verifyItem() {
+        const {
+            shirtUrl,
+            pantsUrl,
+            shoesUrl,
+            outerwearUrl,
+            accessoriesUrl
+        } = this.props;
+
+        let found = false;
+
+        switch (this.state.url_path) {
+            case shirtUrl:
+                found = true;
+            break;
+            case pantsUrl:
+                found = true;
+            break;
+            case shoesUrl:
+                found = true;
+            break;
+            case outerwearUrl:
+                found = true;
+            break;
+            case accessoriesUrl:
+                found = true;
+            break;
+            default:
+                return found;
         }
-        return console.log('Set clothing item.');
+
+        return found;
     }
 
     handleItemSelected(type_clothing, url_path) {
         if (!this.state.selectedItem) {
-            this.setClothesIndexUrl(type_clothing, url_path);
-        } else {
-            this.setState({ selectedItem: false });
-            this.setClothesIndexUrl(type_clothing, '');
+            if (this.setClothesIndexUrl(type_clothing, url_path)) {
+                return this.setState({ selectedItem: !this.state.selectedItem });
+            }
+            return this.state;
         }
+        this.setClothesIndexUrl(type_clothing, '');
+        return this.setState({ selectedItem: !this.state.selectedItem });
     }
 
     render() {
@@ -77,8 +116,6 @@ class ClosetItem extends Component {
         } = this.props;
 
         const { selectedItem } = this.state;
-
-        console.log(index, description);
     
         const uppercaseTitle = description ? (
             <Text
@@ -100,7 +137,6 @@ class ClosetItem extends Component {
                         source={{ uri: url_path }}
                         style={styles.image}
                         />
-                        <View style={[styles.radiusMask, selectedItem ? styles.radiusMaskEven : {}]} />
                     </View>
                     <View style={[styles.textContainer, selectedItem ? styles.textContainerEven : {}]}>
                         { uppercaseTitle }

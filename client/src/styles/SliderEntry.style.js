@@ -24,6 +24,11 @@ export default StyleSheet.create({
         paddingHorizontal: itemHorizontalMargin,
         paddingBottom: 18, // needed for shadow
     },
+    innerContainerSelected: {
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: colors.red
+    },
     imageContainer: {
         flex: 1,
         backgroundColor: 'white',
@@ -32,6 +37,9 @@ export default StyleSheet.create({
     },
     imageContainerEven: {
         backgroundColor: colors.black,
+        borderStyle: 'solid',
+        borderWidth: 2,
+        borderColor: colors.red
     },
     image: {
         ...StyleSheet.absoluteFillObject,
@@ -50,7 +58,10 @@ export default StyleSheet.create({
         backgroundColor: 'white'
     },
     radiusMaskEven: {
-        backgroundColor: colors.black
+        backgroundColor: 'white',
+        borderStyle: 'solid',
+        borderWidth: 2,
+        borderColor: colors.red
     },
     textContainer: {
         justifyContent: 'center',
@@ -62,7 +73,7 @@ export default StyleSheet.create({
         borderBottomRightRadius: entryBorderRadius
     },
     textContainerEven: {
-        backgroundColor: colors.red
+        backgroundColor: 'white'
     },
     title: {
         color: colors.black,
@@ -80,6 +91,6 @@ export default StyleSheet.create({
         fontStyle: 'italic'
     },
     subtitleEven: {
-        color: 'rgba(255, 255, 255, 0.7)'
+        color: colors.gray
     }
 });
