@@ -25,7 +25,7 @@ import {
     RECOMMENDATIONS
 } from '../api/constants';
 import ClosetItem from './ClosetItem';
-import { CardSection, Card, Spinner, Button } from './common';
+import { CardSection, Spinner, Button } from './common';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
 
