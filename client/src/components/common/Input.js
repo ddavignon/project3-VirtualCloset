@@ -27,6 +27,8 @@ const styles = {
         flex: 2
     },
     labelStyle: {
+        color: 'black',
+        fontWeight: 'bold',
         fontSize: 18,
         flex: 1
     },

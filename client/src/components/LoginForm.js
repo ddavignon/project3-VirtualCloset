@@ -5,6 +5,7 @@ import { Text,
     View,
     Picker,
     Alert,
+    Image,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -29,7 +30,7 @@ class LoginForm extends Component {
 
         this.setState({
             showSignupFields: 'show',
-            validationCheck: 0, 
+            validationCheck: 0,
         });
         if (this.state.showSignupFields === 'show') {
           if (this.validateEmail(email)) {
@@ -104,7 +105,7 @@ class LoginForm extends Component {
                            />
                        </CardSection>
                         <CardSection style={{ flexDirection: 'column' }}>
-                            <Text>Carrier</Text>
+                            <Text style={styles.pickerTextStyle} >Carrier</Text>
                             <Picker
                                 style={{ flex: 1 }}
                                 selectedValue={this.props.carrier}
@@ -153,14 +154,21 @@ class LoginForm extends Component {
 
     render() {
         return (
-            <ScrollView>
+            <Image source={require('./images/model.jpg')} style={styles.imageContainer}>
+            <ScrollView style={styles.mainScrollView} >
                 <Card>
+
+                    <Text style={styles.blankTextStyle}>{ '   ' }</Text>
+                    <Text>{ '    ' }</Text>
+                    <Text>{ '    ' }</Text>
+
                     <CardSection>
                         <Input
                             label="Email"
                             placeholder="email@email.com"
                             onChangeText={value => this.props.loginTextFieldUpdate({ prop: 'email', value })}
                             value={this.props.email}
+                            style={styles.imageTextStyle}
                         />
                     </CardSection>
                     <CardSection>
@@ -183,6 +191,7 @@ class LoginForm extends Component {
                     {this.renderButton()}
                 </Card>
             </ScrollView>
+            </Image>
         );
     }
 }
@@ -197,9 +206,29 @@ const styles = {
         borderRadius: 5,
         marginBottom: 5,
     },
-    button: {
-        backgroundColor: '#eeeeee',
-        padding: 10,
+    pickerTextStyle: {
+        fontSize: 18,
+        paddingRight: 70,
+    },
+
+    blankTextStyle: {
+        fontSize: 180,
+        alignSelf: 'center',
+        paddingTop: 15,
+
+    },
+    imageTextStyle: {
+        color: 'black',
+    },
+    mainScrollView: {
+        backgroundColor: 'rgba(0,0,0,0)',
+    },
+    imageContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        width: null,
+        height: null,
+        backgroundColor: 'rgba(0,0,0,0)',
     },
 };
 

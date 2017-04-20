@@ -4,7 +4,8 @@ export const colors = {
     black: '#1a1917',
     gray: '#888888',
     background1: 'rgb(224, 224, 224)',
-    backround2: 'rgb(224, 224, 224)'
+    backround2: 'rgb(224, 224, 224)',
+    backgroundLightGrey: '#EDEDED',
     // background1: 'hsl(15, 55%, 50%)',
     // background2: 'hsl(230, 30%, 45%)'
 };
@@ -12,7 +13,7 @@ export const colors = {
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background1
+        backgroundColor: colors.backgroundLightGrey
     },
     colorsContainer: {
         ...StyleSheet.absoluteFillObject,
@@ -33,7 +34,9 @@ export default StyleSheet.create({
     title: {
         marginTop: 15,
         backgroundColor: 'transparent',
-        color: 'rgba(0, 0, 0, 0.9)',
+        //color: 'rgba(0, 0, 0, 0.9)',
+        //color: '#FFFFFF',
+        color: 'black',
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center'
@@ -51,5 +54,6 @@ export default StyleSheet.create({
         marginBottom: 10
     },
     sliderContainer: {
+        elevation: 3
     }
 });
