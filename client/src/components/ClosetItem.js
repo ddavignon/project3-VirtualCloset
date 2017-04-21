@@ -47,13 +47,45 @@ class ClosetItem extends Component {
         return itemSet;
     }
 
+    checkIfItemCanBeSelected(type_clothing, url_path) {
+        let validItem = true;
+        switch (type_clothing) {
+            case 'shirt':
+                validItem = this.props.shirtUrl;
+                break;
+            case 'pants':
+                validItem = this.props.pantsUrl;
+                break;
+            case 'shoes':
+                validItem = this.props.shoesUrl;
+                break;
+            case 'accessories':
+                validItem = this.props.accessoriesUrl;
+                break;
+            case 'outerwear':
+                validItem = this.props.outerwearUrl;
+                break;
+            default:
+                console.log('selected type clothing not found');
+                validItem = false;
+        }
+
+        console.log('Set valid item.');
+        return validItem;
+    }
+
     handleItemSelected(type_clothing, url_path) {
         if (!this.state.selectedItem) {
-            if (this.setClothesIndexUrl(type_clothing, url_path)) {
-                return this.setState({ selectedItem: !this.state.selectedItem });
+            if (!this.checkIfItemCanBeSelected(type_clothing, url_path)) {
+                if (this.setClothesIndexUrl(type_clothing, url_path)) {
+                    return this.setState({ selectedItem: !this.state.selectedItem });
+                }
+                return this.state;
             }
+            alert('You have already selected an item of this type.');
             return this.state;
         }
+
         this.setClothesIndexUrl(type_clothing, '');
         return this.setState({ selectedItem: !this.state.selectedItem });
     }

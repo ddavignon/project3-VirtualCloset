@@ -19,13 +19,14 @@ import axios from 'axios';
 import {
     GET_CLOTHING_ITEMS,
     GET_ALL_CLOTHING_ITEMS,
-    GET_RECOMMENDED_ITEMS ,
+    GET_RECOMMENDED_ITEMS,
     SEND_CLOTHING_ITEM_IMAGE_TEXT,
     AVATAR,
     RECOMMENDATIONS
 } from '../api/constants';
 import ClosetItem from './ClosetItem';
 import { CardSection, Spinner, Button } from './common';
+import { clothingItemUpdate } from '../actions';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
 
@@ -115,6 +116,7 @@ class ClosetList extends Component {
             this.setState({ showItems: true });
         });
         this.setState({ getAllClothes: false, allClosetItems: [] });
+        this.myShamelessHackyFunctionToResetSelectedItems();
     }
 
     getAllClothes() {
@@ -171,6 +173,7 @@ class ClosetList extends Component {
             this.setState({ showItems: true });
         });
         this.setState({ getAllClothes: true });
+        this.myShamelessHackyFunctionToResetSelectedItems();
     }
 
     getSlides(entries) {
@@ -191,6 +194,14 @@ class ClosetList extends Component {
 
     getRandomItem(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    myShamelessHackyFunctionToResetSelectedItems() {
+            this.props.clothingItemUpdate({ prop: 'shirtUrl', value: '' });
+            this.props.clothingItemUpdate({ prop: 'pantsUrl', value: '' });
+            this.props.clothingItemUpdate({ prop: 'shoesUrl', value: '' });
+            this.props.clothingItemUpdate({ prop: 'accessoriesUrl', value: '' });
+            this.props.clothingItemUpdate({ prop: 'outerwearUrl', value: '' });
     }
 
     handleAvatarPress() {
@@ -340,11 +351,13 @@ class ClosetList extends Component {
                     accessoriesUrl
                 });
                 Tts.speak(this.state.speechToText);
+                alert('Your items have been sent.');
             })
             .catch(err => {
                 console.log('error', err);
                 this.setState({ speechToText: 'something went wrong' });
                 Tts.speak(this.state.speechToText);
+                alert('Something went wrong!');
             });
 
             return console.log({
@@ -358,6 +371,7 @@ class ClosetList extends Component {
             });
         }
         Tts.speak('No items selected');
+        alert('No items selected.');
         return console.log('No items selected');
     }
 
@@ -468,8 +482,8 @@ class ClosetList extends Component {
                     {this.renderItems(this.state.outerwearItems)}
                     <Text style={title}>Accessories</Text>
                     {this.renderItems(this.state.accessoriesItems)}
-                    <Text style={title}>All Items</Text>
-                    {this.renderItems(this.state.allClosetItems)}
+                    {/*<Text style={title}>All Items</Text>
+                    {this.renderItems(this.state.allClosetItems)}*/}
                 </ScrollView>
                 <CardSection>
                     <View style={avatarStyle.containerStyle}>
@@ -566,4 +580,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, null)(ClosetList);
+export default connect(mapStateToProps, { clothingItemUpdate })(ClosetList);
