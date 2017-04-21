@@ -8,6 +8,7 @@ import {
     Platform,
     PermissionsAndroid,
     TouchableHighlight,
+    ToastAndroid,
     Linking
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -351,7 +352,11 @@ class ClosetList extends Component {
                     accessoriesUrl
                 });
                 Tts.speak(this.state.speechToText);
-                alert('Your items have been sent.');
+                ToastAndroid.showWithGravity(
+                    'Your items have been sent.',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.BOTTOM,
+                );
             })
             .catch(err => {
                 console.log('error', err);
@@ -468,10 +473,10 @@ class ClosetList extends Component {
                             </View>)
                         : null
                     }
-                    <Text>
+                    {/*<Text>
                       {this.state.speechToText}
                       {this.state.voiceError}
-                    </Text>
+                    </Text>*/}
                     <Text style={title}>Shirts</Text>
                     {this.renderItems(this.state.shirtItems)}
                     <Text style={title}>Pants</Text>
