@@ -16,7 +16,12 @@ class ClosetItem extends Component {
         type_clothing: PropTypes.string
     };
 
+    state = {
+        selectedItem: false
+    }
+
     setClothesIndexUrl(type_clothing, url_path) {
+        let itemSet = true;
         switch (type_clothing) {
             case 'shirt':
                 this.props.clothingItemUpdate({ prop: 'shirtUrl', value: url_path });
@@ -35,9 +40,54 @@ class ClosetItem extends Component {
                 break;
             default:
                 console.log('type clothing not found');
+                itemSet = false;
         }
 
-        return console.log('Set clothing item.');
+        console.log('Set clothing item.');
+        return itemSet;
+    }
+
+    checkIfItemCanBeSelected(type_clothing, url_path) {
+        let validItem = true;
+        switch (type_clothing) {
+            case 'shirt':
+                validItem = this.props.shirtUrl;
+                break;
+            case 'pants':
+                validItem = this.props.pantsUrl;
+                break;
+            case 'shoes':
+                validItem = this.props.shoesUrl;
+                break;
+            case 'accessories':
+                validItem = this.props.accessoriesUrl;
+                break;
+            case 'outerwear':
+                validItem = this.props.outerwearUrl;
+                break;
+            default:
+                console.log('selected type clothing not found');
+                validItem = false;
+        }
+
+        console.log('Set valid item.');
+        return validItem;
+    }
+
+    handleItemSelected(type_clothing, url_path) {
+        if (!this.state.selectedItem) {
+            if (!this.checkIfItemCanBeSelected(type_clothing, url_path)) {
+                if (this.setClothesIndexUrl(type_clothing, url_path)) {
+                    return this.setState({ selectedItem: !this.state.selectedItem });
+                }
+                return this.state;
+            }
+            alert('You have already selected an item of this type.');
+            return this.state;
+        }
+
+        this.setClothesIndexUrl(type_clothing, '');
+        return this.setState({ selectedItem: !this.state.selectedItem });
     }
 
     render() {
@@ -51,12 +101,14 @@ class ClosetItem extends Component {
             index
         } = this.props;
 
-        console.log(index, description);
+        const { selectedItem } = this.state;
     
         const uppercaseTitle = description ? (
             <Text
-                style={[styles.title, even ? styles.titleEven : {}]}
-                numberOfLines={2}>{ description.toUpperCase() }
+                style={[styles.title, selectedItem ? styles.titleEven : {}]}
+                numberOfLines={2}
+            >
+                { description.toUpperCase() }
             </Text>
         ) : false;
 
@@ -64,22 +116,43 @@ class ClosetItem extends Component {
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.slideInnerContainer}
-              onPress={() => this.setClothesIndexUrl(type_clothing, url_path)}
-              >
-                <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
-                    <Image
-                      source={{ uri: url_path }}
-                      style={styles.image}
-                    />
-                    <View style={[styles.radiusMask, even ? styles.radiusMaskEven : {}]} />
-                </View>
-                <View style={[styles.textContainer, even ? styles.textContainerEven : {}]}>
-                    { uppercaseTitle }
-                    <Text style={[styles.style, even ? styles.subtitleEven : {}]} numberOfLines={2}>{_id}: {style}</Text>
-                </View>
+              onPress={() => this.handleItemSelected(type_clothing, url_path)}
+            >
+                    <View style={[styles.imageContainer, selectedItem ? styles.imageContainerEven : {}]}>
+                        <Image
+                        source={{ uri: url_path }}
+                        style={styles.image}
+                        />
+                    </View>
+                    <View style={[styles.textContainer, selectedItem ? styles.textContainerEven : {}]}>
+                        { uppercaseTitle }
+                        <Text style={[styles.style, selectedItem ? styles.subtitleEven : {}]} numberOfLines={2}>{style}</Text>
+                    </View>
             </TouchableOpacity>
         );
     }
 }
 
-export default connect(null, { clothingItemUpdate })(ClosetItem);
+const mapStateToProps = (state) => {
+    const {
+        shirtUrl,
+        pantsUrl,
+        shoesUrl,
+        outerwearUrl,
+        accessoriesUrl
+    } = state.clothingItemForm;
+
+    const { user, token } = state.auth;
+
+    return {
+        user,
+        token,
+        shirtUrl,
+        pantsUrl,
+        shoesUrl,
+        outerwearUrl,
+        accessoriesUrl
+    };
+};
+
+export default connect(mapStateToProps, { clothingItemUpdate })(ClosetItem);
