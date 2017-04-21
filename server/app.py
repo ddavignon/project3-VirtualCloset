@@ -55,7 +55,7 @@ api.add_resource(UserRegister, '/register')
 api.add_resource(TextList,'/text')
 api.add_resource(avatar,'/recommend')
 api.add_resource(recommendClothes,'/amazon')
-api.add_resource(movingAvatar,'/moving')
+#api.add_resource(movingAvatar,'/moving')
 
 #####################################################################################
 # MIGRATIONS BELOW
