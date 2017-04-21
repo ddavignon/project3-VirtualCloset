@@ -44,9 +44,14 @@ class avatar(Resource):
         }
         return 401
         
-        
-    @jwt_required()
-    def post(self):
+        @jwt_required()
+        def post(self):
         return send_file('static/VirtualClosetAvatar.gif', mimetype='image/gif')
+    
 
         
+class movingAvatar:
+    @jwt_required()
+    def get(self):
+        return send_file('static/VirtualClosetAvatar.gif', mimetype='image/gif')
+    
