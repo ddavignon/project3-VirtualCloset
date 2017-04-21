@@ -16,7 +16,7 @@ from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemList,TextList
 from resources.closet import Closet, ClosetList
-from resources.AvatarAI import avatar #movingAvatar
+from resources.AvatarAI import avatar,movingAvatar
 from resources.recommendation import recommendClothes
 
 from email.MIMEMultipart import MIMEMultipart
@@ -55,7 +55,7 @@ api.add_resource(UserRegister, '/register')
 api.add_resource(TextList,'/text')
 api.add_resource(avatar,'/recommend')
 api.add_resource(recommendClothes,'/amazon')
-#api.add_resource(movingAvatar,'/moving')
+api.add_resource(movingAvatar,'/moving')
 
 #####################################################################################
 # MIGRATIONS BELOW

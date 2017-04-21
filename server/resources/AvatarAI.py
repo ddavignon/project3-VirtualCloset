@@ -50,7 +50,7 @@ class avatar(Resource):
     
 
         
-class movingAvatar:
+class movingAvatar(Resource):
     @jwt_required()
     def get(self):
         return send_file('static/VirtualClosetAvatar.gif', mimetype='image/gif')
