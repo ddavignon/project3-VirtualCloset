@@ -10,6 +10,7 @@ import {
     TouchableHighlight,
     Linking
 } from 'react-native';
+import TimerMixin from 'react-timer-mixin';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
@@ -20,7 +21,7 @@ import axios from 'axios';
 import {
     GET_CLOTHING_ITEMS,
     GET_ALL_CLOTHING_ITEMS,
-    GET_RECOMMENDED_ITEMS ,
+    GET_RECOMMENDED_ITEMS,
     SEND_CLOTHING_ITEM_IMAGE_TEXT,
     AVATAR,
     RECOMMENDATIONS
@@ -29,6 +30,7 @@ import ClosetItem from './ClosetItem';
 import { CardSection, Spinner, Button } from './common';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
+
 
 const Permissions = require('react-native-permissions');
 
@@ -50,6 +52,8 @@ class ClosetList extends Component {
         voiceError: '',
         weatherTemp: '',
         locationPermission: 'undetermined',
+        mixins: [TimerMixin],
+        doneTalking: true,
     };
 
     componentWillMount() {
@@ -234,6 +238,7 @@ class ClosetList extends Component {
                         showItems: true
                     });
                     Tts.speak(this.state.speechToText);
+                    this.setState({ doneTalking: false });
                 })
                 .catch((err) => {
                     console.log(err);
@@ -244,6 +249,7 @@ class ClosetList extends Component {
 
             if (this.state.speechToText === 'get all clothes') {
               this.getAllClothes();
+              this.setState({ doneTalking: false });
               this.setState({ speechToText: 'Here are all of your clothes!' });
               Tts.speak(this.state.speechToText);
             }
@@ -267,6 +273,16 @@ class ClosetList extends Component {
             });
             console.log(error);
           });
+        }
+    }
+
+    componentDidMount() {
+        if (this.state.doneTalking === false) {
+            this.setTimeout(
+              () => { console.log('setting avatar timer!'); },
+              1000
+            );
+            this.setState({ doneTalkin: true });
         }
     }
 
@@ -317,6 +333,7 @@ class ClosetList extends Component {
                 })
             })
             .then(response => {
+                this.setState({ doneTalking: false });
                 console.log(response);
                 this.setState({
                     speechToText: 'clothes sent',
@@ -329,6 +346,7 @@ class ClosetList extends Component {
                 Tts.speak(this.state.speechToText);
             })
             .catch(err => {
+                this.setState({ doneTalking: false });
                 console.log('error', err);
                 this.setState({ speechToText: 'something went wrong' });
                 Tts.speak(this.state.speechToText);
@@ -365,6 +383,7 @@ class ClosetList extends Component {
              console.warn(err);
         }
      }
+
 
     renderItems(items) {
         if (!this.state.showItems) {
@@ -403,6 +422,9 @@ class ClosetList extends Component {
             </View>
         );
     }
+
+    //mixins: [TimerMixin],
+
 
     render() {
         const {
