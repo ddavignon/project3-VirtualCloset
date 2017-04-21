@@ -55,7 +55,7 @@ api.add_resource(UserRegister, '/register')
 api.add_resource(TextList,'/text')
 api.add_resource(avatar,'/recommend')
 api.add_resource(recommendClothes,'/amazon')
-api.add_resource(movingAvatar,'/moving')
+#api.add_resource(movingAvatar,'/moving')
 
 #####################################################################################
 # MIGRATIONS BELOW
@@ -100,7 +100,10 @@ def no_intent():
 @app.route('/login')
 def login():
     return render_template('index.html')
-
+@app.route('/moving')
+def moving():
+    return send_file('static/VirtualClosetAvatar.gif', mimetype='image/gif')
+    
 @app.route('/recommendation',methods=['GET'])
 def recommend():
     des = request.args.get('descripition')
