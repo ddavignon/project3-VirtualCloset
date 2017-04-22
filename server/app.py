@@ -16,7 +16,7 @@ from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemList,TextList
 from resources.closet import Closet, ClosetList
-from resources.AvatarAI import avatar
+from resources.AvatarAI import avatar,movingAvatar
 from resources.recommendation import recommendClothes
 
 from email.MIMEMultipart import MIMEMultipart
@@ -55,6 +55,7 @@ api.add_resource(UserRegister, '/register')
 api.add_resource(TextList,'/text')
 api.add_resource(avatar,'/recommend')
 api.add_resource(recommendClothes,'/amazon')
+#api.add_resource(movingAvatar,'/moving')
 
 #####################################################################################
 # MIGRATIONS BELOW
@@ -99,7 +100,10 @@ def no_intent():
 @app.route('/login')
 def login():
     return render_template('index.html')
-
+@app.route('/moving')
+def moving():
+    return send_file('static/VirtualClosetAvatar.gif', mimetype='image/gif')
+    
 @app.route('/recommendation',methods=['GET'])
 def recommend():
     des = request.args.get('descripition')
@@ -113,7 +117,7 @@ def default():
   
 @app.route('/avatar')
 def webHead():
-  return send_file('static/Avatar.gif', mimetype='image/gif')
+  return send_file('static/AvatarIdleFinal.gif.gif', mimetype='image/gif')
 
   
 @app.route('/virtual/api/v1.0/upload', methods=['POST'])
