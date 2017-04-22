@@ -8,6 +8,7 @@ import {
     Platform,
     PermissionsAndroid,
     TouchableHighlight,
+    ToastAndroid,
     Linking
 } from 'react-native';
 import TimerMixin from 'react-timer-mixin';
@@ -28,6 +29,7 @@ import {
 } from '../api/constants';
 import ClosetItem from './ClosetItem';
 import { CardSection, Spinner, Button } from './common';
+import { clothingItemUpdate } from '../actions';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
 
@@ -64,62 +66,30 @@ class ClosetList extends Component {
         // }
     }
 
-    getLocationCoords() {
-        navigator.geolocation.getCurrentPosition((position) => {
-            this.setState({
-                latitudePosition: JSON.stringify(position.coords.latitude),
-                longitudePosition: JSON.stringify(position.coords.longitude)
-            });
-        },
-            (error) => {
-            console.log(error);
-        }, {
-            enableHighAccuracy: true,
-            timeout: 20000,
-            maximumAge: 1000 }
-        );
+    componentDidMount() {
+        if (this.state.doneTalking === false) {
+            this.setTimeout(
+              () => { console.log('setting avatar timer!'); },
+              1000
+            );
+            this.setState({ doneTalkin: true });
+        }
     }
 
-    getPermissionAndroid() {
-        Permissions.getPermissionStatus('location', 'whenInUse')
-          .then(response => {
-            //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
-            this.setState({ locationPermission: response });
+    getSlides(entries) {
+        if (!entries) {
+            return false;
+        }
+        return entries.map((entry, index) => {
+            return (
+                <ClosetItem
+                  key={`carousel-entry-${index}`}
+                  even={(index + 1) % 2 === 0}
+                  index={index}
+                  {...entry}
+                />
+            );
         });
-    }
-
-    getWeatherClothes() {
-        this.setState({ showItems: false });
-
-        this.getLocationCoords();
-
-        console.log(this.state.latitudePosition, this.state.longitudePosition);
-        axios.get(GET_CLOTHING_ITEMS, {
-            headers: {
-                'Authorization': 'JWT ' + this.props.token
-            },
-            params: {
-                lat: this.state.latitudePosition,
-                lng: this.state.longitudePosition
-            }
-        })
-        .then((response) => {
-            console.log(response);
-            this.setState({
-                shirtItems: response.data.shirts,
-                pantsItems: response.data.pants,
-                shoesItems: response.data.shoes,
-                accessoriesItems: response.data.accessories,
-                outerwearItems: response.data.outerwear,
-                weatherTemp: response.data.weather,
-                showItems: true
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-            this.setState({ showItems: true });
-        });
-        this.setState({ getAllClothes: false, allClosetItems: [] });
     }
 
     getAllClothes() {
@@ -176,22 +146,78 @@ class ClosetList extends Component {
             this.setState({ showItems: true });
         });
         this.setState({ getAllClothes: true });
+        this.myShamelessHackyFunctionToResetSelectedItems();
     }
 
-    getSlides(entries) {
-        if (!entries) {
-            return false;
-        }
-        return entries.map((entry, index) => {
-            return (
-                <ClosetItem
-                  key={`carousel-entry-${index}`}
-                  even={(index + 1) % 2 === 0}
-                  index={index}
-                  {...entry}
-                />
-            );
+    getWeatherClothes() {
+        this.setState({ showItems: false });
+
+        this.getLocationCoords();
+
+        console.log(this.state.latitudePosition, this.state.longitudePosition);
+        axios.get(GET_CLOTHING_ITEMS, {
+            headers: {
+                'Authorization': 'JWT ' + this.props.token
+            },
+            params: {
+                lat: this.state.latitudePosition,
+                lng: this.state.longitudePosition
+            }
+        })
+        .then((response) => {
+            console.log(response);
+            this.setState({
+                shirtItems: response.data.shirts,
+                pantsItems: response.data.pants,
+                shoesItems: response.data.shoes,
+                accessoriesItems: response.data.accessories,
+                outerwearItems: response.data.outerwear,
+                weatherTemp: response.data.weather,
+                showItems: true
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            this.setState({ showItems: true });
         });
+        this.setState({ getAllClothes: false, allClosetItems: [] });
+        this.myShamelessHackyFunctionToResetSelectedItems();
+    }
+
+    getPermissionAndroid() {
+        Permissions.getPermissionStatus('location', 'whenInUse')
+          .then(response => {
+            //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+            this.setState({ locationPermission: response });
+        });
+    }
+
+    getLocationCoords() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.setState({
+                latitudePosition: JSON.stringify(position.coords.latitude),
+                longitudePosition: JSON.stringify(position.coords.longitude)
+            });
+        },
+            (error) => {
+            console.log(error);
+        }, {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 1000 }
+        );
+    }
+
+    getRandomItem(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    myShamelessHackyFunctionToResetSelectedItems() {
+            this.props.clothingItemUpdate({ prop: 'shirtUrl', value: '' });
+            this.props.clothingItemUpdate({ prop: 'pantsUrl', value: '' });
+            this.props.clothingItemUpdate({ prop: 'shoesUrl', value: '' });
+            this.props.clothingItemUpdate({ prop: 'accessoriesUrl', value: '' });
+            this.props.clothingItemUpdate({ prop: 'outerwearUrl', value: '' });
     }
 
     handleAvatarPress() {
@@ -199,7 +225,6 @@ class ClosetList extends Component {
       if (Platform.OS === 'android') {
         STTandroid.showGoogleInputDialog()
           .then((result) => {
-
             // console.log(result);
             // Tts.speak(result);
 
@@ -207,64 +232,77 @@ class ClosetList extends Component {
               speechToText: result
             });
 
-            if (this.state.speechToText === 'recommend') {
-                this.setState({
-                  showItems: false,
-                });
-
-                this.getLocationCoords();
-
-                console.log(this.state.latitudePosition, this.state.longitudePosition);
-                axios.get(GET_RECOMMENDED_ITEMS, {
-                    headers: {
-                        'Authorization': 'JWT ' + this.props.token
-                    },
-                    params: {
-                        command: this.state.speechToText,
-                        lat: this.state.latitudePosition,
-                        lng: this.state.longitudePosition
-                    }
-                })
-                .then((response) => {
-                    console.log(response);
+            switch (this.state.speechToText) {
+                case 'recommend':
                     this.setState({
-                        speechToText: response.data.text,
-                        shirtItems: response.data.shirts,
-                        pantsItems: response.data.pants,
-                        shoesItems: response.data.shoes,
-                        accessoriesItems: response.data.accessories,
-                        outerwearItems: response.data.outerwear,
-                        weatherTemp: response.data.weather,
-                        showItems: true
+                        showItems: false,
                     });
+
+                    this.getLocationCoords();
+
+                    console.log(this.state.latitudePosition, this.state.longitudePosition);
+                    axios.get(GET_RECOMMENDED_ITEMS, {
+                        headers: {
+                            'Authorization': 'JWT ' + this.props.token
+                        },
+                        params: {
+                            command: this.state.speechToText,
+                            lat: this.state.latitudePosition,
+                            lng: this.state.longitudePosition
+                        }
+                    })
+                    .then((response) => {
+                        console.log(response);
+                        this.setState({
+                            speechToText: response.data.text,
+                            shirtItems: response.data.shirts,
+                            pantsItems: response.data.pants,
+                            shoesItems: response.data.shoes,
+                            accessoriesItems: response.data.accessories,
+                            outerwearItems: response.data.outerwear,
+                            weatherTemp: response.data.weather,
+                            showItems: true
+                        });
+                        Tts.speak(this.state.speechToText);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.setState({ showItems: true });
+                    });
+                    this.setState({ getAllClothes: false, allClosetItems: [] });
+                break;
+
+                case 'get all clothes':
+                    this.getAllClothes();
+                    this.setState({ speechToText: 'Here are all of your clothes!' });
                     Tts.speak(this.state.speechToText);
-                    this.setState({ doneTalking: false });
-                })
-                .catch((err) => {
-                    console.log(err);
-                    this.setState({ showItems: true });
-                });
-                this.setState({ getAllClothes: false, allClosetItems: [] });
-            }
+                break;
 
-            if (this.state.speechToText === 'get all clothes') {
-              this.getAllClothes();
-              this.setState({ doneTalking: false });
-              this.setState({ speechToText: 'Here are all of your clothes!' });
-              Tts.speak(this.state.speechToText);
-            }
+                case 'send text':
+                    this.sendTextOfClothes();
+                break;
 
-            if (this.state.speechToText === 'send text') {
-              this.sendTextOfClothes();
-            }
+                case 'get recommendations':
+                    if (this.state.allClosetItems.length > 0) {
+                        const itemRecommendation = this.state.allClosetItems[this.getRandomItem(0, this.state.allClosetItems.length)];
+                        Linking.openURL(RECOMMENDATIONS.concat(`?descripition=${itemRecommendation.description}`));
+                    } else {
+                        Linking.openURL(RECOMMENDATIONS);
+                    }
+                break;
 
-            if (this.state.speechToText === 'get recommendations') {
-                if (this.state.allClosetItems.length > 0) {
-                    const itemRecommendation = this.state.allClosetItems[this.getRandomItem(0, this.state.allClosetItems.length)];
-                    Linking.openURL(RECOMMENDATIONS.concat(`?descripition=${itemRecommendation.description}`));
-                } else {
-                    Linking.openURL(RECOMMENDATIONS);
-                }
+                case 'help':
+                    const commands = 'Here are some of my commands...';
+                    const recommend = 'To get items based on the weather, say "recommend..."';
+                    const getAllClothes = 'To get all items in your closet, say "get all clothes..."';
+                    const sendAText = 'To send a text of your chosen outfit, say "send text"...';
+                    const getRecommendations = 'for recommendations of new clothes for your closet, say "get recommendations"...';
+
+                    Tts.speak(`${commands}${recommend}${getAllClothes}${sendAText}${getRecommendations}Thank you!`);
+                break;
+
+                default:
+                    Tts.speak('I\'m not sure what you said');
             }
           })
           .catch((error) => {
@@ -274,20 +312,6 @@ class ClosetList extends Component {
             console.log(error);
           });
         }
-    }
-
-    componentDidMount() {
-        if (this.state.doneTalking === false) {
-            this.setTimeout(
-              () => { console.log('setting avatar timer!'); },
-              1000
-            );
-            this.setState({ doneTalkin: true });
-        }
-    }
-
-    getRandomItem(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
     }
 
     sendTextOfClothes() {
@@ -344,12 +368,18 @@ class ClosetList extends Component {
                     accessoriesUrl
                 });
                 Tts.speak(this.state.speechToText);
+                ToastAndroid.showWithGravity(
+                    'Your items have been sent.',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.BOTTOM,
+                );
             })
             .catch(err => {
                 this.setState({ doneTalking: false });
                 console.log('error', err);
                 this.setState({ speechToText: 'something went wrong' });
                 Tts.speak(this.state.speechToText);
+                alert('Something went wrong!');
             });
 
             return console.log({
@@ -363,6 +393,7 @@ class ClosetList extends Component {
             });
         }
         Tts.speak('No items selected');
+        alert('No items selected.');
         return console.log('No items selected');
     }
 
@@ -423,15 +454,14 @@ class ClosetList extends Component {
         );
     }
 
-    //mixins: [TimerMixin],
-
-
     render() {
         const {
             container,
             scrollview,
-            title,
+            title
         } = styles;
+
+        const { weatherContainerStyle, weatherLabelStyle } = weatherStyle;
 
         if (Platform.OS === 'android' && this.state.locationPermission !== 'authorized') {
             this.requestLocationPermission();
@@ -444,10 +474,18 @@ class ClosetList extends Component {
                   indicatorStyle={'white'}
                   scrollEventThrottle={200}
                 >
-                    <Text>
+                    {this.state.weatherTemp
+                        ? (<View style={weatherContainerStyle}>
+                                <Text style={weatherLabelStyle}>
+                                    {Math.floor(this.state.weatherTemp)}&deg;F
+                                </Text>
+                            </View>)
+                        : null
+                    }
+                    {/*<Text>
                       {this.state.speechToText}
                       {this.state.voiceError}
-                    </Text>
+                    </Text>*/}
                     <Text style={title}>Shirts</Text>
                     {this.renderItems(this.state.shirtItems)}
                     <Text style={title}>Pants</Text>
@@ -458,8 +496,8 @@ class ClosetList extends Component {
                     {this.renderItems(this.state.outerwearItems)}
                     <Text style={title}>Accessories</Text>
                     {this.renderItems(this.state.accessoriesItems)}
-                    <Text style={title}>All Items</Text>
-                    {this.renderItems(this.state.allClosetItems)}
+                    {/*<Text style={title}>All Items</Text>
+                    {this.renderItems(this.state.allClosetItems)}*/}
                 </ScrollView>
                 <CardSection>
                     <View style={avatarStyle.containerStyle}>
@@ -494,7 +532,24 @@ const avatarStyle = {
         height: 80,
         borderRadius: 30,
         overflow: 'hidden'
+    }
+};
+
+const weatherStyle = {
+    weatherLabelStyle: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 36,
+        flex: 1,
+        justifyContent: 'center',
+        textAlign: 'right',
     },
+    weatherContainerStyle: {
+        height: 40,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+    }
 };
 
 const mapStateToProps = (state) => {
@@ -519,4 +574,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, null)(ClosetList);
+export default connect(mapStateToProps, { clothingItemUpdate })(ClosetList);
