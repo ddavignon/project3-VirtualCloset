@@ -11,6 +11,8 @@ import {
     ToastAndroid,
     Linking
 } from 'react-native';
+import TimerMixin from 'react-timer-mixin';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
 import { STTandroid, STTios } from 'react-native-speech-to-text';
@@ -30,6 +32,7 @@ import { CardSection, Spinner, Button } from './common';
 import { clothingItemUpdate } from '../actions';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import styles from '../styles/index.style';
+
 
 const Permissions = require('react-native-permissions');
 
@@ -51,73 +54,42 @@ class ClosetList extends Component {
         voiceError: '',
         weatherTemp: '',
         locationPermission: 'undetermined',
+        mixins: [TimerMixin],
+        doneTalking: true,
     };
 
     componentWillMount() {
-        if (this.state.getAllClothes) {
-            this.getAllClothes();
-        } else {
-            this.getWeatherClothes();
+        // if (this.state.getAllClothes) {
+        //     this.getAllClothes();
+        // } else {
+        //     this.getWeatherClothes();
+        // }
+    }
+
+    componentDidMount() {
+        if (this.state.doneTalking === false) {
+            this.setTimeout(
+              () => { console.log('setting avatar timer!'); },
+              1000
+            );
+            this.setState({ doneTalkin: true });
         }
     }
 
-    getLocationCoords() {
-        navigator.geolocation.getCurrentPosition((position) => {
-            this.setState({
-                latitudePosition: JSON.stringify(position.coords.latitude),
-                longitudePosition: JSON.stringify(position.coords.longitude)
-            });
-        },
-            (error) => {
-            console.log(error);
-        }, {
-            enableHighAccuracy: true,
-            timeout: 20000,
-            maximumAge: 1000 }
-        );
-    }
-
-    getPermissionAndroid() {
-        Permissions.getPermissionStatus('location', 'whenInUse')
-          .then(response => {
-            //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
-            this.setState({ locationPermission: response });
+    getSlides(entries) {
+        if (!entries) {
+            return false;
+        }
+        return entries.map((entry, index) => {
+            return (
+                <ClosetItem
+                  key={`carousel-entry-${index}`}
+                  even={(index + 1) % 2 === 0}
+                  index={index}
+                  {...entry}
+                />
+            );
         });
-    }
-
-    getWeatherClothes() {
-        this.setState({ showItems: false });
-
-        this.getLocationCoords();
-
-        console.log(this.state.latitudePosition, this.state.longitudePosition);
-        axios.get(GET_CLOTHING_ITEMS, {
-            headers: {
-                'Authorization': 'JWT ' + this.props.token
-            },
-            params: {
-                lat: this.state.latitudePosition,
-                lng: this.state.longitudePosition
-            }
-        })
-        .then((response) => {
-            console.log(response);
-            this.setState({
-                shirtItems: response.data.shirts,
-                pantsItems: response.data.pants,
-                shoesItems: response.data.shoes,
-                accessoriesItems: response.data.accessories,
-                outerwearItems: response.data.outerwear,
-                weatherTemp: response.data.weather,
-                showItems: true
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-            this.setState({ showItems: true });
-        });
-        this.setState({ getAllClothes: false, allClosetItems: [] });
-        this.myShamelessHackyFunctionToResetSelectedItems();
     }
 
     getAllClothes() {
@@ -177,20 +149,63 @@ class ClosetList extends Component {
         this.myShamelessHackyFunctionToResetSelectedItems();
     }
 
-    getSlides(entries) {
-        if (!entries) {
-            return false;
-        }
-        return entries.map((entry, index) => {
-            return (
-                <ClosetItem
-                  key={`carousel-entry-${index}`}
-                  even={(index + 1) % 2 === 0}
-                  index={index}
-                  {...entry}
-                />
-            );
+    getWeatherClothes() {
+        this.setState({ showItems: false });
+
+        this.getLocationCoords();
+
+        console.log(this.state.latitudePosition, this.state.longitudePosition);
+        axios.get(GET_CLOTHING_ITEMS, {
+            headers: {
+                'Authorization': 'JWT ' + this.props.token
+            },
+            params: {
+                lat: this.state.latitudePosition,
+                lng: this.state.longitudePosition
+            }
+        })
+        .then((response) => {
+            console.log(response);
+            this.setState({
+                shirtItems: response.data.shirts,
+                pantsItems: response.data.pants,
+                shoesItems: response.data.shoes,
+                accessoriesItems: response.data.accessories,
+                outerwearItems: response.data.outerwear,
+                weatherTemp: response.data.weather,
+                showItems: true
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            this.setState({ showItems: true });
         });
+        this.setState({ getAllClothes: false, allClosetItems: [] });
+        this.myShamelessHackyFunctionToResetSelectedItems();
+    }
+
+    getPermissionAndroid() {
+        Permissions.getPermissionStatus('location', 'whenInUse')
+          .then(response => {
+            //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+            this.setState({ locationPermission: response });
+        });
+    }
+
+    getLocationCoords() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.setState({
+                latitudePosition: JSON.stringify(position.coords.latitude),
+                longitudePosition: JSON.stringify(position.coords.longitude)
+            });
+        },
+            (error) => {
+            console.log(error);
+        }, {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 1000 }
+        );
     }
 
     getRandomItem(min, max) {
@@ -342,6 +357,7 @@ class ClosetList extends Component {
                 })
             })
             .then(response => {
+                this.setState({ doneTalking: false });
                 console.log(response);
                 this.setState({
                     speechToText: 'clothes sent',
@@ -359,6 +375,7 @@ class ClosetList extends Component {
                 );
             })
             .catch(err => {
+                this.setState({ doneTalking: false });
                 console.log('error', err);
                 this.setState({ speechToText: 'something went wrong' });
                 Tts.speak(this.state.speechToText);
@@ -398,6 +415,7 @@ class ClosetList extends Component {
         }
      }
 
+
     renderItems(items) {
         if (!this.state.showItems) {
             return (
@@ -427,19 +445,10 @@ class ClosetList extends Component {
     }
 
     renderButtons() {
-        if (this.state.getAllClothes) {
-            return (
-                <View style={{ flex: 1 }}>
-                    <Button onPress={this.getWeatherClothes.bind(this)}>
-                        { 'Get Clothes for \n      Weather!' }
-                    </Button>
-                </View>
-            );
-        }
         return (
-            <View style={{ flex: 1 }}>
-                <Button onPress={this.getAllClothes.bind(this)}>
-                    Get All Clothes
+            <View style={{ height: 60, flex: 1 }}>
+                <Button onPress={() => Actions.clothingItemCreate()}>
+                    Add an item
                 </Button>
             </View>
         );
@@ -492,44 +501,18 @@ class ClosetList extends Component {
                 </ScrollView>
                 <CardSection>
                     <View style={avatarStyle.containerStyle}>
-                        {this.renderButtons()}
                         <TouchableHighlight
                           onPress={() => this.handleAvatarPress()}
                         >
+                        <View style={avatarStyle.imageStyle}>
                           <Image
                               onPress={() => this.handleAvatarPress()}
-                              style={{ width: 75, height: 75 }}
                               source={{ uri: AVATAR }}
+                              style={avatarStyle.imageStyle}
                           />
+                          </View>
                         </TouchableHighlight>
-                        <View style={{ flex: 1 }}>
-                            <Button
-                                onPress={() => {
-                                    // Works on both iOS and Android
-                                    Alert.alert(
-                                        'Nice Selection!',
-                                        'Would you like to send a message for later?',
-                                        [
-                                            {
-                                                text: 'Cancel',
-                                                onPress: () => { console.log('Cancel Pressed'); },
-                                                style: 'cancel' },
-                                            {
-                                                text: 'Send',
-                                                onPress: () => {
-                                                    this.sendTextOfClothes();
-                                                    console.log('OK Pressed');
-                                                }
-                                            },
-                                        ],
-                                        { cancelable: false }
-                                        );
-                                    }
-                                }
-                            >
-                                { 'Confirm' }
-                            </Button>
-                        </View>
+                        {this.renderButtons()}
                     </View>
                 </CardSection>
             </View>
@@ -542,7 +525,13 @@ const avatarStyle = {
         height: 75,
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+    },
+    imageStyle: {
+        width: 80,
+        height: 80,
+        borderRadius: 30,
+        overflow: 'hidden'
     }
 };
 

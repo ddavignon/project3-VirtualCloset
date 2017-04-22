@@ -20,8 +20,8 @@ const RouterComponent = () => {
 
             <Scene key="main">
                 <Scene
-                    onRight={() => Actions.clothingItemCreate()}
-                    rightTitle="Add"
+                    // onRight={() => Actions.clothingItemCreate()}
+                    // rightTitle="Add"
                     key="closetList"
                     component={ClosetList}
                     title="My Closet"
