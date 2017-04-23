@@ -3,7 +3,7 @@ import {
     StyleSheet,
     View,
     Text,
-    Image, 
+    Image,
     PixelRatio,
     TouchableOpacity,
     Picker
@@ -73,16 +73,16 @@ class ClothingItemForm extends Component {
     }
 
     render() {
-        const { container, clothingItem, clothingItemContainer } = styles;       
-       
+        const { container, clothingItem, clothingItemContainer } = styles;
+
         return (
             <View>
                 <CardSection>
                     <View style={{ flex: 1 }}>
-                        <TouchableOpacity style={container} onPress={this.displayImagePicker.bind(this)}> 
+                        <TouchableOpacity style={container} onPress={this.displayImagePicker.bind(this)}>
                             <View style={[clothingItem, clothingItemContainer, { marginBottom: 20 }]} >
                                 { this.props.uri === null
-                                    ? <Text>Select a Photo</Text> 
+                                    ? <Text>Select a Photo</Text>
                                     : <Image style={styles.clothingItem} source={{ uri: this.props.uri }} />
                                 }
                             </View>
@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
   },
   clothingItem: {
     borderRadius: 5,
-    width: 150,
-    height: 150
+    width: 275,
+    height: 275
   }
 });
 
