@@ -59,11 +59,11 @@ class ClosetList extends Component {
     };
 
     componentWillMount() {
-        // if (this.state.getAllClothes) {
-        //     this.getAllClothes();
-        // } else {
-        //     this.getWeatherClothes();
-        // }
+        if (this.state.getAllClothes) {
+            this.getAllClothes();
+        } else {
+            this.getWeatherClothes();
+        }
     }
 
     componentDidMount() {
