@@ -64,7 +64,7 @@ import com.android.build.OutputFile
  *   extraPackagerArgs: []
  * ]
  */
-
+//project.ext.react = [resourcesDirRelease: "$buildDir/intermediates/res/merged/release"]
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**
@@ -94,7 +94,7 @@ android {
         applicationId "com.virtual_closet"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 4
+        versionCode 5
         versionName "1.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -122,7 +122,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            //signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
