@@ -1,7 +1,7 @@
 # Virtual Closet Application
 ### Spring 2017 - CST438 Software Engineering 
 
-## Handin 2
+## Handin 3
 
 1. __What does your app do?__
 
@@ -25,32 +25,24 @@
 
 3. __What were you able to complete for this handin?__
 
-	- Authentication
+	- added several voice commands
 
-	- user can add items to own closet
+	- weather displayed on screen
 	
-	- item description is found for user
+	- recommendation link for new clothing items
 
-	- user is able to get recommended clothes based on weather for location
+	- fixed overall style and look
 
-	- user can choose between all clothes or clothes for weather
+	- fixed location bug
 
-	- user can upload items to receive text of chosen outfit
-
-	- carousel of clothing items added
-
-	- avatar is in view
+	- extended authentication
 	
-	- alpha release on play store
+	- production release on play store
 	
 
 4. __What are known problems, if any, with your project?__
 
-	- authentication expires too soon
-
-	- appearance needs styling
-
-	- location is buggy
+	- selection does not reset after text is sent
 
 	- not able to update or delete items
 
@@ -58,13 +50,7 @@
 
 	- add delete item
 
-	- fix auth expiration issue
-
-	- dial in location
-
-	- adjust appearance
-
-	- add some functionality to avatar 
+	- add more functionality to avatar 
 	
 	- integrate Alexa skill
 	
