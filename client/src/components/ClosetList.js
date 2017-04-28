@@ -447,19 +447,6 @@ class ClosetList extends Component {
         );
     }
 
-    renderButtons() {
-        return (
-            <View style={{ height: 60, flex: 1 }}>
-                <Button onPress={() => Actions.clothingItemCreate()}>
-                    Add an item
-                </Button>
-                <Button onPress={this.getWeatherClothes.bind(this)}>
-                    Add an item
-                </Button>
-            </View>
-        );
-    }
-
     render() {
         const {
             container,
@@ -518,7 +505,11 @@ class ClosetList extends Component {
                           />
                           </View>
                         </TouchableHighlight>
-                        {this.renderButtons()}
+                        <View style={{ height: 60, flex: 1 }}>
+                            <Button onPress={() => Actions.clothingItemCreate()}>
+                                Add an item
+                            </Button>
+                        </View>
                     </View>
                 </CardSection>
             </View>
