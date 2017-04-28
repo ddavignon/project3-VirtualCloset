@@ -16,6 +16,7 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
 import { STTandroid, STTios } from 'react-native-speech-to-text';
+import ModalDropdown from 'react-native-modal-dropdown';
 import Tts from 'react-native-tts';
 
 import axios from 'axios';
@@ -94,6 +95,7 @@ class ClosetList extends Component {
 
     getAllClothes() {
         this.setState({ showItems: false });
+        this.myShamelessHackyFunctionToResetSelectedItems();
 
         axios.get(GET_ALL_CLOTHING_ITEMS.concat(this.props.user), {
             headers: {
@@ -151,6 +153,7 @@ class ClosetList extends Component {
 
     getWeatherClothes() {
         this.setState({ showItems: false });
+        this.myShamelessHackyFunctionToResetSelectedItems();
 
         this.getLocationCoords();
 
@@ -450,6 +453,9 @@ class ClosetList extends Component {
                 <Button onPress={() => Actions.clothingItemCreate()}>
                     Add an item
                 </Button>
+                <Button onPress={this.getWeatherClothes.bind(this)}>
+                    Add an item
+                </Button>
             </View>
         );
     }
@@ -482,6 +488,7 @@ class ClosetList extends Component {
                             </View>)
                         : null
                     }
+                    <ModalDropdown options={['option 1', 'option 2']} />
                     {/*<Text>
                       {this.state.speechToText}
                       {this.state.voiceError}
@@ -506,7 +513,6 @@ class ClosetList extends Component {
                         >
                         <View style={avatarStyle.imageStyle}>
                           <Image
-                              onPress={() => this.handleAvatarPress()}
                               source={{ uri: AVATAR }}
                               style={avatarStyle.imageStyle}
                           />

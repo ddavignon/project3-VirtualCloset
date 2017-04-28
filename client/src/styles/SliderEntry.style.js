@@ -27,7 +27,7 @@ export default StyleSheet.create({
     innerContainerSelected: {
         borderStyle: 'solid',
         borderWidth: 1,
-        borderColor: colors.red
+        borderColor: colors.black
     },
     imageContainer: {
         flex: 1,
@@ -39,7 +39,7 @@ export default StyleSheet.create({
         backgroundColor: colors.black,
         borderStyle: 'solid',
         borderWidth: 2,
-        borderColor: colors.red
+        borderColor: colors.black
     },
     image: {
         ...StyleSheet.absoluteFillObject,
