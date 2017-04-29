@@ -16,7 +16,6 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
 import { STTandroid, STTios } from 'react-native-speech-to-text';
-import ModalDropdown from 'react-native-modal-dropdown';
 import Tts from 'react-native-tts';
 
 import axios from 'axios';
@@ -36,6 +35,8 @@ import styles from '../styles/index.style';
 
 
 const Permissions = require('react-native-permissions');
+
+const DEMO_OPTIONS_1 = ['option 1', 'option 2', 'option 3', 'option 4', 'option 5', 'option 6', 'option 7', 'option 8', 'option 9'];
 
 Tts.setDefaultLanguage('en-AU');
 
@@ -294,16 +295,6 @@ class ClosetList extends Component {
                     }
                 break;
 
-                case 'help':
-                    const commands = 'Here are some of my commands...';
-                    const recommend = 'To get items based on the weather, say "recommend..."';
-                    const getAllClothes = 'To get all items in your closet, say "get all clothes..."';
-                    const sendAText = 'To send a text of your chosen outfit, say "send text"...';
-                    const getRecommendations = 'for recommendations of new clothes for your closet, say "get recommendations"...';
-
-                    Tts.speak(`${commands}${recommend}${getAllClothes}${sendAText}${getRecommendations}Thank you!`);
-                break;
-
                 default:
                     Tts.speak('I\'m not sure what you said');
             }
@@ -418,7 +409,6 @@ class ClosetList extends Component {
         }
      }
 
-
     renderItems(items) {
         if (!this.state.showItems) {
             return (
@@ -475,11 +465,6 @@ class ClosetList extends Component {
                             </View>)
                         : null
                     }
-                    <ModalDropdown options={['option 1', 'option 2']} />
-                    {/*<Text>
-                      {this.state.speechToText}
-                      {this.state.voiceError}
-                    </Text>*/}
                     <Text style={title}>Shirts</Text>
                     {this.renderItems(this.state.shirtItems)}
                     <Text style={title}>Pants</Text>
