@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "remove-duplicates": "(rm -rf node_modules/react-native-speech-to-text/node_modules/ && rm -rf node_modules/react-native-router-flux/node_modules/react-native/)",
     "build": "(cd android/ && ./gradlew assembleDebug)",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "bundle-android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.map --assets-dest android/app/src/main/res/",
@@ -19,6 +20,7 @@
     "react-native-camera-roll-picker": "^1.1.9",
     "react-native-fetch-blob": "^0.10.2",
     "react-native-image-picker": "^0.26.2",
+    "react-native-modal-dropdown": "^0.4.2",
     "react-native-permissions": "^0.2.7",
     "react-native-router-flux": "^3.38.0",
     "react-native-simple-radio-button": "^2.5.0-alpha.1",
